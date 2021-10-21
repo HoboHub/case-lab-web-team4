@@ -1,14 +1,23 @@
 import axios from 'axios';
 
 export default class ServiceApi {
+  constructor() {
+    this.tokens = {
+      student: '0k8ks8o8ssgo8sksk8kw8okcgggcwswog0s8kwk4',
+      teacher: 'kw84c0kkwwkk4wockss8k0ko00wwo08w8wc4g8gs',
+    };
+  }
+
   /**
    * Конфигурация аxios
+   * Конфиг для студента по дефолту
    * @static
    * @property {Object} rosatom - конфигурация аxios для сервера росатом
    */
   static api = {
     rosatom: axios.create({
-      baseURL: process.env.VUE_APP_ROSATOM_BACKEND_HOST,
+      baseURL: 'https://tml9.rosatom.ru/api/',
+      headers: { 'X-API-KEY': '0k8ks8o8ssgo8sksk8kw8okcgggcwswog0s8kwk4' },
     }),
   };
 
