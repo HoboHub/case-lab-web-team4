@@ -6,6 +6,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
+// import Track from '@/services/track/track';
 
 export default {
   name: 'Home',
@@ -16,6 +17,8 @@ export default {
     if (!this.tracks) {
       this.getTracks();
     }
+
+    // this.getTrack();
   },
 
   computed: {
@@ -24,6 +27,9 @@ export default {
 
   methods: {
     ...mapActions(['getTracks']),
+    // getTrack() {
+    //   Track.getTrackById(34, 'teacher');
+    // },
   },
 };
 </script>

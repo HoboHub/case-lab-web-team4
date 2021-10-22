@@ -1,13 +1,7 @@
 import axios from 'axios';
+import tokens from '@/services/tokens';
 
 export default class ServiceApi {
-  constructor() {
-    this.tokens = {
-      student: '0k8ks8o8ssgo8sksk8kw8okcgggcwswog0s8kwk4',
-      teacher: 'kw84c0kkwwkk4wockss8k0ko00wwo08w8wc4g8gs',
-    };
-  }
-
   /**
    * Конфигурация аxios
    * Конфиг для студента по дефолту
@@ -17,7 +11,7 @@ export default class ServiceApi {
   static api = {
     rosatom: axios.create({
       baseURL: 'https://tml9.rosatom.ru/api/',
-      headers: { 'X-API-KEY': '0k8ks8o8ssgo8sksk8kw8okcgggcwswog0s8kwk4' },
+      headers: { 'X-API-KEY': tokens.student },
     }),
   };
 
@@ -35,7 +29,7 @@ export default class ServiceApi {
   static async post(serviceName = 'rosatom', url = '', postData = {}, reqConfig = {}) {
     try {
       const response = await this.api[serviceName].post(url, postData, reqConfig);
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
     }
@@ -45,7 +39,7 @@ export default class ServiceApi {
   static async get(serviceName = 'rosatom', url = '', preqConfig = {}) {
     try {
       const response = await this.api[serviceName].get(url, preqConfig);
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
     }
@@ -55,7 +49,7 @@ export default class ServiceApi {
   static async put(serviceName = 'rosatom', url = '', postData = {}, reqConfig = {}) {
     try {
       const response = await this.api[serviceName].put(url, postData, reqConfig);
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
     }
@@ -65,7 +59,7 @@ export default class ServiceApi {
   static async delete(serviceName = 'rosatom', url = '', preqConfig = {}) {
     try {
       const response = await this.api[serviceName].delete(url, preqConfig);
-      return response;
+      return response.data;
     } catch (error) {
       console.log(error);
     }
