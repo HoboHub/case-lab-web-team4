@@ -28,13 +28,13 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex';
 // import Track from '@/services/track/track';
-import TrackCard from "../components/trackRelated/TrackCard";
-import Preloader from "../components/Preloader";
+import TrackCard from '../components/trackRelated/TrackCard';
+import Preloader from '../components/Preloader';
 
 export default {
-  name: "Home",
+  name: 'Home',
   components: {
     TrackCard,
     Preloader,
@@ -42,10 +42,8 @@ export default {
 
   data() {
     return {
-      baseUrl: "https://tml9.rosatom.ru",
+      baseUrl: 'https://tml9.rosatom.ru',
       showAll: true,
-      actualTracks: null,
-      myTracks: [],
     };
   },
 
@@ -56,13 +54,11 @@ export default {
   },
 
   computed: {
-    ...mapState({ tracks: "tracks" }),
+    ...mapState({ tracks: 'tracks' }),
 
     actualTracks() {
       // ВКЛЮЧИМ,КОГДА ПОЧИНЯТ ДАТЫ
-      // this.actualTracks = [...this.tracks].filter(i => i.data.dateTimeFinish > Date.now())
-      //return [...this.tracks].filter(i => i.data.dateTimeFinish > Date.now())
-
+      // return [...this.tracks].filter(i => i.data.dateTimeFinish > Date.now())
       // ПОКА ДАННАЯ ФУНКЦИЯ НИЧЕГО НЕ ДЕЛАЕТ
       return this.tracks;
     },
@@ -75,7 +71,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["getTracks"]),
+    ...mapActions(['getTracks']),
     // getTrack() {
     //   Track.getTrackById(34, 'teacher');
     // },
