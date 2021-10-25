@@ -4,7 +4,7 @@ import ServiceApi from '@/services/serviceApi';
 export default createStore({
   state: {
     userRole: 'teacher',
-    tracks: null,
+    tracks: JSON.parse(localStorage.getItem('tracks')) || [],
   },
   getters: {
     getUserRole(state) {
@@ -14,6 +14,11 @@ export default createStore({
     getTracks(state) {
       return state.tracks;
     },
+
+    getTrackById: (state) => (id) => {
+      return [...state.tracks].find((t) => t.id == id)
+
+    }
   },
   mutations: {
     changeUserRole(state, payload) {
@@ -21,7 +26,8 @@ export default createStore({
     },
 
     changeTracks(state, payload) {
-      state.tracks = payload;
+      state.tracks.push(...payload.data)
+      localStorage.setItem('tracks', JSON.stringify(state.tracks))
     },
   },
   actions: {

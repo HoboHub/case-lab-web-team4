@@ -1,35 +1,121 @@
 <template>
-  <div class="home">
-    <h1>Страница списка треков</h1>
+  <div class="home container">
+    <Preloader></Preloader>
+
+    <div class="page-choice">
+      <button @click="showAll = false" :class="showAll || 'btn-active'" class="myTracks-btn btn">
+        <i class="fas fa-location-arrow"></i> Мои треки
+      </button>
+      <button @click="showAll = true" :class="showAll && 'btn-active'" class="catalog-btn btn">
+        Каталог
+      </button>
+    </div>
+    <div class="tracks-cnt" v-if="tracks">
+      <TrackCard
+        v-for="track in showAll ? tracks : assignedTracks"
+        :key="track.id"
+        :show-all="showAll"
+        :status="track.status"
+        :id="track.id"
+        :name="track.data.name"
+        :description="track.data.previewText"
+        :imgUrl="baseUrl + track.data.previewPicture"
+        class="card"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from "vuex";
 // import Track from '@/services/track/track';
+import TrackCard from "../components/trackRelated/TrackCard";
+import Preloader from "../components/Preloader";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
+    TrackCard,
+    Preloader,
   },
 
-  mounted() {
-    if (!this.tracks) {
-      this.getTracks();
-    }
+  data() {
+    return {
+      baseUrl: "https://tml9.rosatom.ru",
+      showAll: true,
+      actualTracks: null,
+      myTracks: [],
+    };
+  },
 
-    // this.getTrack();
+  async mounted() {
+    if (!this.tracks.length) {
+      await this.getTracks();
+    }
   },
 
   computed: {
-    ...mapState({ tracks: 'tracks' }),
+    ...mapState({ tracks: "tracks" }),
+
+    actualTracks() {
+      // ВКЛЮЧИМ,КОГДА ПОЧИНЯТ ДАТЫ
+      // this.actualTracks = [...this.tracks].filter(i => i.data.dateTimeFinish > Date.now())
+      //return [...this.tracks].filter(i => i.data.dateTimeFinish > Date.now())
+
+      // ПОКА ДАННАЯ ФУНКЦИЯ НИЧЕГО НЕ ДЕЛАЕТ
+      return this.tracks;
+    },
+
+    assignedTracks() {
+      // ПОКА ДАННАЯ ФУНКЦИЯ НИЧЕГО НЕ ДЕЛАЕТ, ТК НЕТ ПОДХОДЯЩИХ ТРЕКОВ
+      // return [...this.tracks].filter(i => i.assigned === false)
+      return this.tracks;
+    },
   },
 
   methods: {
-    ...mapActions(['getTracks']),
+    ...mapActions(["getTracks"]),
     // getTrack() {
     //   Track.getTrackById(34, 'teacher');
     // },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.page-choice {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  @media (min-width: 968px) {
+    justify-content: start;
+    gap: 20px;
+  }
+
+  .myTracks-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    i {
+      font-size: 16px;
+    }
+  }
+}
+
+.tracks-cnt {
+  margin-top: 60px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 342px);
+  gap: 10px;
+  row-gap: 50px;
+  justify-content: space-around;
+  align-items: stretch;
+  justify-items: stretch;
+
+  @media (min-width: 986px) {
+    justify-content: space-between;
+  }
+}
+</style>
