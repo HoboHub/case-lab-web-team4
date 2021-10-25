@@ -16,6 +16,7 @@
         :key="track.id"
         :show-all="showAll"
         :status="track.status"
+        :dateFinish="track.data.dateTimeFinish"
         :id="track.id"
         :name="track.data.name"
         :description="track.data.previewText"

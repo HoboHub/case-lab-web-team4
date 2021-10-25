@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <p class="completed-label" v-if="!showAll && status === ''">
+    <p class="completed-label" v-if="!showAll && status === ''"> // ИЛИ dateFinish < new Date()
       Завершен <i class="far fa-check-circle"></i>
     </p>
     <img class="track-img" :src="imgUrl" alt="small placeholder. TO BE DONE" />
@@ -31,6 +31,9 @@ export default {
     },
     status: {
       type: String,
+    },
+    dateFinish: {
+      type: Number
     },
     id: {
       type: Number,
