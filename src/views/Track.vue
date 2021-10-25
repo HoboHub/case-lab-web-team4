@@ -1,12 +1,12 @@
 <template>
   <div class="track">
-    <Preloader></Preloader>
-    <img :src="baseUrl + track.data.previewPicture" class="track-cover" alt="preview picture" />
+<!--    <Preloader></Preloader>-->
+    <img :src="track.data.previewPicture ? baseUrl + track.data.previewPicture : placeholderBig" class="track-cover" alt="preview picture" />
     <div class="track-content container">
       <router-link :to="{ name: 'Tracks' }" class="link-back"
         ><i class="fas fa-arrow-left"></i>В каталог
       </router-link>
-      <TrackInfoMain :name="track.data.name" :description="track.data.description" />
+      <TrackInfoMain :name="track.data.name" :description="track.data.previewText" />
       <TrackInfoSub
         :date-start-prop="track.data.dateTimeStart"
         :date-finish-prop="track.data.dateTimeFinish"
@@ -17,7 +17,8 @@
 
 <script>
 // import Track from '../services/track/track'
-import Preloader from '../components/Preloader';
+// import Preloader from '../components/Preloader';
+import placeholderBig from '../../public/placeholderBig.png'
 import TrackInfoMain from '../components/trackRelated/TrackInfoMain';
 import TrackInfoSub from '../components/trackRelated/TrackInfoSub';
 
@@ -25,7 +26,7 @@ export default {
   name: 'Track',
   components: {
     // Track
-    Preloader,
+    // Preloader,
     TrackInfoMain,
     TrackInfoSub,
   },
@@ -37,6 +38,7 @@ export default {
   data() {
     return {
       baseUrl: 'https://tml9.rosatom.ru',
+      placeholderBig: placeholderBig
     };
   },
 };
@@ -51,6 +53,8 @@ export default {
   max-height: 500px;
   width: 100%;
   object-fit: contain;
+  filter: brightness(90%);
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .track-content {

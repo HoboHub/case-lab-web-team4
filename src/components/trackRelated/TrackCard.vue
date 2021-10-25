@@ -4,7 +4,7 @@
       <!-- // ИЛИ dateFinish < new Date() */ -->
       Завершен <i class="far fa-check-circle"></i>
     </p>
-    <img class="track-img" :src="imgUrl" alt="small placeholder. TO BE DONE" />
+    <img class="track-img" :src="imgUrl ? baseUrl + imgUrl : placeholderImage " alt="small placeholder. TO BE DONE" />
 
     <div class="track-main">
       <div class="track-info">
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import placeholderSmall from '../../../public/placeholderSmall.png'
 export default {
   name: 'TrackCard',
   props: {
@@ -52,13 +53,16 @@ export default {
   },
   data() {
     return {
-      baseUrl: '',
+      baseUrl: 'https://tml9.rosatom.ru',
+
+      placeholderImage: placeholderSmall
+
     };
   },
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang='scss'>
 .card {
   display: flex;
   flex-direction: column;
@@ -83,8 +87,9 @@ export default {
     color: #ffffff;
   }
 
-  img {
+  .track-img {
     max-width: 100%;
+    height: 40%;
   }
 
   .track-main {

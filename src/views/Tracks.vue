@@ -1,6 +1,6 @@
 <template>
   <div class="home container">
-    <Preloader></Preloader>
+<!--    <Preloader :first-load="!hasPageBeenLoaded" @loaded="loaded"></Preloader>-->
 
     <div class="page-choice">
       <button @click="showAll = false" :class="showAll || 'btn-active'" class="myTracks-btn btn">
@@ -20,7 +20,7 @@
         :id="track.id"
         :name="track.data.name"
         :description="track.data.previewText"
-        :imgUrl="baseUrl + track.data.previewPicture"
+        :imgUrl="track.data.previewPicture"
         class="card"
       />
     </div>
@@ -31,13 +31,13 @@
 import { mapState, mapActions } from 'vuex';
 // import Track from '@/services/track/track';
 import TrackCard from '../components/trackRelated/TrackCard';
-import Preloader from '../components/Preloader';
-
+// import Preloader from '../components/Preloader';
+// Vue.use(Loading)
 export default {
   name: 'Home',
   components: {
     TrackCard,
-    Preloader,
+    // Preloader,
   },
 
   data() {
@@ -55,6 +55,10 @@ export default {
 
   computed: {
     ...mapState({ tracks: 'tracks' }),
+
+    hasPageBeenLoaded() {
+      return sessionStorage.getItem('tracksLoaded')
+    },
 
     actualTracks() {
       // ВКЛЮЧИМ,КОГДА ПОЧИНЯТ ДАТЫ
@@ -75,6 +79,9 @@ export default {
     // getTrack() {
     //   Track.getTrackById(34, 'teacher');
     // },
+    loaded() {
+      Vue
+    }
   },
 };
 </script>

@@ -3,7 +3,7 @@ import ServiceApi from '@/services/serviceApi';
 
 export default createStore({
   state: {
-    userRole: 'teacher',
+    userRole: null,
     tracks: JSON.parse(localStorage.getItem('tracks')) || [],
   },
   getters: {
@@ -32,7 +32,7 @@ export default createStore({
   },
   actions: {
     async getTracks({ commit }) {
-      const response = await ServiceApi.get('rosatom', '/tracks');
+      const response = await ServiceApi.get('rosatom', '/tracks',);
       commit('changeTracks', response);
     },
   },

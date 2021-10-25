@@ -1,31 +1,47 @@
 <template>
-  <div class="preloader"></div>
+  <div class="preloader-inactive"></div>
 </template>
 
 <script>
-import { gsap } from 'gsap';
+import {gsap} from 'gsap';
 
 export default {
   name: 'Preloader',
+  props: {
+    firstLoad: Boolean
+  },
   mounted() {
-    document.body.style.overflow = 'hidden';
-    const images = document.querySelectorAll('img');
-    let imagesLoaded = 0;
+    if (this.firstLoad) {
+      document.body.style.overflow = 'hidden';
+      document.querySelector('.preloader-inactive').classList.add('preloader')
+      const images = document.querySelectorAll('img');
+      let imagesLoaded = 0;
 
-    images.forEach((i) => {
-      i.addEventListener('load', () => {
-        imagesLoaded += 1;
-        if (imagesLoaded === images.length) {
-          this.doneLoading();
-        }
+      images.forEach((i) => {
+        i.addEventListener('load', () => {
+          imagesLoaded += 1;
+          if (imagesLoaded === images.length) {
+            this.doneLoading();
+          }
+        });
       });
-    });
+
+      setTimeout(() => {
+        this.doneLoading()
+      }, 2000)
+    }
+  },
+  data() {
+    return {
+    }
   },
   methods: {
     doneLoading() {
+      console.log(2321321321)
       document.body.style.overflow = 'auto';
       document.querySelector('.preloader').classList.remove('preloader');
-      gsap.fromTo('body', { opacity: 0, duration: 0.3 }, { opacity: 1, duration: 0.7 });
+      gsap.fromTo('body', {opacity: 0, duration: 0.3}, {opacity: 1, duration: 0.7});
+      this.$emit('loaded')
     },
   },
 };
