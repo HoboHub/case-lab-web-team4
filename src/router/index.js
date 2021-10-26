@@ -9,6 +9,11 @@ const routes = [
     component: Home,
   },
   {
+    path: '/login',
+    name: 'Login',
+    component: () => import('../views/Login'),
+  },
+  {
     path: '/catalog',
     name: 'Catalog',
     component: () => import('../views/Catalog.vue'),
@@ -23,6 +28,11 @@ const routes = [
     path: '/track/:id',
     name: 'Track',
     component: () => import('../views/Track'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import('../views/404'),
   },
 ];
 

@@ -11,31 +11,35 @@
       <Button @click="showAll = true" :active="showAll" class="catalog-btn">
         Каталог
       </Button>
+      <Button v-if="userRole === 'teacher'" class="create-btn"><i class="fas fa-plus"></i>
+        Создать трек
+      </Button>
     </div>
     <div class="tracks-cnt" v-if="tracks">
-        <TrackCard
-          v-for="track in showAll ? tracks : assignedTracks"
-          :key="track.id"
-          :show-all="showAll"
-          :status="track.status"
-          :dateFinish="track.data.dateTimeFinish"
-          :id="track.id"
-          :name="track.data.name"
-          :description="track.data.previewText"
-          :imgUrl="track.data.previewPicture"
-          class="card"
-        />
+      <TrackCard
+        v-for="track in showAll ? tracks : assignedTracks"
+        :is-master="this.userRole === 'teacher'"
+        :key="track.id"
+        :show-all="showAll"
+        :status="track.status"
+        :dateFinish="track.data.dateTimeFinish"
+        :id="track.id"
+        :name="track.data.name"
+        :description="track.data.previewText"
+        :imgUrl="track.data.previewPicture"
+        class="card"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import gsap from 'gsap';
 // import Track from '@/services/track/track';
 import TrackCard from '../components/trackRelated/TrackCard';
 import Button from '../components/Button';
 // import Preloader from '../components/Preloader';
-// Vue.use(Loading)
 export default {
   name: 'Home',
   components: {
@@ -53,16 +57,18 @@ export default {
 
   async mounted() {
     if (!this.tracks.length) {
-      await this.getTracks();
+      console.log(this.token);
+      await this.getTracks(this.token);
     }
+    gsap.fromTo('body', { opacity: 0 }, { opacity: 1, duration: 0.7 });
   },
 
   computed: {
-    ...mapState({ tracks: 'tracks' }),
+    ...mapState({ tracks: 'tracks', userRole: 'userRole', token: 'token' }),
 
-    hasPageBeenLoaded() {
-      return sessionStorage.getItem('tracksLoaded');
-    },
+    // hasPageBeenLoaded() {
+    //   return sessionStorage.getItem('tracksLoaded');
+    // },
 
     actualTracks() {
       // ВКЛЮЧИМ,КОГДА ПОЧИНЯТ ДАТЫ
@@ -76,6 +82,7 @@ export default {
       // return [...this.tracks].filter(i => i.assigned === false)
       return this.tracks;
     },
+
   },
 
   methods: {
@@ -102,13 +109,21 @@ export default {
   }
 
   .myTracks-btn {
-    display: flex;
-    align-items: center;
     gap: 6px;
 
     i {
       font-size: 16px;
     }
+  }
+
+  .create-btn{
+    margin-left: auto;
+    background: #ffa34f;
+    color: #ffffff;
+    gap: 6px;
+
+    border: unset;
+
   }
 }
 
@@ -120,7 +135,7 @@ export default {
   gap: 10px;
   row-gap: 50px;
   justify-content: space-around;
-  align-items: stretch;
+  align-items: end;
   justify-items: stretch;
 
   @media (min-width: 986px) {

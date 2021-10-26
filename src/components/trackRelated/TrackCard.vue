@@ -1,27 +1,32 @@
 <template>
   <div class="card">
-    <p class="completed-label" v-if="!showAll && status === ''">
+    <p class="completed-sticker sticker" v-if="!showAll && status === ''">
       <!-- // ИЛИ dateFinish < new Date() */ -->
       Завершен <i class="far fa-check-circle"></i>
     </p>
-    <img class="track-img"
-         :src="imgUrl ? baseUrl + imgUrl : placeholderImage "
-         alt="small placeholder. TO BE DONE"
-    />
+    <div class="track-core">
+      <img class="track-img"
+           :src="imgUrl ? baseUrl + imgUrl : placeholderImage "
+           alt="small placeholder. TO BE DONE"
+      />
 
-    <div class="track-main">
-      <div class="track-info">
-        <router-link :to="'/track/' + id" tag="h2" class="track-name"
+      <div class="track-main">
+        <div class="track-info">
+          <router-link :to="'/track/' + id" tag="h2" class="track-name"
           >{{ name || "Скоро здесь будет название" }}
-        </router-link>
-        <p class="track-description">
-          {{ description || "Скоро здесь будет описание" }}
-        </p>
+          </router-link>
+          <p class="track-description">
+            {{ description || "Скоро здесь будет описание" }}
+          </p>
+        </div>
+        <router-link class="open-track" :to="'/track/' + id">
+          <i class="fas fa-arrow-right"></i
+          ></router-link>
       </div>
-      <router-link class="open-track" :to="'/track/' + id">
-        <i class="fas fa-arrow-right"></i
-      ></router-link>
     </div>
+    <p v-if="isMaster" class="change-track-sticker sticker">
+      Изменить <i class="fas fa-pencil"></i>
+    </p>
   </div>
 </template>
 
@@ -54,6 +59,10 @@ export default {
     imgUrl: {
       type: String,
     },
+    isMaster: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -79,7 +88,7 @@ export default {
     transform: scale(1.03);
   }
 
-  .completed-label {
+  .sticker {
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -89,6 +98,23 @@ export default {
     background: #ffa34f;
     border-radius: 15px 15px 0px 0px;
     color: #ffffff;
+
+    transition: .4s;
+  }
+
+  .change-track-sticker {
+    cursor: pointer;
+    border-radius: 0 0 15px 15px;
+
+    &:hover {
+      filter: brightness(110%);
+    }
+  }
+  .track-core{
+    height: 490px;
+
+    display: flex;
+    flex-direction: column;
   }
 
   .track-img {

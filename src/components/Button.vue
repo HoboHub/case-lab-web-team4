@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="(active && 'btn-active') + ' ' + (btnBlue && 'btn-blue')"
+    :class="{'btn-active' : active, 'btn-blue' :  btnBlue, 'btn-orange' : btnOrange}"
     class="btn">
     <slot></slot>
   </div>
@@ -15,6 +15,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    btnOrange: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
@@ -25,7 +29,7 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 10px 24px;
-  font-size: 14px;
+  font-size: 14px ;
   font-weight: 700;
   border-radius: 22px;
   border: 1px solid #1f2041;
@@ -37,6 +41,7 @@ export default {
     filter: brightness(90%);
   }
 }
+
 .btn-active {
   color: #ffffff;
   background: #5a2dda;
@@ -44,7 +49,25 @@ export default {
 }
 
 .btn-blue {
-  background: rgba(42, 123, 169, 0.78);
-  color: #ffffff;
+  $blueBgColor: rgba(42, 123, 169, 0.78);
+  $blueTextColor: rgb(255,255,255);
+  background: $blueBgColor;
+  color: $blueTextColor;
+
+  &:hover{
+    background: darken($blueBgColor, 10%);
+  }
+}
+
+.btn-orange {
+  $orangeBgColor: rgb(253, 166, 93);
+  $orangeTextColor: rgb(255,255,255);
+  background: $orangeBgColor;
+  color: $orangeTextColor;
+
+  &:hover{
+    background: darken($orangeBgColor, 10%);
+  }
+
 }
 </style>
