@@ -3,17 +3,17 @@
 </template>
 
 <script>
-import {gsap} from 'gsap';
+import { gsap } from 'gsap';
 
 export default {
   name: 'Preloader',
   props: {
-    firstLoad: Boolean
+    firstLoad: Boolean,
   },
   mounted() {
     if (this.firstLoad) {
       document.body.style.overflow = 'hidden';
-      document.querySelector('.preloader-inactive').classList.add('preloader')
+      document.querySelector('.preloader-inactive').classList.add('preloader');
       const images = document.querySelectorAll('img');
       let imagesLoaded = 0;
 
@@ -27,21 +27,20 @@ export default {
       });
 
       setTimeout(() => {
-        this.doneLoading()
-      }, 2000)
+        this.doneLoading();
+      }, 2000);
     }
   },
   data() {
-    return {
-    }
+    return {};
   },
   methods: {
     doneLoading() {
-      console.log(2321321321)
+      console.log(2321321321);
       document.body.style.overflow = 'auto';
       document.querySelector('.preloader').classList.remove('preloader');
-      gsap.fromTo('body', {opacity: 0, duration: 0.3}, {opacity: 1, duration: 0.7});
-      this.$emit('loaded')
+      gsap.fromTo('body', { opacity: 0, duration: 0.3 }, { opacity: 1, duration: 0.7 });
+      this.$emit('loaded');
     },
   },
 };
@@ -59,7 +58,7 @@ export default {
   overflow: hidden;
 
   &:after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -70,7 +69,7 @@ export default {
   }
 
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 0;

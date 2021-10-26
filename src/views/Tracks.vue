@@ -1,28 +1,30 @@
 <template>
   <div class="home container">
-<!--    <Preloader :first-load="!hasPageBeenLoaded" @loaded="loaded"></Preloader>-->
+    <!--    <Preloader :first-load="!hasPageBeenLoaded" @loaded="loaded"></Preloader>-->
 
     <div class="page-choice">
-      <button @click="showAll = false" :class="showAll || 'btn-active'" class="myTracks-btn btn">
-        <i class="fas fa-location-arrow"></i> Мои треки
-      </button>
-      <button @click="showAll = true" :class="showAll && 'btn-active'" class="catalog-btn btn">
+      <Button
+        @click="showAll = false" :active="!showAll"
+        class="myTracks-btn">
+        <i class='fas fa-location-arrow'></i> Мои треки
+      </Button>
+      <Button @click="showAll = true" :active="showAll" class="catalog-btn">
         Каталог
-      </button>
+      </Button>
     </div>
     <div class="tracks-cnt" v-if="tracks">
-      <TrackCard
-        v-for="track in showAll ? tracks : assignedTracks"
-        :key="track.id"
-        :show-all="showAll"
-        :status="track.status"
-        :dateFinish="track.data.dateTimeFinish"
-        :id="track.id"
-        :name="track.data.name"
-        :description="track.data.previewText"
-        :imgUrl="track.data.previewPicture"
-        class="card"
-      />
+        <TrackCard
+          v-for="track in showAll ? tracks : assignedTracks"
+          :key="track.id"
+          :show-all="showAll"
+          :status="track.status"
+          :dateFinish="track.data.dateTimeFinish"
+          :id="track.id"
+          :name="track.data.name"
+          :description="track.data.previewText"
+          :imgUrl="track.data.previewPicture"
+          class="card"
+        />
     </div>
   </div>
 </template>
@@ -31,12 +33,14 @@
 import { mapState, mapActions } from 'vuex';
 // import Track from '@/services/track/track';
 import TrackCard from '../components/trackRelated/TrackCard';
+import Button from '../components/Button';
 // import Preloader from '../components/Preloader';
 // Vue.use(Loading)
 export default {
   name: 'Home',
   components: {
     TrackCard,
+    Button,
     // Preloader,
   },
 
@@ -57,7 +61,7 @@ export default {
     ...mapState({ tracks: 'tracks' }),
 
     hasPageBeenLoaded() {
-      return sessionStorage.getItem('tracksLoaded')
+      return sessionStorage.getItem('tracksLoaded');
     },
 
     actualTracks() {
@@ -80,8 +84,8 @@ export default {
     //   Track.getTrackById(34, 'teacher');
     // },
     loaded() {
-      Vue
-    }
+    },
+
   },
 };
 </script>
@@ -101,6 +105,7 @@ export default {
     display: flex;
     align-items: center;
     gap: 6px;
+
     i {
       font-size: 16px;
     }

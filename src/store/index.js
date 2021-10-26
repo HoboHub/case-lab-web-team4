@@ -15,10 +15,7 @@ export default createStore({
       return state.tracks;
     },
 
-    getTrackById: (state) => (id) => {
-      return [...state.tracks].find((t) => t.id == id)
-
-    }
+    getTrackById: (state) => (id) => [...state.tracks].find((t) => t.id === id),
   },
   mutations: {
     changeUserRole(state, payload) {
@@ -26,13 +23,13 @@ export default createStore({
     },
 
     changeTracks(state, payload) {
-      state.tracks.push(...payload.data)
-      localStorage.setItem('tracks', JSON.stringify(state.tracks))
+      state.tracks.push(...payload.data);
+      localStorage.setItem('tracks', JSON.stringify(state.tracks));
     },
   },
   actions: {
     async getTracks({ commit }) {
-      const response = await ServiceApi.get('rosatom', '/tracks',);
+      const response = await ServiceApi.get('rosatom', '/tracks');
       commit('changeTracks', response);
     },
   },
