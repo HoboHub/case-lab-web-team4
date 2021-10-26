@@ -11,7 +11,7 @@ export default class ServiceApi {
   static api = {
     rosatom: axios.create({
       baseURL: 'https://tml9.rosatom.ru/api/',
-      headers: { 'X-API-KEY': tokens.student },
+      headers: { 'X-API-KEY': tokens.teacher },
     }),
   };
 

@@ -1,0 +1,30 @@
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding:10px 24px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 22px;
+  border: 1px solid #1F2041;
+  cursor: pointer;
+  transition: .4s;
+  background: #FFFFFF;
+
+  &:hover {
+    filter: brightness(90%);
+
+  }
+
+
+}
+.btn-active{
+  color: #FFFFFF;
+  background: #5A2DDA;
+  filter: brightness(100%) !important;
+}
+
+.btn-blue {
+  background: rgba(42, 123, 169, 0.78);
+  color: #ffffff;
+}
