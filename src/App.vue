@@ -1,11 +1,21 @@
 <template>
   <div>
-    <!--    <div id="nav">-->
-    <!--      <router-link to="/">Главная</router-link>
-     | <router-link to="/catalog">Каталог</router-link> |-->
-    <!--      <router-link to="/tracks">Треки</router-link>-->
-    <!--    </div>-->
-    <router-link to='/login'> Сменить роль </router-link>
+    <div id="nav">
+      <router-link to="/login" class="menu-login">
+        <i class="fas fa-users-cog"></i>
+      </router-link>
+      <div class="menu">
+        <router-link to="/" class="menu-item">
+          <i class="fas fa-home"></i
+        ></router-link>
+        <router-link to="/catalog" class="menu-item">
+          <i class="far fa-check-circle"> </i>
+        </router-link>
+        <router-link to="/tracks" class="menu-item"
+          ><i class="fas fa-location-arrow"></i
+        ></router-link>
+      </div>
+    </div>
     <router-view />
   </div>
 </template>
@@ -22,7 +32,11 @@
 }
 
 #nav {
-  padding: 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: linear-gradient(to bottom, #bc9cff, #8ba4f9);
+  height: 100%;
 
   a {
     font-weight: bold;
@@ -31,6 +45,37 @@
     &.router-link-exact-active {
       color: #42b983;
     }
+  }
+
+  .menu {
+    padding: 10px;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    .menu-item {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #ffffff;
+      font-size: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+  }
+  .menu-login {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    margin-left: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
   }
 }
 .container {
