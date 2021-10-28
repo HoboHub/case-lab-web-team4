@@ -52,7 +52,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 }); console.log(store.getters.getUserRole);
-debugger;
+// debugger;
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {

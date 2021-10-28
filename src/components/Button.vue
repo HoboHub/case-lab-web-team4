@@ -47,6 +47,8 @@ export default {
   color: #ffffff;
   background: #5a2dda;
   filter: brightness(100%) !important;
+
+  border: none; //on click remove border
 }
 
 .btn-blue {

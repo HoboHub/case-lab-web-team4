@@ -2,15 +2,19 @@
   <div class="container">
     <h2 class="login-title">Зайти как :</h2>
     <div class="login-choice">
-      <Button @click="login('teacher')" :btn-orange="true">Учитель</Button>
-      <Button @click="login('student')" >Ученик</Button>
+      <Button
+        @click="login('teacher')"
+        :active="userRole === 'teacher'">Учитель</Button>
+      <Button
+        @click="login('student')"
+        :active="userRole === 'student'">Ученик</Button>
     </div>
   </div>
 
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import Button from '../components/Button';
 
 export default {
@@ -20,8 +24,14 @@ export default {
   },
   mounted() {
     this.clearTracks();
-    this.clearUserRole();
+    // this.clearUserRole(); //стили кнопок зависят от userRole
     this.clearToken();
+  },
+
+  computed: {
+    ...mapState({
+      userRole: 'userRole',
+    }),
   },
 
   methods: {
@@ -61,7 +71,7 @@ export default {
   justify-content: center;
 
   > div {
-    font-size: 24px;
+    font-size: 16px;
   }
 }
 
