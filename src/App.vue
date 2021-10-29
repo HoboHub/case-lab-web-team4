@@ -50,6 +50,7 @@ export default {
   left: 0;
   background: linear-gradient(to bottom, #bc9cff, #8ba4f9);
   height: 100%;
+  z-index: 999;
 
   a {
     font-weight: bold;
@@ -95,6 +96,7 @@ export default {
   max-width: 1140px;
   margin: 0 auto;
   padding: 10px 12px;
+  margin-left: 70px;
 }
 
 .btn-changeRole {
