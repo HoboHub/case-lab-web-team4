@@ -15,7 +15,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import Button from '../components/Button';
+import Button from '@/components/Button.vue';
 
 export default {
   name: 'Login',

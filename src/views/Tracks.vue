@@ -40,8 +40,8 @@
 import { mapState, mapActions } from 'vuex';
 import gsap from 'gsap';
 // import Track from '@/services/track/track';
-import TrackCard from '../components/trackRelated/TrackCard';
-import Button from '../components/Button';
+import TrackCard from '@/components/trackRelated/TrackCard.vue';
+import Button from '@/components/Button.vue';
 // import Preloader from '../components/Preloader';
 export default {
   name: 'Home',
@@ -60,7 +60,6 @@ export default {
 
   async mounted() {
     if (!this.tracks.length) {
-      console.log(this.token);
       await this.getTracks(this.token);
     }
     gsap.fromTo('body', { opacity: 0 }, { opacity: 1, duration: 0.7 });
@@ -89,7 +88,9 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getTracks']),
+    ...mapActions([
+      'getTracks',
+    ]),
     // getTrack() {
     //   Track.getTrackById(34, 'teacher');
     // },
@@ -112,7 +113,6 @@ export default {
   }
 
   .myTracks-btn {
-
     i {
       font-size: 16px;
     }

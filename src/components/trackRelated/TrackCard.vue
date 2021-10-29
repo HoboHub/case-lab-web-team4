@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import placeholderSmall from '../../../public/placeholderSmall.png';
 
 export default {
@@ -70,8 +71,11 @@ export default {
     };
   },
   computed: {
+    ...mapGetters([
+      'getUserRole',
+    ]),
     isMaster() {
-      return this.$store.getters.getUserRole === 'teacher';
+      return this.getUserRole === 'teacher';
     },
   },
 };

@@ -1,18 +1,27 @@
 <template>
   <div class="track">
     <!--    <Preloader></Preloader>-->
-    <img :src="track.data.previewPicture ? baseUrl + track.data.previewPicture : placeholderBig"
+    <img :src="previewPicture"
          class="track-cover" alt="preview picture"/>
     <div class="track-content container">
-        <router-link :to="{ name: 'Tracks' }" class="link-back"
-        ><i class="fas fa-arrow-left"></i>В каталог
+        <router-link
+          :to="{ name: 'Tracks' }"
+          class="link-back"
+        >
+          <i class="fas fa-arrow-left"></i>
+          В каталог
         </router-link>
         <Button v-if="isMaster"
           :btn-orange="true"
-          class="redact-btn">
-          <i class="fas fa-pencil"></i> Редактировать
+          class="redact-btn"
+        >
+          <i class="fas fa-pencil"></i>
+          Редактировать
         </Button>
-      <TrackInfoMain :name="track.data.name" :description="track.data.previewText"/>
+      <TrackInfoMain
+        :name="track.data.name"
+        :description="track.data.previewText"
+      />
       <TrackInfoSub
         :date-start-prop="track.data.dateTimeStart"
         :date-finish-prop="track.data.dateTimeFinish"
@@ -22,12 +31,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 // import Track from '../services/track/track';
 // import Preloader from '../components/Preloader';
-import Button from '../components/Button';
+import Button from '@/components/Button.vue';
+import TrackInfoMain from '@/components/trackRelated/TrackInfoMain.vue';
+import TrackInfoSub from '@/components/trackRelated/TrackInfoSub.vue';
 import placeholderBig from '../../public/placeholderBig.png';
-import TrackInfoMain from '../components/trackRelated/TrackInfoMain';
-import TrackInfoSub from '../components/trackRelated/TrackInfoSub';
 
 export default {
   name: 'track',
@@ -39,11 +49,21 @@ export default {
     TrackInfoSub,
   },
   computed: {
+    ...mapGetters([
+      'getUserRole',
+      'getTrackByIdStore',
+    ]),
     track() {
-      return this.$store.getters.getTrackByIdStore(+this.$route.params.id);
+      return this.getTrackByIdStore(+this.$route.params.id);
     },
     isMaster() {
-      return this.$store.getters.getUserRole === 'teacher';
+      return this.getUserRole;
+    },
+    previewPicture() {
+      if (this.track.data.previewPicture) {
+        return `${this.baseUrl}${this.track.data.previewPicture}`;
+      }
+      return this.placeholderBig;
     },
   },
   data() {

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '@/store';
-import Home from '../views/Home.vue';
+import Home from '@/views/Home.vue';
 
 const routes = [
   {
@@ -14,12 +14,12 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/Login'),
+    component: () => import('@/views/Login.vue'),
   },
   {
     path: '/catalog',
     name: 'Catalog',
-    component: () => import('../views/Catalog.vue'),
+    component: () => import('@/views/Catalog.vue'),
     meta: {
       requiresAuth: true,
     },
@@ -27,7 +27,7 @@ const routes = [
   {
     path: '/tracks',
     name: 'Tracks',
-    component: () => import('../views/Tracks.vue'),
+    component: () => import('@/views/Tracks.vue'),
     meta: {
       requiresAuth: true,
     },
@@ -36,7 +36,7 @@ const routes = [
   {
     path: '/track/:id',
     name: 'Track',
-    component: () => import('../views/Track'),
+    component: () => import('@/views/Track.vue'),
     meta: {
       requiresAuth: true,
     },
@@ -44,15 +44,14 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     name: 'notFound',
-    component: () => import('../views/404'),
+    component: () => import('@/views/404.vue'),
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-}); console.log(store.getters.getUserRole);
-// debugger;
+});
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {

@@ -1,6 +1,6 @@
 import { createStore } from 'vuex';
-import ServiceApi from '@/services/serviceApi.js';
-import tokens from '@/services/tokens.js';
+import ServiceApi from '@/services/serviceApi';
+import tokens from '@/services/tokens';
 
 export default createStore({
   state: {
@@ -9,22 +9,13 @@ export default createStore({
     tracks: JSON.parse(sessionStorage.getItem('tracks')) || '',
   },
   getters: {
-    getUserRole(state) {
-      return state.userRole;
-    },
-
-    getToken(state) {
-      return state.token;
-    },
-
-    getTracks(state) {
-      return state.tracks;
-    },
+    getUserRole: (state) => state.userRole,
+    getToken: (state) => state.token,
+    getTracks: (state) => state.tracks,
     getTrackByIdStore: (state) => (id) => [...state.tracks].find((t) => t.id === id),
   },
   mutations: {
     setRole(state, payload) {
-      console.log(payload);
       state.userRole = payload.userRole;
       if (state.userRole) {
         sessionStorage.setItem('userRole', JSON.stringify(state.userRole));
