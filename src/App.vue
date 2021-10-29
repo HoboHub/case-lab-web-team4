@@ -1,16 +1,21 @@
 <template>
   <div>
-    <!--    <div id="nav">-->
-    <!--      <router-link to="/">Главная</router-link>
-     | <router-link to="/catalog">Каталог</router-link> |-->
-    <!--      <router-link to="/tracks">Треки</router-link>-->
-    <!--    </div>-->
-    <router-link to='/login' v-if="viewChangeRole">
-      <div class="btn-changeRole">
-        <img src="@/assets/person.svg" alt="person">
-        <span>Сменить роль</span>
+    <div id="nav">
+      <router-link to="/login" class="menu-login">
+        <i class="fas fa-users-cog"></i>
+      </router-link>
+      <div class="menu">
+        <router-link to="/" class="menu-item">
+          <i class="fas fa-home"></i>
+        </router-link>
+        <router-link to="/catalog" class="menu-item">
+          <i class="far fa-check-circle"> </i>
+        </router-link>
+        <router-link to="/tracks" class="menu-item">
+          <i class="fas fa-location-arrow"></i>
+        </router-link>
       </div>
-    </router-link>
+    </div>
     <router-view />
   </div>
 </template>
