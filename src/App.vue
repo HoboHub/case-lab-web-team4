@@ -1,24 +1,32 @@
 <template>
   <div>
-    <div id="nav">
-      <router-link to="/login" class="menu-login">
-        <i class="fas fa-users-cog"></i>
-      </router-link>
-      <div class="menu">
-        <router-link to="/" class="menu-item">
-          <i class="fas fa-home"></i
-        ></router-link>
-        <router-link to="/catalog" class="menu-item">
-          <i class="far fa-check-circle"> </i>
-        </router-link>
-        <router-link to="/tracks" class="menu-item"
-          ><i class="fas fa-location-arrow"></i
-        ></router-link>
+    <!--    <div id="nav">-->
+    <!--      <router-link to="/">Главная</router-link>
+     | <router-link to="/catalog">Каталог</router-link> |-->
+    <!--      <router-link to="/tracks">Треки</router-link>-->
+    <!--    </div>-->
+    <router-link to='/login' v-if="viewChangeRole">
+      <div class="btn-changeRole">
+        <img src="@/assets/person.svg" alt="person">
+        <span>Сменить роль</span>
       </div>
-    </div>
+    </router-link>
     <router-view />
   </div>
 </template>
+
+<script>
+// задает видимость кнопки Сменить роль
+export default {
+  name: 'app',
+  computed: {
+    viewChangeRole() {
+      return this.$route.path === '/tracks';
+      // return this.$route.path === '/login';
+    },
+  },
+};
+</script>
 
 <style lang="scss">
 @import "assets/zero.css";
@@ -82,5 +90,28 @@
   max-width: 1140px;
   margin: 0 auto;
   padding: 10px 12px;
+}
+
+.btn-changeRole {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+  border: 1px solid black;
+  border-radius: 22px;
+  padding: 9px 20px;
+  background-color: transparent;
+  transition-duration: .25s;
+  img {}
+  span {
+    font-size: 14px;
+    font-weight: bold;
+    color: #1f2041;
+  }
+  &:hover {
+    background-color: #66D2EA;
+    border: 1px solid darken(#66D2EA, 10%);
+  }
 }
 </style>

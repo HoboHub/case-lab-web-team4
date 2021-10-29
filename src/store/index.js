@@ -1,6 +1,6 @@
 import { createStore } from 'vuex';
-import ServiceApi from '@/services/serviceApi';
-import tokens from '@/services/tokens';
+import ServiceApi from '@/services/serviceApi.js';
+import tokens from '@/services/tokens.js';
 
 export default createStore({
   state: {

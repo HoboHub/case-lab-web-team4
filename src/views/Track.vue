@@ -80,7 +80,7 @@ export default {
   .redact-btn{
     border-radius: 6px;
     border: unset;
-    box-shadow: 0px 2px 7px rgba(139, 164, 249, .6);
+    box-shadow: 0px 2px 4px rgba(139, 164, 249, .3);
   }
 
 .track-content {
