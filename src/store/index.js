@@ -54,7 +54,7 @@ export default createStore({
       if (this.state.userRole !== 'teacher') {
         response.data = response.data.filter((i) => i.data.published === true);
       }
-      console.log(response);
+      // console.log(response);
       if (response.data && response.data.length) {
         commit('changeTracks', [...response.data]);
       }

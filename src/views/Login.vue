@@ -10,7 +10,6 @@
         :active="userRole === 'student'">Ученик</Button>
     </div>
   </div>
-
 </template>
 
 <script>
