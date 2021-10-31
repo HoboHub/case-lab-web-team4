@@ -4,16 +4,16 @@
     <div class="login-choice">
       <Button
         @click="login('teacher')"
-        :active="userRole === 'teacher'">Учитель</Button>
+        :active="getUser.role === 'teacher'">Учитель</Button>
       <Button
         @click="login('student')"
-        :active="userRole === 'student'">Ученик</Button>
+        :active="getUser.role === 'student'">Ученик</Button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import Button from '@/components/Button.vue';
 
 export default {
@@ -24,22 +24,18 @@ export default {
 
   mounted() {
     this.clearTracks();
-    // this.clearUserRole(); //стили кнопок зависят от userRole
-    this.clearToken();
+    this.changeUser('');
   },
 
   computed: {
-    ...mapState({
-      userRole: 'userRole',
-    }),
+    ...mapGetters(['getUser']),
   },
 
   methods: {
-    ...mapActions(['changeUserRole', 'changeToken', 'clearTracks', 'clearUserRole', 'clearToken']),
+    ...mapActions(['changeUser', 'clearTracks']),
 
     login(role) {
-      this.changeUserRole(role);
-      this.changeToken(role);
+      this.changeUser(role);
       this.redirect();
     },
 

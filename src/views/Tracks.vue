@@ -1,7 +1,7 @@
 <template>
   <div class="home container">
     <!--    <Preloader :first-load="!hasPageBeenLoaded" @loaded="loaded"></Preloader>-->
-    <template v-if="tracks">
+    <template v-if="getTracks">
       <div class="page-choice">
         <Button
           @click="showAll = false" :active="!showAll"
@@ -12,14 +12,14 @@
           Каталог
         </Button>
         <Button
-          v-if="userRole === 'teacher'"
+          v-if="getUser.role === 'teacher'"
           :btn-orange="true" class="create-btn">
           <i class="fas fa-plus"></i> Создать трек
         </Button>
       </div>
       <div class="tracks-cnt">
         <TrackCard
-          v-for="track in showAll ? tracks : assignedTracks"
+          v-for="track in showAll ? getTracks : assignedTracks"
           :key="track.id"
           :show-all="showAll"
           :status="track.status"
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import gsap from 'gsap';
 // import Track from '@/services/track/track';
 import TrackCard from '@/components/trackRelated/TrackCard.vue';
@@ -59,44 +59,37 @@ export default {
   },
 
   async mounted() {
-    if (!this.tracks.length) {
-      await this.getTracks(this.token);
+    if (!this.getTracks.length) {
+      await this.fetchTracks(this.getUser.token);
     }
     gsap.fromTo('body', { opacity: 0 }, { opacity: 1, duration: 0.7 });
   },
 
   computed: {
-    ...mapState({
-      tracks: 'tracks',
-      userRole: 'userRole',
-      token: 'token',
-    }),
+    ...mapGetters([
+      'getTracks',
+      'getUser',
+    ]),
 
     actualTracks() {
       // ВКЛЮЧИМ,КОГДА ПОЧИНЯТ ДАТЫ
       // return [...this.tracks].filter(i => i.data.dateTimeFinish > Date.now())
       // ПОКА ДАННАЯ ФУНКЦИЯ НИЧЕГО НЕ ДЕЛАЕТ
-      return this.tracks;
+      return this.getTracks;
     },
 
     assignedTracks() {
       // ПОКА ДАННАЯ ФУНКЦИЯ НИЧЕГО НЕ ДЕЛАЕТ, ТК НЕТ ПОДХОДЯЩИХ ТРЕКОВ
       // return [...this.tracks].filter(i => i.assigned === false)
-      return this.tracks;
+      return this.getTracks;
     },
 
   },
 
   methods: {
     ...mapActions([
-      'getTracks',
+      'fetchTracks',
     ]),
-    // getTrack() {
-    //   Track.getTrackById(34, 'teacher');
-    // },
-    loaded() {
-    },
-
   },
 };
 </script>

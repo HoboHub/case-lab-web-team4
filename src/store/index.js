@@ -4,59 +4,66 @@ import tokens from '@/services/tokens';
 
 export default createStore({
   state: {
-    userRole: JSON.parse(sessionStorage.getItem('userRole')) || null,
-    token: JSON.parse(sessionStorage.getItem('token')) || null,
+    user: {
+      role: JSON.parse(sessionStorage.getItem('userRole')) || '',
+      token: JSON.parse(sessionStorage.getItem('token')) || '',
+    },
     tracks: JSON.parse(sessionStorage.getItem('tracks')) || '',
   },
+
   getters: {
-    getUserRole: (state) => state.userRole,
-    getToken: (state) => state.token,
+    getUser: (state) => state.user,
     getTracks: (state) => state.tracks,
     getTrackByIdStore: (state) => (id) => [...state.tracks].find((t) => t.id === id),
   },
-  mutations: {
-    setRole(state, payload) {
-      state.userRole = payload.userRole;
-      if (state.userRole) {
-        sessionStorage.setItem('userRole', JSON.stringify(state.userRole));
-      } else sessionStorage.removeItem('userRole');
-    },
 
-    setToken(state, payload) {
-      state.token = payload;
-      if (state.token) {
-        sessionStorage.setItem('token', JSON.stringify(state.token));
-      } else sessionStorage.removeItem('token');
+  mutations: {
+    setUser(state, role) {
+      state.user.role = role;
+      state.user.token = tokens[role];
+
+      if (state.user.role) {
+        sessionStorage.setItem('userRole', JSON.stringify(state.user.role));
+      } else {
+        sessionStorage.removeItem('userRole');
+      }
+
+      if (state.user.token) {
+        sessionStorage.setItem('token', JSON.stringify(state.user.token));
+      } else {
+        sessionStorage.removeItem('token');
+      }
     },
 
     changeTracks(state, payload) {
       state.tracks = payload;
+
       if (state.tracks && state.tracks.length) {
         sessionStorage.setItem('tracks', JSON.stringify(state.tracks));
-      } else sessionStorage.removeItem('tracks');
+      } else {
+        sessionStorage.removeItem('tracks');
+      }
     },
   },
+
   actions: {
-    changeUserRole({ commit }, role) {
-      commit('setRole', { userRole: role });
+    changeUser({ commit }, role) {
+      commit('setUser', role);
     },
 
-    changeToken({ commit }, role) {
-      commit('setToken', tokens[role]);
-    },
-
-    async getTracks({ commit }, token) {
+    async fetchTracks({ commit }, token) {
       const response = await ServiceApi.get('rosatom', '/tracks', {
         headers: {
           'X-API-KEY': token,
         },
       });
-      if (this.state.userRole !== 'teacher') {
-        response.data = response.data.filter((i) => i.data.published === true);
+
+      if (this.state.user.role !== 'teacher') {
+        response.data = response.data.filter((item) => item.data.published === true);
       }
       // console.log(response);
       if (response.data && response.data.length) {
-        commit('changeTracks', [...response.data]);
+        commit('changeTracks', response.data);
       }
     },
 
@@ -64,13 +71,7 @@ export default createStore({
       commit('changeTracks', '');
     },
 
-    clearUserRole({ commit }) {
-      commit('setRole', '');
-    },
-
-    clearToken({ commit }) {
-      commit('setToken', '');
-    },
   },
+
   modules: {},
 });

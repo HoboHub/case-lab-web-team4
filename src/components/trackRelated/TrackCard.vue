@@ -72,10 +72,11 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getUserRole',
+      'getUser',
     ]),
+
     isMaster() {
-      return this.getUserRole === 'teacher';
+      return this.getUser.role === 'teacher';
     },
   },
 };

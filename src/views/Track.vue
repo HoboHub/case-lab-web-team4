@@ -25,7 +25,7 @@
       />
 
       <TrackInfoSub
-        :track-duration="this.trackDuration"
+        :track-duration="trackDuration"
         :date-start-prop="track.data.dateTimeStart"
         :date-finish-prop="track.data.dateTimeFinish"
       />
@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 // import Track from '../services/track/track';
 // import Preloader from '../components/Preloader';
 
@@ -80,19 +80,19 @@ export default {
     TrackItem,
   },
   computed: {
-    ...mapState({
-      userRole: 'userRole',
-    }),
     ...mapGetters([
-      'getUserRole',
+      'getUser',
       'getTrackByIdStore',
     ]),
+
     track() {
       return this.getTrackByIdStore(+this.$route.params.id);
     },
+
     isMaster() {
       return this.getUserRole;
     },
+
     previewPicture() {
       if (this.track.data.previewPicture) {
         return `${this.baseUrl}${this.track.data.previewPicture}`;
@@ -135,8 +135,8 @@ export default {
   },
 
   mounted() {
-    this.details(this.userRole);
-    // this.getItemType(this.userRole);
+    this.details(this.getUser.role);
+    // this.getItemType(this.getUser.role);
     // this.getTrackDuration();
   },
 };

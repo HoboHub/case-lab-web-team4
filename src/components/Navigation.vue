@@ -4,7 +4,7 @@
         <i class="fas fa-users-cog"></i>
       </router-link>
       <div class="menu">
-        <router-link to="/" class="menu-item">
+        <router-link to="/home" class="menu-item">
           <i class="fas fa-home"></i>
         </router-link>
         <router-link to="/catalog" class="menu-item">

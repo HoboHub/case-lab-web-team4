@@ -1,15 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '@/store';
-import Home from '@/views/Home.vue';
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'Default',
     redirect: '/login',
     meta: {
-      requiresAuth: true,
+      requiresAuth: false,
     },
   },
   {
@@ -19,29 +17,37 @@ const routes = [
     component: () => import('@/views/Login.vue'),
   },
   {
-    path: '/catalog',
-    name: 'Catalog',
-    component: () => import('@/views/Catalog.vue'),
+    path: '/home',
+    name: 'Home',
     meta: {
       requiresAuth: true,
     },
+    component: () => import('@/views/Home.vue'),
+  },
+  {
+    path: '/catalog',
+    name: 'Catalog',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Catalog.vue'),
   },
   {
     path: '/tracks',
     name: 'Tracks',
-    component: () => import('@/views/Tracks.vue'),
     meta: {
       requiresAuth: true,
     },
+    component: () => import('@/views/Tracks.vue'),
   },
 
   {
     path: '/track/:id',
     name: 'Track',
-    component: () => import('@/views/Track.vue'),
     meta: {
       requiresAuth: true,
     },
+    component: () => import('@/views/Track.vue'),
   },
   {
     path: '/:pathMatch(.*)*',
@@ -56,16 +62,15 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  // Если в роуте в meta флаг обязательной авторизации === true то проверяем роут дальше
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    // if not, redirect to login page.
-    if (!store.getters.getUserRole) {
-      next({ name: 'Login' });
+    if (!store.getters.getUser.token) {
+      next({ name: 'Login' }); // Если токен не получен, то роут не переключится
     } else {
-      next(); // go to wherever I'm going
+      next(); // переход на следующий роут
     }
   } else {
-    next(); // does not require auth, make sure to always call next()!
+    next(); // Если флага нет, или он равен false, то переход на следующий роут
   }
 });
 
