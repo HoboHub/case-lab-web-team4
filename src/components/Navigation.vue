@@ -30,6 +30,7 @@ export default {
   left: 0;
   background: linear-gradient(to bottom, #bc9cff, #8ba4f9);
   height: 100%;
+  z-index: 999;
 
   a {
     font-weight: bold;
@@ -75,28 +76,30 @@ export default {
   max-width: 1140px;
   margin: 0 auto;
   padding: 10px 12px;
+  padding-left: 70px;
 }
 
-.btn-changeRole {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 10px;
-  border: 1px solid black;
-  border-radius: 22px;
-  padding: 9px 20px;
-  background-color: transparent;
-  transition-duration: .25s;
+// Не используется
+// .btn-changeRole {
+//   display: inline-flex;
+//   align-items: center;
+//   gap: 10px;
+//   justify-content: center;
+//   margin-top: 10px;
+//   border: 1px solid black;
+//   border-radius: 22px;
+//   padding: 9px 20px;
+//   background-color: transparent;
+//   transition-duration: .25s;
 
-  span {
-    font-size: 14px;
-    font-weight: bold;
-    color: #1f2041;
-  }
-  &:hover {
-    background-color: #66D2EA;
-    border: 1px solid darken(#66D2EA, 10%);
-  }
-}
+//   span {
+//     font-size: 14px;
+//     font-weight: bold;
+//     color: #1f2041;
+//   }
+//   &:hover {
+//     background-color: #66D2EA;
+//     border: 1px solid darken(#66D2EA, 10%);
+//   }
+// }
 </style>

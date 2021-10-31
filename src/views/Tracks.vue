@@ -104,12 +104,12 @@ export default {
 <style lang="scss" scoped>
 .page-choice {
   display: flex;
+  gap: 10px;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+
   @media (min-width: 968px) {
-    justify-content: start;
-    gap: 20px;
+    justify-content: flex-start;
   }
 
   .myTracks-btn {
@@ -120,25 +120,28 @@ export default {
 
   .create-btn {
     margin-left: auto;
-
     border: unset;
-
   }
 }
 
 .tracks-cnt {
   margin-top: 60px;
 
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 342px);
-  gap: 10px;
-  row-gap: 50px;
-  justify-content: space-around;
-  align-items: end;
-  justify-items: stretch;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
 
-  @media (min-width: 986px) {
-    justify-content: space-between;
+  .card {
+    width: 400px;
+  }
+
+  @media (max-width: 968px) {
+    flex-direction: column;
+    justify-content: flex-start;
+
+    .card {
+      width: 100%;
+    }
   }
 }
 </style>
