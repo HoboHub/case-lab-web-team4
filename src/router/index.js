@@ -7,6 +7,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    redirect: '/login',
     meta: {
       requiresAuth: true,
     },
@@ -14,6 +15,7 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
+    meta: { title: 'Вход', layout: 'LayoutLogin' },
     component: () => import('@/views/Login.vue'),
   },
   {

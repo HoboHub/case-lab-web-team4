@@ -1,7 +1,7 @@
 <template>
   <div class="home container">
     <!--    <Preloader :first-load="!hasPageBeenLoaded" @loaded="loaded"></Preloader>-->
-    <div v-if="tracks">
+    <template v-if="tracks">
       <div class="page-choice">
         <Button
           @click="showAll = false" :active="!showAll"
@@ -31,7 +31,7 @@
           class="card"
         />
       </div>
-    </div>
+    </template>
     <p v-else class="no-tracks">There are no tracks yet</p>
   </div>
 </template>

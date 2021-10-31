@@ -1,56 +1,43 @@
 <template>
-  <div>
-    <component :is="layout">
-      <router-view />
-    </component>
-  </div>
+  <div id="nav">
+      <router-link to="/login" class="menu-login">
+        <i class="fas fa-users-cog"></i>
+      </router-link>
+      <div class="menu">
+        <router-link to="/" class="menu-item">
+          <i class="fas fa-home"></i>
+        </router-link>
+        <router-link to="/catalog" class="menu-item">
+          <i class="far fa-check-circle"> </i>
+        </router-link>
+        <router-link to="/tracks" class="menu-item">
+          <i class="fas fa-location-arrow"></i>
+        </router-link>
+      </div>
+    </div>
 </template>
 
 <script>
-import LayoutLogin from '@/layouts/LayoutLogin.vue';
-import LayoutDefault from '@/layouts/LayoutDefault.vue';
-
 export default {
-  name: 'app',
-  components: {
-    LayoutLogin,
-    LayoutDefault,
-  },
-  computed: {
-    layout() {
-      // В роутере проверяем св-во layout и переключаем слои
-      if (this.$route.meta.layout === 'LayoutLogin') {
-        return 'LayoutLogin';
-      }
-      return 'LayoutDefault';
-    },
-  },
+  name: 'Navigation',
 };
 </script>
 
-<style lang="scss">
-
-@import "assets/zero.css";
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;1,400&family=Roboto:wght@300;400;700;900&display=swap");
-#app {
-  font-family: "Montserrat", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
+<style lang="scss" scoped>
+  #nav {
   position: fixed;
   top: 0;
   left: 0;
   background: linear-gradient(to bottom, #bc9cff, #8ba4f9);
   height: 100%;
-  z-index: 999;
 
   a {
     font-weight: bold;
     color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
   }
 
   .menu {
@@ -88,7 +75,6 @@ export default {
   max-width: 1140px;
   margin: 0 auto;
   padding: 10px 12px;
-  padding-left: 70px;
 }
 
 .btn-changeRole {
@@ -102,7 +88,7 @@ export default {
   padding: 9px 20px;
   background-color: transparent;
   transition-duration: .25s;
-  img {}
+
   span {
     font-size: 14px;
     font-weight: bold;
