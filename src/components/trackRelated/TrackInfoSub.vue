@@ -1,7 +1,8 @@
 <template>
   <div class="track-info-sub">
     <div class="track-duration">
-      <h2>{{ duration }} часов</h2>
+      <!-- <h2>{{ duration }} часов</h2> -->
+      <h2>{{ trackDuration }} часов</h2>
       <p>продолжительность трека</p>
     </div>
     <div class="track-start-date">
@@ -28,6 +29,9 @@ export default {
     dateFinishProp: {
       type: Number,
       required: true,
+    },
+    trackDuration: {
+      type: Number,
     },
   },
   computed: {

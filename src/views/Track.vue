@@ -21,23 +21,53 @@
       <TrackInfoMain
         :name="track.data.name"
         :description="track.data.previewText"
+        :isNotAssigned="!track.assigned"
       />
+
       <TrackInfoSub
+        :track-duration="this.trackDuration"
         :date-start-prop="track.data.dateTimeStart"
         :date-finish-prop="track.data.dateTimeFinish"
       />
+
+      <!-- if ordered -->
+      <!-- сменить на track.assigned как будет функционал -->
+      <div
+        v-if="!track.assigned"
+        class="track-content-ordered">
+        <Button
+          :class="{'btn-test': true, 'btn-disabled': false}">
+          Входное тестирование
+        </Button>
+      </div>
+
+      <div class="track-item-list">
+        <TrackItem
+          v-for="item in trackDetail"
+          :key="item.id"
+          :name ="item.entityName"
+          :duration="item.entityDuration"
+          :type="item.data.type" />
+      </div>
+
+      <!-- <div>{{trackDuration}}</div> -->
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 // import Track from '../services/track/track';
 // import Preloader from '../components/Preloader';
+
+import TrackDetail from '@/services/track/trackDetail';
+
 import Button from '@/components/Button.vue';
 import TrackInfoMain from '@/components/trackRelated/TrackInfoMain.vue';
 import TrackInfoSub from '@/components/trackRelated/TrackInfoSub.vue';
 import placeholderBig from '../../public/placeholderBig.png';
+
+import TrackItem from '@/components/trackRelated/TrackItem.vue';
 
 export default {
   name: 'track',
@@ -47,8 +77,12 @@ export default {
     Button,
     TrackInfoMain,
     TrackInfoSub,
+    TrackItem,
   },
   computed: {
+    ...mapState({
+      userRole: 'userRole',
+    }),
     ...mapGetters([
       'getUserRole',
       'getTrackByIdStore',
@@ -66,11 +100,44 @@ export default {
       return this.placeholderBig;
     },
   },
+
+  methods: {
+    async details(role) {
+      const result = await TrackDetail.getTrackDetail(+this.$route.params.id, role);
+      this.trackDetail = result;
+
+      // get full track duration
+      const durRes = await this.trackDetail
+        .map((item) => {
+          let sum = 0;
+          const newStr = item.entityDuration.toString();
+
+          if (newStr) {
+            const num = newStr.match(/\d+/g).map(Number);
+            sum += num[0] * 60 + num[1];
+            return sum;
+          }
+          return 0;
+        });
+
+      this.trackDuration = Math.ceil(durRes.reduce((a, b) => a + b) / 60);
+    },
+  },
+
   data() {
     return {
       baseUrl: 'https://tml9.rosatom.ru',
       placeholderBig,
+      trackDetail: null,
+      trackDuration: 0,
+      // typeOfitem: null,
     };
+  },
+
+  mounted() {
+    this.details(this.userRole);
+    // this.getItemType(this.userRole);
+    // this.getTrackDuration();
   },
 };
 </script>
@@ -128,4 +195,24 @@ export default {
     grid-column: span 2;
   }
 }
+
+.track-content-ordered {
+  grid-column-start: 2;
+}
+
+.track-item-list {
+  grid-column-start: 2;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.track-item {}
+
+// .track-content-item-main {
+//   display: flex;
+// }
+
+// .track-content-item-side {}
 </style>

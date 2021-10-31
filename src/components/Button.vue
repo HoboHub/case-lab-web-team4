@@ -1,6 +1,11 @@
 <template>
   <div
-    :class="{'btn-active' : active, 'btn-blue' :  btnBlue, 'btn-orange' : btnOrange}"
+    :class="{
+      'btn-active' : active,
+      'btn-blue' :  btnBlue,
+      'btn-orange' : btnOrange,
+      'btn-test' : btnTest,
+      'btn-disabled' : btnDisabled}"
     class="btn">
     <slot></slot>
   </div>
@@ -16,6 +21,14 @@ export default {
       default: false,
     },
     btnOrange: {
+      type: Boolean,
+      default: false,
+    },
+    btnTest: {
+      type: Boolean,
+      default: false,
+    },
+    btnDisabled: {
       type: Boolean,
       default: false,
     },
@@ -72,5 +85,22 @@ export default {
     background: darken($orangeBgColor, 10%);
   }
 
+}
+
+.btn-test {
+  background: #6FCF97;
+  width: 300px;
+  height: 50px;
+  border-radius: 5px;
+  border: none;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  box-shadow: 0px 2px 3px rgba(139, 164, 249, .3)
+}
+
+.btn-disabled {
+  opacity: 0.4;
+  pointer-events: none;
 }
 </style>
