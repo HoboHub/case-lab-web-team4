@@ -1,38 +1,77 @@
 import { createStore } from 'vuex';
 import ServiceApi from '@/services/serviceApi';
+import tokens from '@/services/tokens';
 
 export default createStore({
   state: {
-    userRole: null,
-    tracks: JSON.parse(localStorage.getItem('tracks')) || [],
+    user: {
+      role: JSON.parse(sessionStorage.getItem('userRole')) || '',
+      token: JSON.parse(sessionStorage.getItem('token')) || '',
+    },
+    tracks: JSON.parse(sessionStorage.getItem('tracks')) || '',
   },
+
   getters: {
-    getUserRole(state) {
-      return state.userRole;
-    },
-
-    getTracks(state) {
-      return state.tracks;
-    },
-
-    getTrackById: (state) => (id) => [...state.tracks].find((t) => t.id === id),
+    getUser: (state) => state.user,
+    getTracks: (state) => state.tracks,
+    getTrackByIdStore: (state) => (id) => [...state.tracks].find((t) => t.id === id),
   },
+
   mutations: {
-    changeUserRole(state, payload) {
-      state.userRole = payload.userRole;
+    setUser(state, role) {
+      state.user.role = role;
+      state.user.token = tokens[role];
+
+      if (state.user.role) {
+        sessionStorage.setItem('userRole', JSON.stringify(state.user.role));
+      } else {
+        sessionStorage.removeItem('userRole');
+      }
+
+      if (state.user.token) {
+        sessionStorage.setItem('token', JSON.stringify(state.user.token));
+      } else {
+        sessionStorage.removeItem('token');
+      }
     },
 
     changeTracks(state, payload) {
-      state.tracks.push(...payload.data);
-      localStorage.setItem('tracks', JSON.stringify(state.tracks));
+      state.tracks = payload;
+
+      if (state.tracks && state.tracks.length) {
+        sessionStorage.setItem('tracks', JSON.stringify(state.tracks));
+      } else {
+        sessionStorage.removeItem('tracks');
+      }
     },
   },
+
   actions: {
-    async getTracks({ commit }) {
-      const response = await ServiceApi.get('rosatom', '/tracks');
-      commit('changeTracks', response);
+    changeUser({ commit }, role) {
+      commit('setUser', role);
     },
+
+    async fetchTracks({ commit }, token) {
+      const response = await ServiceApi.get('rosatom', '/tracks', {
+        headers: {
+          'X-API-KEY': token,
+        },
+      });
+
+      if (this.state.user.role !== 'teacher') {
+        response.data = response.data.filter((item) => item.data.published === true);
+      }
+      // console.log(response);
+      if (response.data && response.data.length) {
+        commit('changeTracks', response.data);
+      }
+    },
+
+    clearTracks({ commit }) {
+      commit('changeTracks', '');
+    },
+
   },
-  modules: {
-  },
+
+  modules: {},
 });

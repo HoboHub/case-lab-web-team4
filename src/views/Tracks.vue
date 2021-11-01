@@ -1,20 +1,25 @@
 <template>
   <div class="home container">
     <!--    <Preloader :first-load="!hasPageBeenLoaded" @loaded="loaded"></Preloader>-->
-
-    <div class="page-choice">
-      <Button
-        @click="showAll = false" :active="!showAll"
-        class="myTracks-btn">
-        <i class='fas fa-location-arrow'></i> Мои треки
-      </Button>
-      <Button @click="showAll = true" :active="showAll" class="catalog-btn">
-        Каталог
-      </Button>
-    </div>
-    <div class="tracks-cnt" v-if="tracks">
+    <template v-if="getTracks">
+      <div class="page-choice">
+        <Button
+          @click="showAll = false" :active="!showAll"
+          class="myTracks-btn">
+          <i class='fas fa-location-arrow'></i> Мои треки
+        </Button>
+        <Button @click="showAll = true" :active="showAll" class="catalog-btn">
+          Каталог
+        </Button>
+        <Button
+          v-if="getUser.role === 'teacher'"
+          :btn-orange="true" class="create-btn">
+          <i class="fas fa-plus"></i> Создать трек
+        </Button>
+      </div>
+      <div class="tracks-cnt">
         <TrackCard
-          v-for="track in showAll ? tracks : assignedTracks"
+          v-for="track in showAll ? getTracks : assignedTracks"
           :key="track.id"
           :show-all="showAll"
           :status="track.status"
@@ -25,17 +30,19 @@
           :imgUrl="track.data.previewPicture"
           class="card"
         />
-    </div>
+      </div>
+    </template>
+    <p v-else class="no-tracks">There are no tracks yet</p>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
+import gsap from 'gsap';
 // import Track from '@/services/track/track';
-import TrackCard from '../components/trackRelated/TrackCard';
-import Button from '../components/Button';
+import TrackCard from '@/components/trackRelated/TrackCard.vue';
+import Button from '@/components/Button.vue';
 // import Preloader from '../components/Preloader';
-// Vue.use(Loading)
 export default {
   name: 'Home',
   components: {
@@ -52,40 +59,37 @@ export default {
   },
 
   async mounted() {
-    if (!this.tracks.length) {
-      await this.getTracks();
+    if (!this.getTracks.length) {
+      await this.fetchTracks(this.getUser.token);
     }
+    gsap.fromTo('body', { opacity: 0 }, { opacity: 1, duration: 0.7 });
   },
 
   computed: {
-    ...mapState({ tracks: 'tracks' }),
-
-    hasPageBeenLoaded() {
-      return sessionStorage.getItem('tracksLoaded');
-    },
+    ...mapGetters([
+      'getTracks',
+      'getUser',
+    ]),
 
     actualTracks() {
       // ВКЛЮЧИМ,КОГДА ПОЧИНЯТ ДАТЫ
       // return [...this.tracks].filter(i => i.data.dateTimeFinish > Date.now())
       // ПОКА ДАННАЯ ФУНКЦИЯ НИЧЕГО НЕ ДЕЛАЕТ
-      return this.tracks;
+      return this.getTracks;
     },
 
     assignedTracks() {
       // ПОКА ДАННАЯ ФУНКЦИЯ НИЧЕГО НЕ ДЕЛАЕТ, ТК НЕТ ПОДХОДЯЩИХ ТРЕКОВ
       // return [...this.tracks].filter(i => i.assigned === false)
-      return this.tracks;
+      return this.getTracks;
     },
+
   },
 
   methods: {
-    ...mapActions(['getTracks']),
-    // getTrack() {
-    //   Track.getTrackById(34, 'teacher');
-    // },
-    loaded() {
-    },
-
+    ...mapActions([
+      'fetchTracks',
+    ]),
   },
 };
 </script>
@@ -93,38 +97,44 @@ export default {
 <style lang="scss" scoped>
 .page-choice {
   display: flex;
+  gap: 10px;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+
   @media (min-width: 968px) {
-    justify-content: start;
-    gap: 20px;
+    justify-content: flex-start;
   }
 
   .myTracks-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
     i {
       font-size: 16px;
     }
+  }
+
+  .create-btn {
+    margin-left: auto;
+    border: unset;
   }
 }
 
 .tracks-cnt {
   margin-top: 60px;
 
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 342px);
-  gap: 10px;
-  row-gap: 50px;
-  justify-content: space-around;
-  align-items: stretch;
-  justify-items: stretch;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
 
-  @media (min-width: 986px) {
-    justify-content: space-between;
+  .card {
+    width: 400px;
+  }
+
+  @media (max-width: 968px) {
+    flex-direction: column;
+    justify-content: flex-start;
+
+    .card {
+      width: 100%;
+    }
   }
 }
 </style>
