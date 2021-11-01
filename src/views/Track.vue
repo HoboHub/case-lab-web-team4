@@ -1,8 +1,28 @@
 <template>
   <div class="track">
     <!--    <Preloader></Preloader>-->
-    <img :src="previewPicture"
-         class="track-cover" alt="preview picture"/>
+
+    <!-- <img :src="previewPicture"
+         class="track-cover" alt="preview picture"/> -->
+    <div class="track-bg-img" style="overflow: hidden; position: relative;">
+      <img
+        :src="previewPicture"
+        class="track-cover-bg"
+        alt="preview picture" data-v-7ef61a01=""
+        style="
+        position: absolute;
+        top:  0px;
+        left: 0px;
+        max-height: 510px;
+        width: 101%;
+        filter: blur(10px);">
+      <img
+        :src="previewPicture"
+        class="track-cover"
+        alt="preview picture"
+        data-v-7ef61a01="">
+    </div>
+
     <div class="track-content container">
         <router-link
           :to="{ name: 'Tracks' }"
@@ -153,6 +173,7 @@ export default {
   object-fit: contain;
   filter: brightness(90%);
   background: rgba(0, 0, 0, 0.1);
+  margin-left: 3%;
 }
 
   .link-back {
@@ -177,6 +198,11 @@ export default {
   grid-template-columns: 1fr;
   gap: 60px;
 }
+
+// .track-cover::before {
+//   background-image: url('https://tml9.rosatom.ru/data/track/images/preview/bddc2ae9cbd2e0874c319f06087e81db.png');
+//   filter: blur(10px);
+// }
 
 @media (min-width: 800px) {
   .track-content {
