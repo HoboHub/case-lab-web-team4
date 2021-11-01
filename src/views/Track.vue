@@ -29,7 +29,22 @@
         :date-start-prop="track.data.dateTimeStart"
         :date-finish-prop="track.data.dateTimeFinish"
       />
-
+      <div class="track-manage-btns">
+        <Button v-if="isMaster"
+            :btn-orange="true"
+            class="add-btn"
+          >
+            <i class="fas fa-plus"></i>
+            Добавить элемент
+          </Button>
+          <Button v-if="isMaster"
+            :btn-blue="true"
+            class="enroll-btn"
+          >
+            <img src="../assets/student.svg" alt="student">
+            Записать студента
+          </Button>
+      </div>
       <!-- if ordered -->
       <!-- сменить на track.assigned как будет функционал -->
       <div
@@ -164,10 +179,19 @@ export default {
     font-size: 14px;
   }
 
-  .redact-btn{
-    border-radius: 6px;
+  .redact-btn, .add-btn, .enroll-btn{
     border: unset;
     box-shadow: 0px 2px 4px rgba(139, 164, 249, .3);
+  }
+
+  .add-btn, .enroll-btn{
+    gap: 15px;
+    border-radius: 22px;
+    width: 250px;
+    grid-column: 2;
+  }
+  .add-btn{
+    margin-right: 15px;
   }
 
 .track-content {
@@ -178,6 +202,11 @@ export default {
   gap: 60px;
 }
 
+.track-manage-btns{
+  grid-column: 2;
+  display: flex;
+  justify-content: space-between;
+}
 @media (min-width: 800px) {
   .track-content {
     grid-template-columns: 1fr 6fr 2fr;
