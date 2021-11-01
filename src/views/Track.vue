@@ -125,7 +125,7 @@ export default {
     },
 
     isMaster() {
-      return this.getUser.role;
+      return (this.getUser.role === 'teacher');
     },
 
     previewPicture() {
