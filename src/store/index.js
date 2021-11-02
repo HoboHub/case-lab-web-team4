@@ -1,14 +1,15 @@
 import { createStore } from 'vuex';
+import { getItem, setItem, removeItem } from '@/helpers/localStorageHelper';
 import ServiceApi from '@/services/serviceApi';
 import tokens from '@/services/tokens';
 
 export default createStore({
   state: {
     user: {
-      role: JSON.parse(sessionStorage.getItem('userRole')) || '',
-      token: JSON.parse(sessionStorage.getItem('token')) || '',
+      role: getItem('userRole') || '',
+      token: getItem('token') || '',
     },
-    tracks: JSON.parse(sessionStorage.getItem('tracks')) || '',
+    tracks: getItem('tracks') || '',
   },
 
   getters: {
@@ -23,15 +24,15 @@ export default createStore({
       state.user.token = tokens[role];
 
       if (state.user.role) {
-        sessionStorage.setItem('userRole', JSON.stringify(state.user.role));
+        setItem('userRole', state.user.role);
       } else {
-        sessionStorage.removeItem('userRole');
+        removeItem('userRole');
       }
 
       if (state.user.token) {
-        sessionStorage.setItem('token', JSON.stringify(state.user.token));
+        setItem('token', state.user.token);
       } else {
-        sessionStorage.removeItem('token');
+        removeItem('token');
       }
     },
 
@@ -39,9 +40,9 @@ export default createStore({
       state.tracks = payload;
 
       if (state.tracks && state.tracks.length) {
-        sessionStorage.setItem('tracks', JSON.stringify(state.tracks));
+        setItem('tracks', state.tracks);
       } else {
-        sessionStorage.removeItem('tracks');
+        removeItem('tracks');
       }
     },
   },
