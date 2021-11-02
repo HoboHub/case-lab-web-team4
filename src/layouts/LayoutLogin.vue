@@ -24,7 +24,7 @@ export default {
 
   mounted() {
     this.clearTracks();
-    this.changeUser('');
+    // this.changeUser('');
   },
 
   computed: {

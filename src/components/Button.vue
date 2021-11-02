@@ -103,4 +103,12 @@ export default {
   opacity: 0.4;
   pointer-events: none;
 }
+
+.enroll-btn {
+  background-color: #66D2EA;
+
+  &:hover{
+    background: darken(#66D2EA, 10%);
+  }
+}
 </style>

@@ -32,8 +32,8 @@ export default {
       display: flex;
       width: 100%;
       height: 100%;
-      padding: 30px;
-      padding-left: 50px;
+      // padding: 30px;
+      // padding-left: 50px;
     }
   }
 </style>
