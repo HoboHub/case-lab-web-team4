@@ -95,6 +95,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.home.container {
+  padding: 50px;
+}
+
 .page-choice {
   display: flex;
   gap: 10px;
@@ -123,12 +127,20 @@ export default {
   display: flex;
   gap: 30px;
   flex-wrap: wrap;
+  // padding-left: 90px;
+
+  justify-content: center;
 
   .card {
     width: 400px;
   }
 
-  @media (max-width: 968px) {
+  @media (min-width: 995px) {
+    margin: 0 auto;
+    margin-top: 60px;
+    // margin-left: 120px;
+  }
+  @media (min-width: 481px) and (max-width: 768px) {
     flex-direction: column;
     justify-content: flex-start;
 
