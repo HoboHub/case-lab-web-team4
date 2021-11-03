@@ -184,7 +184,7 @@ export default {
 
 .track-bg-img {
   background-color: lightgrey;
-  height: 500px
+  max-height: 500px
 }
 
 .track-cover {
