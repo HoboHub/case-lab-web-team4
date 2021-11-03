@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
 import { getItem, removeItem, setItem } from '@/helpers/localStorageHelper';
 import { reformatDates } from '@/helpers/reformatDatesHelper';
+import { getItem, setItem, removeItem } from '@/helpers/localStorageHelper';
 import ServiceApi from '@/services/serviceApi';
 import track from '@/services/track/track';
 import tokens from '@/services/tokens';
@@ -12,7 +13,7 @@ export default createStore({
       token: getItem('token') || '',
     },
     tracks: getItem('tracks') || '',
-    isSubmitting: false,
+
   },
 
   getters: {
@@ -44,6 +45,7 @@ export default createStore({
       setItem('tracks', state.tracks);
     },
 
+
     addTrack(state, payload) {
       state.tracks = state.tracks.push(payload);
       setItem('tracks', state.tracks);
@@ -64,6 +66,7 @@ export default createStore({
     removeTracks(state) {
       state.tracks = '';
       removeItem('tracks');
+
     },
   },
 
