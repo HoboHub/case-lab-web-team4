@@ -49,6 +49,16 @@ const routes = [
     },
     component: () => import('@/views/Track.vue'),
   },
+  // track item
+  {
+    path: '/track/:id/detail/:id',
+    name: 'Item',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/Item.vue'),
+  },
+  //
   {
     path: '/:pathMatch(.*)*',
     name: 'notFound',
