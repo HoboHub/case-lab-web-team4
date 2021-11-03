@@ -6,47 +6,34 @@
       <p>продолжительность трека</p>
     </div>
     <div class="track-start-date">
-      <h2>{{ dateStart.format("DD, MM, YYYY").replaceAll(", ", ".") }}</h2>
+      <h2>{{ dateStartProp.replaceAll("/ ", ".") }}</h2>
       <p>дата открытия</p>
     </div>
     <div class="track-finish-date">
-      <h2>{{ dateFinish.format("DD, MM, YYYY").replaceAll(", ", ".") }}</h2>
+      <h2>{{ dateFinishProp.replaceAll("/ ", ".") }}</h2>
       <p>дата закрытия</p>
     </div>
   </div>
 </template>
 
 <script>
-import moment from 'moment';
 
 export default {
   name: 'TrackInfoSub',
   props: {
     dateStartProp: {
-      type: Number,
+      type: String,
       required: true,
     },
     dateFinishProp: {
-      type: Number,
+      type: String,
       required: true,
     },
     trackDuration: {
       type: Number,
     },
   },
-  computed: {
-    dateStart() {
-      return moment.utc(this.dateStartProp);
-    },
 
-    dateFinish() {
-      return moment.utc(this.dateFinishProp);
-    },
-
-    duration() {
-      return this.dateFinish.diff(this.dateStart, 'hours');
-    },
-  },
 };
 </script>
 
