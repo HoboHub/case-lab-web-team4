@@ -83,10 +83,10 @@
           :key="item.id"
           :name="item.entityName"
           :duration="item.entityDuration"
-          :type="item.data.type"/>
+          :type="item.data.type"
+          :id="item.id"
+          :trackId="item.trackId" />
       </div>
-
-      <!-- <div>{{trackDuration}}</div> -->
     </div>
   </div>
 </template>
@@ -181,6 +181,11 @@ export default {
 <style lang="scss" scoped>
 .track {
   color: #1f2041;
+}
+
+.track-bg-img {
+  background-color: lightgrey;
+  max-height: 500px
 }
 
 .track-cover {
