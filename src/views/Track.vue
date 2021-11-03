@@ -34,6 +34,7 @@
       <Button v-if="isMaster"
               :btn-orange="true"
               class="redact-btn"
+              @click="this.$router.push({name : 'EditTrack'})"
       >
         <i class="fas fa-pencil"></i>
         Редактировать
@@ -188,9 +189,6 @@ export default {
   object-fit: contain;
   filter: brightness(90%);
   background: rgba(0, 0, 0, 0.1);
-  margin: -30px;
-  margin-left: -50px;
-  margin-bottom: 16px;
 }
 
 .link-back {
@@ -251,15 +249,17 @@ export default {
   .track-manage-btns, .track-content-ordered, .track-item-list {
     grid-column-start: 2;
   }
-  .track-manage-btns{
+  .track-manage-btns {
     justify-content: space-between;
   }
 
 }
-.track-content-ordered{
+
+.track-content-ordered {
   display: flex;
   justify-content: center;
 }
+
 .track-item-list {
 
   display: flex;

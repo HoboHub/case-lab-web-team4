@@ -30,6 +30,7 @@ export default {
 
 <style lang="scss">
   @import "assets/zero.css";
+
   @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;1,400&family=Roboto:wght@300;400;700;900&display=swap");
 
   #app {
@@ -38,5 +39,28 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+  }
+  .container {
+    padding: 50px;
+  }
+  .d-flex{
+    width: 100%;
+    display: flex;
+  }
+  .gap-1{
+    gap: 8px;
+  }
+  .gap-2{
+    gap: 16px;
+  }
+  .flex-column{
+    flex-direction: column;
+  }
+  .flex-center{
+    justify-content: center;
+    align-items: center;
+  }
+  .align-center{
+    align-items: center;
   }
 </style>
