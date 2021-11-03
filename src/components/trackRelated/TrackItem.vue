@@ -1,5 +1,9 @@
 <template>
     <div class="track-item">
+        <!-- link to item -->
+        <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link>
+        <!--  -->
+
         <span v-if="type !== 'pdf'" class="track-item-type">{{ type || "Тип" }}</span>
 
         <h2 class="track-item-name">{{ name || "Название элемента" }}</h2>
@@ -45,11 +49,26 @@ export default {
     type: {
       type: String,
     },
+    id: {
+      type: Number,
+    },
+    trackId: {
+      type: Number,
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.open-track-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
 .track-item {
     position: relative;
     min-height: 175px;

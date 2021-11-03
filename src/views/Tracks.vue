@@ -13,9 +13,17 @@
         </Button>
         <Button
           v-if="getUser.role === 'teacher'"
-          :btn-orange="true" class="create-btn">
-          <i class="fas fa-plus"></i> Создать трек
+          :btn-orange="true"
+          class="create-btn"
+        >
+          <router-link
+            style="color:#FFFFFF;"
+            :to="{name: 'CreateTrack'}">
+            <i class="fas fa-plus"></i>
+            Создать трек
+          </router-link>
         </Button>
+
       </div>
       <div class="tracks-cnt">
         <TrackCard
@@ -95,6 +103,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .page-choice {
   display: flex;
   gap: 10px;
@@ -123,12 +132,20 @@ export default {
   display: flex;
   gap: 30px;
   flex-wrap: wrap;
+  // padding-left: 90px;
+
+  justify-content: center;
 
   .card {
     width: 400px;
   }
 
-  @media (max-width: 968px) {
+  @media (min-width: 995px) {
+    margin: 0 auto;
+    margin-top: 60px;
+    // margin-left: 120px;
+  }
+  @media (min-width: 481px) and (max-width: 768px) {
     flex-direction: column;
     justify-content: flex-start;
 

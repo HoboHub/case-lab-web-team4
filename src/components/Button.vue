@@ -1,14 +1,16 @@
 <template>
-  <div
+  <button
     :class="{
       'btn-active' : active,
       'btn-blue' :  btnBlue,
       'btn-orange' : btnOrange,
       'btn-test' : btnTest,
-      'btn-disabled' : btnDisabled}"
+      'btn-disabled' : btnDisabled,
+      'border-disabled' : borderDisabled
+  }"
     class="btn">
     <slot></slot>
-  </div>
+  </button>
 </template>
 
 <script>
@@ -32,6 +34,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    borderDisabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
@@ -43,7 +49,7 @@ export default {
   justify-content: center;
   gap: 6px;
   padding: 10px 24px;
-  font-size: 14px ;
+  font-size: 14px;
   font-weight: 700;
   border-radius: 22px;
   border: 1px solid #1f2041;
@@ -66,22 +72,22 @@ export default {
 
 .btn-blue {
   $blueBgColor: rgba(42, 123, 169, 0.78);
-  $blueTextColor: rgb(255,255,255);
+  $blueTextColor: rgb(255, 255, 255);
   background: $blueBgColor;
   color: $blueTextColor;
 
-  &:hover{
+  &:hover {
     background: darken($blueBgColor, 10%);
   }
 }
 
 .btn-orange {
   $orangeBgColor: rgb(255, 165, 0);
-  $orangeTextColor: rgb(255,255,255);
+  $orangeTextColor: rgb(255, 255, 255);
   background: $orangeBgColor;
   color: $orangeTextColor;
 
-  &:hover{
+  &:hover {
     background: darken($orangeBgColor, 10%);
   }
 
@@ -102,5 +108,17 @@ export default {
 .btn-disabled {
   opacity: 0.4;
   pointer-events: none;
+}
+
+.enroll-btn {
+  background-color: #66D2EA;
+
+  &:hover {
+    background: darken(#66D2EA, 10%);
+  }
+}
+
+.border-disabled {
+  border: unset;
 }
 </style>

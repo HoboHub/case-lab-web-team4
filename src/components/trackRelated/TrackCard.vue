@@ -45,7 +45,7 @@ export default {
       type: String,
     },
     dateFinish: {
-      type: Number,
+      type: String,
     },
     id: {
       type: Number,
