@@ -40,6 +40,14 @@ const routes = [
     },
     component: () => import('@/views/Tracks.vue'),
   },
+  {
+    path: '/tracks/new',
+    name: 'CreateTrack',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/CreateTrack.vue'),
+  },
 
   {
     path: '/track/:id',
@@ -59,6 +67,14 @@ const routes = [
     component: () => import('@/views/Item.vue'),
   },
   //
+  {
+    path: '/track/:id/edit',
+    name: 'EditTrack',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/EditTrack.vue'),
+  },
   {
     path: '/:pathMatch(.*)*',
     name: 'notFound',

@@ -24,20 +24,21 @@
     </div>
 
     <div class="track-content container">
-        <router-link
-          :to="{ name: 'Tracks' }"
-          class="link-back"
-        >
-          <i class="fas fa-arrow-left"></i>
-          В каталог
-        </router-link>
-        <Button v-if="isMaster"
-          :btn-orange="true"
-          class="redact-btn"
-        >
-          <i class="fas fa-pencil"></i>
-          Редактировать
-        </Button>
+      <router-link
+        :to="{ name: 'Tracks' }"
+        class="link-back"
+      >
+        <i class="fas fa-arrow-left"></i>
+        В каталог
+      </router-link>
+      <Button v-if="isMaster"
+              :btn-orange="true"
+              class="redact-btn"
+              @click="this.$router.push({name : 'EditTrack'})"
+      >
+        <i class="fas fa-pencil"></i>
+        Редактировать
+      </Button>
       <TrackInfoMain
         :name="track.data.name"
         :description="track.data.previewText"
@@ -51,19 +52,19 @@
       />
       <div class="track-manage-btns">
         <Button v-if="isMaster"
-            :btn-orange="true"
-            class="add-btn"
-          >
-            <i class="fas fa-plus"></i>
-            Добавить элемент
-          </Button>
-          <Button v-if="isMaster"
-            :btn-blue="true"
-            class="enroll-btn"
-          >
-            <img src="../assets/student.svg" alt="student">
-            Записать студента
-          </Button>
+                :btn-orange="true"
+                class="add-btn"
+        >
+          <i class="fas fa-plus"></i>
+          Добавить элемент
+        </Button>
+        <Button v-if="isMaster"
+                :btn-blue="true"
+                class="enroll-btn"
+        >
+          <img src="../assets/student.svg" alt="student">
+          Записать студента
+        </Button>
       </div>
       <!-- if ordered -->
       <!-- сменить на track.assigned как будет функционал -->
@@ -80,7 +81,7 @@
         <TrackItem
           v-for="item in trackDetail"
           :key="item.id"
-          :name ="item.entityName"
+          :name="item.entityName"
           :duration="item.entityDuration"
           :type="item.data.type"
           :id="item.id"
@@ -125,7 +126,7 @@ export default {
     },
 
     isMaster() {
-      return (this.getUser.role === 'teacher');
+      return this.getUser.role === 'teacher';
     },
 
     previewPicture() {
@@ -189,35 +190,32 @@ export default {
 
 .track-cover {
   max-height: 500px;
-  width: 100%;
+  width: calc(100% + 80px);
   object-fit: contain;
   filter: brightness(90%);
   background: rgba(0, 0, 0, 0.1);
 }
 
-  .link-back {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 14px;
-  }
+.link-back {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+}
 
-  .redact-btn, .add-btn, .enroll-btn{
-    border: unset;
-    box-shadow: 0px 2px 4px rgba(139, 164, 249, .3);
-  }
+.redact-btn, .add-btn, .enroll-btn {
+  border: unset;
+  box-shadow: 0px 2px 4px rgba(139, 164, 249, .3);
+}
 
-  .add-btn, .enroll-btn{
-    gap: 15px;
-    border-radius: 22px;
-    width: 250px;
-    grid-column: 2;
-  }
-  .add-btn{
-    margin-right: 15px;
-  }
+.add-btn, .enroll-btn {
+  gap: 15px;
+  border-radius: 22px;
+  width: 250px;
+  grid-column: 2;
+}
 
 .track-content {
   margin-top: 16px;
@@ -229,12 +227,14 @@ export default {
   padding: 30px 50px;
 }
 
-.track-manage-btns{
-  grid-column: 2;
+.track-manage-btns {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
 }
-@media (min-width: 800px) {
+
+@media (min-width: 978px) {
   .track-content {
     grid-template-columns: 1fr 6fr 2fr;
   }
@@ -245,26 +245,35 @@ export default {
   // ИЗ TRACK-INFO-SUB COMPONENT
   .track-info-sub {
     text-align: left;
+    align-self: center;
   }
 
   .link-back {
     grid-column: span 2;
   }
+  .track-manage-btns, .track-content-ordered, .track-item-list {
+    grid-column-start: 2;
+  }
+  .track-manage-btns {
+    justify-content: space-between;
+  }
+
 }
 
 .track-content-ordered {
-  grid-column-start: 2;
+  display: flex;
+  justify-content: center;
 }
 
 .track-item-list {
-  grid-column-start: 2;
 
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.track-item {}
+.track-item {
+}
 
 // .track-content-item-main {
 //   display: flex;
