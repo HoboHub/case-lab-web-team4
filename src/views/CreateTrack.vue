@@ -5,7 +5,9 @@
   :validation-errors="validationErrors"
   :is-submitting="isSubmitting"
   @trackSubmit="onSubmit"
+  @completed="onComplete"
   />
+
   </div>
 </template>
 
@@ -37,6 +39,8 @@ export default {
       this.isSubmitting = true;
       await this.createTrack(form);
       this.isSubmitting = false;
+    },
+    onComplete() {
       this.$router.push({ name: 'Tracks' });
     },
   },

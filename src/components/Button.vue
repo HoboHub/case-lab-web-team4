@@ -4,6 +4,7 @@
       'btn-active' : active,
       'btn-blue' :  btnBlue,
       'btn-orange' : btnOrange,
+      'btn-danger' : btnDanger,
       'btn-test' : btnTest,
       'btn-disabled' : btnDisabled,
       'border-disabled' : borderDisabled
@@ -23,6 +24,10 @@ export default {
       default: false,
     },
     btnOrange: {
+      type: Boolean,
+      default: false,
+    },
+    btnDanger: {
       type: Boolean,
       default: false,
     },
@@ -90,6 +95,18 @@ export default {
   &:hover {
     background: darken($orangeBgColor, 10%);
   }
+
+}
+
+.btn-danger {
+  $dangerBgColor: rgb(255, 0, 0);
+  $dangerTextColor: rgb(255, 255, 255);
+  background: $dangerBgColor;
+  color: $dangerTextColor;
+
+  &:hover {
+  background: darken($dangerBgColor, 10%);
+}
 
 }
 

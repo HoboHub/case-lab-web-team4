@@ -75,6 +75,7 @@ const routes = [
     },
     component: () => import('@/views/EditTrack.vue'),
   },
+
   {
     path: '/:pathMatch(.*)*',
     name: 'notFound',
