@@ -76,6 +76,14 @@ const routes = [
     component: () => import('@/views/EditTrack.vue'),
   },
   {
+    path: '/track/:id/enroll',
+    name: 'enrollStudent',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/EnrollStudent.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'notFound',
     component: () => import('@/views/404.vue'),
