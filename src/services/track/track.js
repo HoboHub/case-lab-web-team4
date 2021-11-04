@@ -30,12 +30,8 @@ export default class Track {
       headers.headers = { 'X-API-KEY': tokens.teacher };
     }
 
-    try {
-      const response = await serviceApi.post('rosatom', 'track/', track, headers);
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await serviceApi.post('rosatom', 'track/', track, headers);
+    return response;
   }
 
   // eslint-disable-next-line consistent-return
@@ -66,13 +62,8 @@ export default class Track {
       headers.headers = { 'X-API-KEY': tokens.teacher };
     }
 
-    try {
-      const response = await serviceApi.put('rosatom', `track/${trackId}`, track, headers);
-      console.log(response);
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await serviceApi.put('rosatom', `track/${trackId}`, track, headers);
+    return response;
   }
 
   // eslint-disable-next-line consistent-return

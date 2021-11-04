@@ -24,9 +24,9 @@
           ></router-link>
       </div>
     </div>
-    <p v-if="isMaster" class="change-track-sticker sticker">
+    <router-link :to="`/track/${id}/edit`" v-if="isMaster" class="change-track-sticker sticker">
       Изменить <i class="fas fa-pencil"></i>
-    </p>
+    </router-link>
   </div>
 </template>
 

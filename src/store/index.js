@@ -1,7 +1,6 @@
 import { createStore } from 'vuex';
 import { getItem, removeItem, setItem } from '@/helpers/localStorageHelper';
 import { reformatDates } from '@/helpers/reformatDatesHelper';
-import { getItem, setItem, removeItem } from '@/helpers/localStorageHelper';
 import ServiceApi from '@/services/serviceApi';
 import track from '@/services/track/track';
 import tokens from '@/services/tokens';
@@ -14,12 +13,14 @@ export default createStore({
     },
     tracks: getItem('tracks') || '',
 
+    isSuccess: null,
   },
 
   getters: {
     getUser: (state) => state.user,
     getTracks: (state) => state.tracks,
     getTrackByIdStore: (state) => (id) => [...state.tracks].find((t) => t.id === id),
+    getSuccessStatus: (state) => state.isSuccess,
   },
 
   mutations: {
@@ -45,19 +46,17 @@ export default createStore({
       setItem('tracks', state.tracks);
     },
 
-
     addTrack(state, payload) {
       state.tracks = state.tracks.push(payload);
       setItem('tracks', state.tracks);
     },
 
     changeTrack(state, payload) {
-      const trackIndex = state.tracks.findIndex((i) => i.id === payload.id);
-      const currentTrack = state.tracks[trackIndex].data;
       // eslint-disable-next-line no-unused-expressions
-      Object.keys(currentTrack).forEach((key) => {
+      Object.keys(payload.currentTrack).forEach((key) => {
         if (payload.form[key]) {
-          currentTrack[key] = payload.form[key];
+          // eslint-disable-next-line no-param-reassign
+          payload.currentTrack[key] = payload.form[key];
         }
       });
       setItem('tracks', state.tracks);
@@ -66,8 +65,17 @@ export default createStore({
     removeTracks(state) {
       state.tracks = '';
       removeItem('tracks');
-
     },
+
+    removeTrack(state, payload) {
+      state.tracks = state.tracks.filter((i) => i.id !== payload);
+      setItem('tracks', state.tracks);
+    },
+
+    changeSuccessStatus(state, payload) {
+      state.isSuccess = payload;
+    },
+
   },
 
   actions: {
@@ -89,34 +97,64 @@ export default createStore({
       if (response.data && response.data.length) {
         response.data.map((i) => reformatDates(i.data));
         commit('changeTracks', response.data);
+        commit('changeSuccessStatus', true);
       }
     },
 
     // eslint-disable-next-line no-unused-vars
     async createTrack({ commit }, form) {
+      // проверяем, загрузил ли пользователь изображение, и, если да,
+      // заменяем ссылку в previewPicture
       if (form.previewPicture instanceof FormData) {
         const imgUrl = await track.uploadImage(form.previewPicture, 'teacher');
         // eslint-disable-next-line no-param-reassign
         form.previewPicture = imgUrl;
       }
-      await track.createTrack(form, 'teacher');
-      commit('removeTracks');
+      const response = await track.createTrack(form, 'teacher');
+      if (response) {
+        commit('removeTracks');
+        commit('changeSuccessStatus', true);
+      } else {
+        commit('changeSuccessStatus', false);
+      }
     },
 
     // eslint-disable-next-line no-unused-vars
-    async editTrack({ commit }, data) {
+    async editTrack({ commit, state }, data) {
       if (data.form.previewPicture instanceof FormData) {
         // eslint-disable-next-line no-param-reassign
         data.form.previewPicture = await track.uploadImage(data.form.previewPicture, 'teacher');
       }
-      await track.changeTrack(data.id, data.form, 'teacher');
-      // eslint-disable-next-line no-param-reassign
-      data.form = reformatDates(data.form);
-      commit('changeTrack', { id: data.id, form: data.form });
+
+      const response = await track.changeTrack(data.id, data.form, 'teacher');
+      if (response) {
+        // eslint-disable-next-line no-param-reassign
+        data.form = reformatDates(data.form);
+        const trackIndex = state.tracks.findIndex((i) => i.id === data.id);
+        const currentTrack = state.tracks[trackIndex].data;
+        commit('changeTrack', { currentTrack, form: data.form });
+        commit('changeSuccessStatus', true);
+      } else {
+        commit('changeSuccessStatus', false);
+      }
     },
 
     clearTracks({ commit }) {
       commit('removeTracks');
+    },
+    // удаление отдельного трека
+    async removeTrack({ commit }, id) {
+      const response = await track.removeTrack(id, this.state.user.role);
+      if (response) {
+        commit('changeSuccessStatus', true);
+        commit('removeTrack', id);
+      } else {
+        commit('changeSuccessStatus', false);
+      }
+    },
+
+    clearSuccess({ commit }) {
+      commit('changeSuccessStatus', null);
     },
 
   },
