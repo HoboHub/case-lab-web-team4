@@ -73,6 +73,7 @@
         <Button v-if="isMaster"
                 :btn-blue="true"
                 class="enroll-btn"
+                @click="this.$router.push({name : 'enrollStudent'})"
         >
           <img src="../assets/student.svg" alt="student">
           Записать студента
