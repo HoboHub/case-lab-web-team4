@@ -1,10 +1,9 @@
 /* eslint no-shadow:  0 */ // --> OFF
 // eslint-disable-next-line no-unused-vars
-import { getItem, removeItem, setItem } from '@/helpers/localStorageHelper';
 import searchApi from '@/services/search/searchApi';
 
 const state = {
-  users: getItem('users') || '',
+  users: '',
 
 };
 const getters = {
@@ -15,16 +14,18 @@ const mutations = {
   // eslint-disable-next-line no-shadow
   changeUsers(state, payload) {
     state.users = payload;
-    setItem('users', payload);
   },
 };
 const actions = {
-  async fetchUsers({ commit }) {
-    const response = await searchApi.getUsers('teacher');
+  async fetchUsers({ commit }, { q, department, company }) {
+    const response = await searchApi.getUsers(q, department, company, 'teacher');
 
     if (response) {
       commit('changeUsers', response);
     }
+  },
+  clearUsers({ commit }) {
+    commit('changeUsers', '');
   },
 };
 export default {

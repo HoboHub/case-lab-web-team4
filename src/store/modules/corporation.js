@@ -1,11 +1,12 @@
 /* eslint no-shadow:  0 */ // --> OFF
 // eslint-disable-next-line no-unused-vars
-import { getItem, removeItem, setItem } from '@/helpers/localStorageHelper';
+import { getItem, setItem } from '@/helpers/localStorageHelper';
 import corporationApi from '@/services/search/corporationApi';
+// import { removeRedundant } from '@/helpers/removeRedundantData';
 
 const state = {
   departments: getItem('departments') || '',
-  companies: getItem('companies') || '',
+  companies: '',
 };
 const getters = {
   getDepartments: (state) => state.departments,
@@ -14,11 +15,10 @@ const getters = {
 const mutations = {
   changeDepartments(state, payload) {
     state.departments = payload;
-    setItem('departments', payload);
+    setItem('departments', state.departments);
   },
   changeCompanies(state, payload) {
     state.companies = payload;
-    setItem('companies', payload);
   },
 };
 const actions = {
@@ -26,15 +26,21 @@ const actions = {
     const response = await corporationApi.fetchDepartments('teacher');
 
     if (response) {
-      commit('changeDepartments', response.data.filter((i) => i));
+      commit('changeDepartments', response.data);
     }
   },
 
   async fetchCompanies({ commit }, department) {
     const response = await corporationApi.fetchCompanies(department, 'teacher');
     if (response) {
+      // const filteredCompanies = await removeRedundant(this.state.search.users
+      //   .map((i) => i.data.company), response);
       commit('changeCompanies', response);
     }
+  },
+
+  clearCompanies({ commit }) {
+    commit('changeCompanies', '');
   },
 
 };
