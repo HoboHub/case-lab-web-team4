@@ -31,23 +31,28 @@
             Сброс
         </Button>
         <Button
-            :btn-blue="true"
             :border-disabled="true"
-          >
+            :active="true">
             Применить
         </Button>
       </div>
       <div class="form-footer">
         <div class="modal-footer">
+        <!-- <router-link :to="{ name: 'Tracks' }"> -->
           <Button
             :btn-orange="true"
-            :border-disabled="true"
-          >
+            :border-disabled="true">
             Отмена
           </Button>
+        <!-- </router-link> -->
 
-          <Button type="submit" @submit.prevent
-                  :btn-disabled="isSubmitting" :btn-blue="true">Подтвердить
+          <Button
+            type="submit"
+            @submit.prevent
+            :btn-disabled="isSubmitting"
+            :btn-blue="true"
+            class="enroll-btn">
+            Подтвердить
           </Button>
         </div>
       </div>
@@ -124,6 +129,17 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+input {
+  color: #3765FF;
+}
+
+::-webkit-input-placeholder {
+  color: #3765FF;
+  // padding-left: 10px;
+  // padding-left: 10px;
+}
+
 .form {
   max-width: 800px;
   width: 100%;
@@ -142,8 +158,14 @@ export default {
   margin-bottom: 16px;
 }
 
+.form-username {
+  color: #3765FF;
+  padding-left: 15px;
+}
+
 .form-filter {
   border-radius: 5px;
+  padding-left: 15px;
 }
 
 .modal-footer {
@@ -162,7 +184,8 @@ input {
   display: block;
   width: 100%;
   border: 1px solid #8ba4f9;
-  border-bottom: 1px solid #757575;
+  border-radius: 5px;
+  // border-bottom: 1px solid #757575;
 }
 
 input:focus,
