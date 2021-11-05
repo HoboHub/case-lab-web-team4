@@ -156,29 +156,29 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
   background: rgba(0, 0, 0, 0.1);
 }
 
-  .link-back {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 14px;
-  }
+.link-back {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+}
 
-  .redact-btn, .add-btn, .enroll-btn{
-    border: unset;
-    box-shadow: 0px 2px 4px rgba(139, 164, 249, .3);
-  }
+.redact-btn, .add-btn, .enroll-btn{
+  border: unset;
+  box-shadow: 0px 2px 4px rgba(139, 164, 249, .3);
+}
 
-  .add-btn, .enroll-btn{
-    gap: 15px;
-    border-radius: 22px;
-    width: 250px;
-    grid-column: 2;
-  }
-  .add-btn{
-    margin-right: 15px;
-  }
+.add-btn, .enroll-btn{
+  gap: 15px;
+  border-radius: 22px;
+  width: 250px;
+  grid-column: 2;
+}
+.add-btn{
+  margin-right: 15px;
+}
 
 .item-content {
   margin-top: 16px;
@@ -195,21 +195,27 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
   display: flex;
   justify-content: space-between;
 }
-@media (min-width: 800px) {
+@media (min-width: 968px) {
   .item-content {
+    // grid-template-columns: 1fr;
     grid-template-columns: 1fr 6fr 2fr;
   }
-  // ИЗ TRACK-INFO-MAIN COMPONENT
   .item-info-main {
     grid-column-start: 2;
   }
-  // ИЗ TRACK-INFO-SUB COMPONENT
   .item-info-sub {
     text-align: left;
+    align-self: center;
   }
 
   .link-back {
     grid-column: span 2;
+  }
+  .item-manage-btns, .item-content-ordered, .item-item-list {
+    grid-column-start: 2;
+  }
+  .item-manage-btns {
+    justify-content: space-between;
   }
 }
 
@@ -223,5 +229,19 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+@media (max-width: 967px) {
+  .item-info-main {
+    grid-column-start: 1;
+  }
+  .item-info-sub {
+    grid-column-start: 1;
+  }
+  .item-content-ordered {
+    grid-column-start: 1;
+    display: flex;
+    justify-content: center;
+  }
 }
 </style>

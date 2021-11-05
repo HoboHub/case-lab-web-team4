@@ -9,15 +9,25 @@
       <form @submit.prevent="onSubmit" class="form d-flex flex-column">
         <div class="form-header">
           <div class="group">
-            <input type="text" :disabled="isSubmitting" required v-model="name"/>
+            <input
+              class="input-name"
+              type="text"
+              :disabled="isSubmitting"
+              required v-model="name"
+              placeholder="Название трека"/>
             <span class="highlight"></span>
             <span class="bar"></span>
           </div>
         </div>
         <div class="form-body d-flex flex-column">
           <div class="group">
-        <textarea type="text" :disabled="isSubmitting" class="description" v-model="previewText"
-                  required> </textarea>
+        <textarea
+          type="text"
+          :disabled="isSubmitting"
+          class="description"
+          v-model="previewText"
+          required
+          placeholder="Описание трека"></textarea>
             <span class="highlight"></span>
             <span class="bar"></span>
           </div>
@@ -55,9 +65,11 @@
           />
           <div class="upload-file-cnt">
             <label for="loadFile">
-              <Button :disabled="isSubmitting" class="upload-file-btn"
-                      type="button"
-                      :active="!pictureToUpload">Загрузить обложку
+              <Button
+                :disabled="isSubmitting"
+                class="upload-file-btn"
+                type="button"
+                :active="!pictureToUpload">Загрузить обложку
               </Button>
             </label>
             <p v-if="!pictureToUpload" class="d-flex gap-1 align-center">
@@ -71,15 +83,21 @@
         </div>
         <div class="form-footer">
           <div class="modal-footer">
-            <Button
-              :btn-orange="true"
-              :border-disabled="true"
-            >
-              Отмена
-            </Button>
+            <router-link :to="{ name: 'Tracks' }">
+              <Button
+                :btn-orange="true"
+                :border-disabled="true">
+                Отмена
+              </Button>
+            </router-link>
 
-            <Button type="submit" @submit.prevent
-                    :btn-disabled="isSubmitting" :btn-blue="true">Подтвердить
+            <Button
+              type="submit"
+              @submit.prevent
+              :btn-disabled="isSubmitting"
+              :btn-blue="true"
+              class="enroll-btn">
+              Подтвердить
             </Button>
           </div>
         </div>
@@ -175,6 +193,10 @@ export default {
 
 <style scoped lang="scss">
 
+::-webkit-input-placeholder {
+  color: #3765FF;
+}
+
 .form {
   max-width: 800px;
   width: 100%;
@@ -193,10 +215,19 @@ export default {
   margin-bottom: 16px;
 }
 
+.input-name {
+  color: #3765FF;
+  padding-left: 15px;
+}
+
 .description {
+  padding-left: 15px;
+  color: #3765FF;
   resize: vertical;
   min-height: 150px;
   margin-bottom: 16px;
+  outline: none;
+  resize: none;
 }
 
 .dates-cnt {
@@ -268,7 +299,9 @@ textarea {
   display: block;
   width: 100%;
   border: 1px solid #8ba4f9;
-  border-bottom: 1px solid #757575;
+  border-radius: 5px;
+  background: rgba(139, 164, 249, 0.05);
+  // border-bottom: 1px solid #757575;
 }
 
 input:focus,
