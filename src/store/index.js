@@ -1,4 +1,6 @@
 import { createStore } from 'vuex';
+import search from './modules/search';
+import corporation from './modules/corporation';
 import { getItem, removeItem, setItem } from '@/helpers/localStorageHelper';
 import { reformatDates } from '@/helpers/reformatDatesHelper';
 import ServiceApi from '@/services/serviceApi';
@@ -159,5 +161,5 @@ export default createStore({
 
   },
 
-  modules: {},
+  modules: { search, corporation },
 });

@@ -73,6 +73,7 @@
         <Button v-if="isMaster"
                 :btn-blue="true"
                 class="enroll-btn"
+                @click="addStudents"
         >
           <img src="../assets/student.svg" alt="student">
           Записать студента
@@ -154,7 +155,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['removeTrack']),
+    ...mapActions(['removeTrack', 'fetchUsers']),
     async details(role) {
       const result = await TrackDetail.getTrackDetail(+this.$route.params.id, role);
       this.trackDetail = result;
@@ -185,6 +186,10 @@ export default {
 
     callConfirm() {
 
+    },
+    addStudents() {
+      this.fetchUsers();
+      this.$router.push(`/track/${this.track.id}/students`);
     },
   },
 
