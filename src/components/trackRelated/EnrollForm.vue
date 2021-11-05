@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column">
-    <h2 class="track-name">Записать студента на трек <br>"{{
+    <h2 class="form-name">Записать студента на трек <br>"{{
         truncate(name, 38, "...") || "Имя трека"
       }}"
     </h2>
@@ -15,27 +15,76 @@
         <div class="group">
           <input type="text" :disabled="isSubmitting" class="form-filter" v-model="division"
                   required placeholder="Дивизион">
-          <span class="highlight"></span>
-          <span class="bar"></span>
         </div>
         <div class="group">
           <input type="text" :disabled="isSubmitting" class="form-filter" v-model="company"
                   required placeholder="Предприятие">
-          <span class="highlight"></span>
-          <span class="bar"></span>
         </div>
-        <Button
-            :btn-orange="true"
-            :border-disabled="true"
-          >
-            Сброс
-        </Button>
-        <Button
-            :btn-blue="true"
-            :border-disabled="true"
-          >
-            Применить
-        </Button>
+        <div class="form-head-buttons">
+          <Button
+              :btn-orange="true"
+              :border-disabled="true"
+            >
+            <i class="fas fa-times"></i>
+              Сброс
+          </Button>
+          <Button
+              :btn-blue="true"
+              :border-disabled="true"
+            >
+              Применить
+          </Button>
+        </div>
+        <table class="form-results">
+          <caption>Результаты поиска</caption>
+          <tr>
+            <th>ФИО</th>
+            <th>Дивизион</th>
+            <th>Предприятие</th>
+            <th>Записать</th>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><input type="checkbox"></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><input type="checkbox"></td>
+          </tr>
+        </table>
+        <table class="form-enroll">
+          <caption>Будут записаны</caption>
+          <tr>
+            <th>ФИО</th>
+            <th>Дивизион</th>
+            <th>Предприятие</th>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
       </div>
       <div class="form-footer">
         <div class="modal-footer">
@@ -47,7 +96,7 @@
           </Button>
 
           <Button type="submit" @submit.prevent
-                  :btn-disabled="isSubmitting" :btn-blue="true">Подтвердить
+                  :btn-disabled="isSubmitting" :btn-blue="true" style="border: none;">Подтвердить
           </Button>
         </div>
       </div>
@@ -108,17 +157,6 @@ export default {
       }
       return text;
     },
-
-    onFileSelected(event) {
-      // eslint-disable-next-line prefer-destructuring
-      const fd = new FormData();
-      fd.append('file', event.target.files[0]);
-      this.pictureToUpload = fd;
-    },
-
-    resetPicture() {
-      this.pictureToUpload = null;
-    },
   },
 };
 </script>
@@ -131,11 +169,43 @@ export default {
   gap: 24px;
 }
 
+.form-results, .form-enroll{
+  border: solid #8BA4F9 1px;
+  border-radius: 5px;
+  text-align: center;
+  border-spacing: 0;
+  caption{
+    text-align: left;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
+    color: #8BA4F9;
+    margin-bottom: 15px;
+  }
+  th {
+    font-weight: 400;
+    border-bottom: solid #8BA4F9 1px;
+  }
+  th, td{
+    padding: 20px 20px;
+  }
+  th:first-child, td:first-child {
+    width: 30%;
+  }
+}
 .form-body {
   gap: 24px;
 }
-
-.track-name {
+.form-username, .form-filter{
+  border-radius: 5px;
+  padding-left: 15px;
+}
+.form-head-buttons{
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.form-name {
   font-weight: 800;
   font-size: 36px;
   color: #1f2041;
@@ -144,6 +214,7 @@ export default {
 
 .form-filter {
   border-radius: 5px;
+  width: 50%;
 }
 
 .modal-footer {
@@ -174,9 +245,7 @@ textarea:focus {
 
 /* active state */
 input:focus ~ label,
-input:valid ~ label,
-textarea:focus ~ label,
-textarea:valid ~ label {
+input:valid ~ label {
   top: -20px;
   font-size: 14px;
   color: #5264ae;
@@ -211,9 +280,7 @@ textarea:valid ~ label {
 
 /* active state */
 input:focus ~ .bar:before,
-input:focus ~ .bar:after,
-textarea:focus ~ .bar:before,
-textarea:focus ~ .bar:after {
+input:focus ~ .bar:after {
   width: 50%;
 }
 
