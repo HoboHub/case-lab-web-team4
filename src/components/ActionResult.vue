@@ -13,7 +13,7 @@ import { gsap } from 'gsap';
 export default {
   name: 'ActionResult',
   mounted() {
-    this.$store.dispatch('clearSuccess');
+    this.$store.dispatch('changeSuccessStatus', null);
   },
   computed: {
     ...mapGetters({ isSuccess: 'getSuccessStatus' }),
@@ -21,6 +21,7 @@ export default {
   },
   methods: {
     completed() {
+      debugger;
       this.$router.back();
     },
   },
@@ -41,7 +42,7 @@ export default {
 
 <style scoped lang="scss">
 .result {
-  position: absolute;
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
