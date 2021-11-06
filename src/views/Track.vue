@@ -132,6 +132,8 @@ import placeholderBig from '../../public/placeholderBig.png';
 import TrackItem from '@/components/trackRelated/TrackItem.vue';
 import ActionResult from '@/components/ActionResult.vue';
 
+import ConfirmDelete from '@/components/trackRelated/ConfirmDelete.vue';
+
 export default {
   name: 'track',
   components: {
@@ -142,6 +144,7 @@ export default {
     TrackInfoMain,
     TrackInfoSub,
     TrackItem,
+    ConfirmDelete,
   },
   computed: {
     ...mapGetters([
