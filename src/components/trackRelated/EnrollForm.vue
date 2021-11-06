@@ -6,25 +6,31 @@
     </h2>
     <form @submit.prevent="onSubmit" class="form d-flex flex-column">
       <div class="group">
-        <input type="text" :disabled="isSubmitting" class = "form-username" required
-                v-model="username" placeholder="Поиск пользователя">
+        <input
+          ref="username"
+          type="text" :disabled="isSubmitting" class = "form-username" required
+          v-model="username" placeholder="Поиск пользователя">
         <span class="highlight"></span>
         <span class="bar"></span>
       </div>
       <div class="form-body d-flex flex-column">
         <div class="group">
-          <input type="text" :disabled="isSubmitting" class="form-filter" v-model="division"
-                  required placeholder="Дивизион">
+          <input
+            ref="division"
+            type="text" :disabled="isSubmitting" class="form-filter" v-model="division"
+            required placeholder="Дивизион">
         </div>
         <div class="group">
-          <input type="text" :disabled="isSubmitting" class="form-filter" v-model="company"
-                  required placeholder="Предприятие">
+          <input
+            ref="company"
+            type="text" :disabled="isSubmitting" class="form-filter" v-model="company"
+            required placeholder="Предприятие">
         </div>
         <div class="form-head-buttons">
           <Button
+              @click.stop="resetForm"
               :btn-orange="true"
-              :border-disabled="true"
-            >
+              :border-disabled="true">
             <i class="fas fa-times"></i>
               Сброс
           </Button>
@@ -87,13 +93,13 @@
       </div>
       <div class="form-footer">
         <div class="modal-footer">
-        <!-- <router-link :to="{ name: 'Tracks' }"> -->
+        <router-link :to="{ name: 'Tracks' }">
           <Button
             :btn-orange="true"
             :border-disabled="true">
             Отмена
           </Button>
-        <!-- </router-link> -->
+        </router-link>
           <Button
             type="submit"
             @submit.prevent
@@ -160,6 +166,11 @@ export default {
         return text.substring(0, length) + suffix;
       }
       return text;
+    },
+    resetForm() {
+      this.$refs.username.value = '';
+      this.$refs.division.value = '';
+      this.$refs.company.value = '';
     },
   },
 };
