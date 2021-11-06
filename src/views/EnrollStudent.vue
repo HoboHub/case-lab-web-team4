@@ -1,12 +1,10 @@
 <template>
   <div class="container d-flex flex-center">
-  <TrackForms
+  <EnrollForm
   :initial-values="initialValues"
   :validation-errors="validationErrors"
   :is-submitting="isSubmitting"
   @trackSubmit="onSubmit"
-  @completed="onComplete"
-
   />
 
   </div>
@@ -14,12 +12,12 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import TrackForms from '@/components/trackRelated/TrackForms.vue';
+import EnrollForm from '@/components/trackRelated/EnrollForm.vue';
 
 export default {
-  name: 'EditTrack',
+  name: 'EnrollStudent',
   components: {
-    TrackForms,
+    EnrollForm,
   },
   created() {
     this.initialValues = {
@@ -46,16 +44,14 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['editTrack']),
+    ...mapActions(['enrollStudent']),
     async onSubmit(form) {
       this.isSubmitting = true;
-      await this.editTrack({
+      await this.enrollStudent({
         id: this.track.id,
         form,
       });
       this.isSubmitting = false;
-    },
-    onComplete() {
       this.$router.push({ name: 'Tracks' });
     },
   },

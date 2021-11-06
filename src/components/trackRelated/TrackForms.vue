@@ -1,86 +1,109 @@
 <template>
-  <div class="d-flex flex-column">
-    <h2 class="track-name">Настройки трека <br>"{{
-        truncate(name, 38, "...") || "Имя трека"
-      }}"
-    </h2>
-    <form @submit.prevent="onSubmit" class="form d-flex flex-column">
-      <div class="form-header">
-        <div class="group">
-          <input type="text" :disabled="isSubmitting" required v-model="name"/>
-          <span class="highlight"></span>
-          <span class="bar"></span>
-        </div>
-      </div>
-      <div class="form-body d-flex flex-column">
-        <div class="group">
-        <textarea type="text" :disabled="isSubmitting" class="description" v-model="previewText"
-                  required> </textarea>
-          <span class="highlight"></span>
-          <span class="bar"></span>
-        </div>
-        <div class="dates-cnt">
-          <div class="date-block start">
-            <p class="">Дата открытия</p>
-            <Datepicker
-              inputClassName="input-date"
-              uid="start"
+  <div style="width: 100%">
+    <ActionResult></ActionResult>
+    <div class="d-flex flex-column">
+      <h2 class="track-name">Настройки трека <br>"{{
+          truncate(name, 38, "...") || "Имя трека"
+        }}"
+      </h2>
+      <form @submit.prevent="onSubmit" class="form d-flex flex-column">
+        <div class="form-header">
+          <div class="group">
+            <input
+              class="input-name"
+              type="text"
               :disabled="isSubmitting"
-              :maxDate="dateTimeFinish"
-              :yearRange="yearRange"
-              v-model="dateTimeStart">
-            </Datepicker>
-          </div>
-          <div class="date-block finish">
-            <p class="">Дата закрытия</p>
-            <Datepicker
-              inputClassName="input-date"
-              uid="finish"
-              :disabled="isSubmitting"
-              :minDate="dateTimeStart"
-              :yearRange="yearRange"
-              v-model="dateTimeFinish"
-            ></Datepicker>
+              required v-model="name"
+              placeholder="Название трека"/>
+            <span class="highlight"></span>
+            <span class="bar"></span>
           </div>
         </div>
-        <input
-          type="file"
-          style="display:none;"
-          id="loadFile"
-          accept=".jpg, .jpeg, .png"
-          @change="onFileSelected"
+        <div class="form-body d-flex flex-column">
+          <div class="group">
+        <textarea
+          type="text"
           :disabled="isSubmitting"
-        />
-        <div class="upload-file-cnt">
-          <label for="loadFile">
-            <Button :disabled="isSubmitting" class="upload-file-btn"
-                    type="button"
-                    :active="!pictureToUpload">Загрузить обложку</Button>
-          </label>
-          <p v-if="!pictureToUpload" class="d-flex gap-1 align-center">
-            <i class="fas fa-times"></i>
-            <u>Не загружено</u></p>
-          <p v-else class="d-flex gap-1 align-center">
-            <i class="fas fa-check" style="color: green"></i>
-            <u class="reset" @click="resetPicture">Удалить</u>
-          </p>
+          class="description"
+          v-model="previewText"
+          required
+          placeholder="Описание трека"></textarea>
+            <span class="highlight"></span>
+            <span class="bar"></span>
+          </div>
+          <div class="dates-cnt">
+            <div class="date-block start">
+              <p class="">Дата открытия</p>
+              <Datepicker
+                inputClassName="input-date"
+                uid="start"
+                :disabled="isSubmitting"
+                :maxDate="dateTimeFinish"
+                :yearRange="yearRange"
+                v-model="dateTimeStart">
+              </Datepicker>
+            </div>
+            <div class="date-block finish">
+              <p class="">Дата закрытия</p>
+              <Datepicker
+                inputClassName="input-date"
+                uid="finish"
+                :disabled="isSubmitting"
+                :minDate="dateTimeStart"
+                :yearRange="yearRange"
+                v-model="dateTimeFinish"
+              ></Datepicker>
+            </div>
+          </div>
+          <input
+            type="file"
+            style="display:none;"
+            id="loadFile"
+            accept=".jpg, .jpeg, .png"
+            @change="onFileSelected"
+            :disabled="isSubmitting"
+          />
+          <div class="upload-file-cnt">
+            <label for="loadFile">
+              <Button
+                :disabled="isSubmitting"
+                class="upload-file-btn"
+                type="button"
+                :active="!pictureToUpload">Загрузить обложку
+              </Button>
+            </label>
+            <p v-if="!pictureToUpload" class="d-flex gap-1 align-center">
+              <i class="fas fa-times"></i>
+              <u>Не загружено</u></p>
+            <p v-else class="d-flex gap-1 align-center">
+              <i class="fas fa-check" style="color: green"></i>
+              <u class="reset" @click="resetPicture">Удалить</u>
+            </p>
+          </div>
         </div>
-      </div>
-      <div class="form-footer">
-        <div class="modal-footer">
-          <Button
-            :btn-orange="true"
-            :border-disabled="true"
-          >
-            Отмена
-          </Button>
+        <div class="form-footer">
+          <div class="modal-footer">
+            <router-link :to="{ name: 'Tracks' }">
+              <Button
+                :btn-orange="true"
+                :border-disabled="true">
+                Отмена
+              </Button>
+            </router-link>
 
-          <Button type="submit" @submit.prevent
-                  :btn-disabled="isSubmitting" :btn-blue="true">Подтвердить
-          </Button>
+            <Button
+              type="submit"
+              @submit.prevent
+              :btn-disabled="isSubmitting"
+              :btn-blue="true"
+              class="enroll-btn">
+              Подтвердить
+            </Button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
+
   </div>
 </template>
 
@@ -88,6 +111,7 @@
 import Datepicker from 'vue3-date-time-picker';
 import moment from 'moment';
 import Button from '@/components/Button.vue';
+import ActionResult from '@/components/ActionResult.vue';
 
 export default {
   name: 'TrackForms',
@@ -106,10 +130,11 @@ export default {
     },
   },
   components: {
-    Datepicker, Button,
+    Datepicker, Button, ActionResult,
   },
 
   computed: {
+
     dateTimeStartComputed() {
       return moment(this.dateTimeStart).format('X');
     },
@@ -143,6 +168,7 @@ export default {
       };
       this.$emit('trackSubmit', form);
     },
+
     truncate(text, length, suffix) {
       if (text.length > length) {
         return text.substring(0, length) + suffix;
@@ -161,10 +187,16 @@ export default {
       this.pictureToUpload = null;
     },
   },
+
 };
 </script>
 
 <style scoped lang="scss">
+
+::-webkit-input-placeholder {
+  color: #3765FF;
+}
+
 .form {
   max-width: 800px;
   width: 100%;
@@ -183,10 +215,19 @@ export default {
   margin-bottom: 16px;
 }
 
+.input-name {
+  color: #3765FF;
+  padding-left: 15px;
+}
+
 .description {
+  padding-left: 15px;
+  color: #3765FF;
   resize: vertical;
   min-height: 150px;
   margin-bottom: 16px;
+  outline: none;
+  resize: none;
 }
 
 .dates-cnt {
@@ -215,22 +256,27 @@ export default {
   display: flex;
   align-items: center;
   gap: 10px;
-  label{
+
+  label {
     cursor: pointer;
   }
-  .upload-file-btn{
+
+  .upload-file-btn {
     white-space: nowrap;
     pointer-events: none;
   }
+
   i {
     font-size: 24px;
   }
+
   u {
     font-weight: 700;
     font-size: 12px;
     text-decoration: none;
   }
-  .reset{
+
+  .reset {
     cursor: pointer;
   }
 
@@ -253,7 +299,9 @@ textarea {
   display: block;
   width: 100%;
   border: 1px solid #8ba4f9;
-  border-bottom: 1px solid #757575;
+  border-radius: 5px;
+  background: rgba(139, 164, 249, 0.05);
+  // border-bottom: 1px solid #757575;
 }
 
 input:focus,

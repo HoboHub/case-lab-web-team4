@@ -1,5 +1,7 @@
 <template>
-  <div class="track">
+  <div>
+    <actionResult/>
+  <div v-if="track" class="track">
     <!--    <Preloader></Preloader>-->
 
     <!-- <img :src="previewPicture"
@@ -31,14 +33,24 @@
         <i class="fas fa-arrow-left"></i>
         В каталог
       </router-link>
-      <Button v-if="isMaster"
-              :btn-orange="true"
-              class="redact-btn"
-              @click="this.$router.push({name : 'EditTrack'})"
-      >
-        <i class="fas fa-pencil"></i>
-        Редактировать
-      </Button>
+      <div v-if="isMaster" class="admin-btns d-flex flex-column gap-2">
+        <Button
+          :btn-orange="true"
+          class="redact-btn"
+          @click="this.$router.push({name : 'EditTrack'})"
+        >
+          <i class="fas fa-pencil"></i>
+          Редактировать
+        </Button>
+        <Button
+          :btn-danger="true"
+          class="redact-btn"
+          @click="deleteTrack"
+        >
+          <i class="fas fa-times"></i>
+          Удалить
+        </Button>
+      </div>
       <TrackInfoMain
         :name="track.data.name"
         :description="track.data.previewText"
@@ -61,6 +73,7 @@
         <Button v-if="isMaster"
                 :btn-blue="true"
                 class="enroll-btn"
+                @click="this.$router.push({name : 'enrollStudent'})"
         >
           <img src="../assets/student.svg" alt="student">
           Записать студента
@@ -85,14 +98,16 @@
           :duration="item.entityDuration"
           :type="item.data.type"
           :id="item.id"
-          :trackId="item.trackId" />
+          :trackId="item.trackId"/>
       </div>
     </div>
   </div>
+  </div>
+
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 // import Track from '../services/track/track';
 // import Preloader from '../components/Preloader';
 
@@ -104,10 +119,12 @@ import TrackInfoSub from '@/components/trackRelated/TrackInfoSub.vue';
 import placeholderBig from '../../public/placeholderBig.png';
 
 import TrackItem from '@/components/trackRelated/TrackItem.vue';
+import ActionResult from '@/components/ActionResult.vue';
 
 export default {
   name: 'track',
   components: {
+    ActionResult,
     // Track
     // Preloader,
     Button,
@@ -138,6 +155,7 @@ export default {
   },
 
   methods: {
+    ...mapActions(['removeTrack']),
     async details(role) {
       const result = await TrackDetail.getTrackDetail(+this.$route.params.id, role);
       this.trackDetail = result;
@@ -157,6 +175,17 @@ export default {
         });
 
       this.trackDuration = Math.ceil(durRes.reduce((a, b) => a + b) / 60);
+    },
+
+    deleteTrack() {
+      // eslint-disable-next-line no-restricted-globals
+      if (confirm('Are you sure?')) {
+        this.removeTrack(this.track.id);
+      }
+    },
+
+    callConfirm() {
+
     },
   },
 

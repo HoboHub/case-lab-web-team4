@@ -4,6 +4,7 @@
       'btn-active' : active,
       'btn-blue' :  btnBlue,
       'btn-orange' : btnOrange,
+      'btn-danger' : btnDanger,
       'btn-test' : btnTest,
       'btn-disabled' : btnDisabled,
       'border-disabled' : borderDisabled
@@ -23,6 +24,10 @@ export default {
       default: false,
     },
     btnOrange: {
+      type: Boolean,
+      default: false,
+    },
+    btnDanger: {
       type: Boolean,
       default: false,
     },
@@ -93,6 +98,18 @@ export default {
 
 }
 
+.btn-danger {
+  $dangerBgColor: rgb(255, 0, 0);
+  $dangerTextColor: rgb(255, 255, 255);
+  background: $dangerBgColor;
+  color: $dangerTextColor;
+
+  &:hover {
+  background: darken($dangerBgColor, 10%);
+}
+
+}
+
 .btn-test {
   background: #6FCF97;
   width: 300px;
@@ -112,6 +129,7 @@ export default {
 
 .enroll-btn {
   background-color: #66D2EA;
+  border: none;
 
   &:hover {
     background: darken(#66D2EA, 10%);
