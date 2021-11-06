@@ -5,10 +5,12 @@
       Завершен <i class="far fa-check-circle"></i>
     </p>
     <div class="track-core">
-      <img class="track-img"
-           :src="imgUrl ? baseUrl + imgUrl : placeholderImage "
-           alt="small placeholder. TO BE DONE"
-      />
+      <div class="track-img-wrap">
+        <img class="track-img"
+          :src="imgUrl ? baseUrl + imgUrl : placeholderImage "
+          alt="small placeholder. TO BE DONE"
+        />
+      </div>
 
       <div class="track-main">
         <div class="track-info">
@@ -124,9 +126,21 @@ export default {
     flex-direction: column;
   }
 
+  .track-img-wrap {
+    // position: relative;
+    overflow: hidden;
+    height: 200px;
+  }
+
   .track-img {
-    max-width: 100%;
-    height: 40%;
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    // max-width: 100%;
+    width: 100%;
+    // text-align: center;
+    // height: 100%;
+    // height: 40%;
   }
 
   .track-main {

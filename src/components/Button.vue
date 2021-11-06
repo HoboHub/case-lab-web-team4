@@ -129,6 +129,7 @@ export default {
 
 .enroll-btn {
   background-color: #66D2EA;
+  border: none;
 
   &:hover {
     background: darken(#66D2EA, 10%);
