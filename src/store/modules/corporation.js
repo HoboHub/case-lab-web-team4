@@ -1,8 +1,6 @@
 /* eslint no-shadow:  0 */ // --> OFF
-// eslint-disable-next-line no-unused-vars
 import { getItem, setItem } from '@/helpers/localStorageHelper';
 import corporationApi from '@/services/search/corporationApi';
-// import { removeRedundant } from '@/helpers/removeRedundantData';
 
 const state = {
   departments: getItem('departments') || '',

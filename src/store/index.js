@@ -155,8 +155,8 @@ export default createStore({
       }
     },
 
-    clearSuccess({ commit }) {
-      commit('changeSuccessStatus', null);
+    changeSuccessStatus({ commit }, status) {
+      commit('changeSuccessStatus', status);
     },
 
   },

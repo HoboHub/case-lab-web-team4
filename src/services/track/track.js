@@ -81,4 +81,18 @@ export default class Track {
       console.log(error);
     }
   }
+
+  static assignTrack(trackId, userId, userRole) {
+    const headers = {};
+
+    if (userRole === 'teacher') {
+      headers.headers = { 'X-API-KEY': tokens.teacher };
+    }
+    try {
+      serviceApi.post('rosatom', `track/${trackId}/trackAssigns`, [{ userId }], headers);
+    } catch (error) {
+      console.log(`Error assigning user ${userId} to track ${trackId}`, error);
+    }
+    debugger;
+  }
 }

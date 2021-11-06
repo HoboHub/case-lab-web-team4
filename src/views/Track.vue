@@ -155,7 +155,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['removeTrack', 'fetchUsers']),
+    ...mapActions(['removeTrack']),
     async details(role) {
       const result = await TrackDetail.getTrackDetail(+this.$route.params.id, role);
       this.trackDetail = result;
@@ -188,8 +188,7 @@ export default {
 
     },
     addStudents() {
-      this.fetchUsers();
-      this.$router.push(`/track/${this.track.id}/students`);
+      this.$router.push(`/track/${this.track.id}/enroll`);
     },
   },
 

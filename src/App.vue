@@ -53,6 +53,12 @@ export default {
   .gap-2{
     gap: 16px;
   }
+  .gap-3{
+    gap: 24px;
+  }
+  .gap-4{
+    gap: 32px;
+  }
   .flex-column{
     flex-direction: column;
   }
