@@ -2,22 +2,24 @@
 <template v-if="this.track">
   <div class="container d-flex flex-column">
     <ActionResult></ActionResult>
-    <h2 class="form-name">Записать студента на трек <br>"{{ track.data.name
+    <h2 class="form-name">Записать студента на трек <br>"{{
+        track.data.name
       }}"
     </h2>
     <div class="form d-flex flex-column gap-3">
       <div class="form-header cnt-local d-flex flex-column gap-1">
         <div class="group">
           <input type="text" class="form-username"
-                 v-model="searchData" @input="onInputCustom" placeholder="Поиск пользователя">
+                 v-model="searchData.inputData"
+                 @input="onInputCustom" placeholder="Поиск пользователя">
           <span class="highlight"></span>
           <span class="bar"></span>
         </div>
         <Dropdown
           class="my-dropdown-toggle"
           :options="this.departments"
-          :selected="departmentSelected || 'Департамент'"
-          :placeholder="departmentSelected || 'Департамент'"
+          :selected="searchData.departmentSelected || 'Департамент'"
+          :placeholder="searchData.departmentSelected || 'Департамент'"
           v-on:updateOption="selectDepartment"
           :closeOnOutsideClick="true"
           :disabled="!this.departments || this.isLoading"
@@ -26,8 +28,8 @@
         <Dropdown
           class="my-dropdown-toggle"
           :options="this.companies"
-          :selected="companySelected || 'Компания'"
-          :placeholder="companySelected || 'Компания'"
+          :selected="searchData.companySelected || 'Компания'"
+          :placeholder="searchData.companySelected || 'Компания'"
           v-on:updateOption="selectCompany"
           :closeOnOutsideClick="true"
           :disabled="!this.companies || this.isLoading"
@@ -60,7 +62,7 @@
           </thead>
           <tbody style="position:relative;">
           <Preloader v-show="isLoading"></Preloader>
-          <tr v-if="!searchData && !isLoading">
+          <tr v-if="!Object.values(searchData).some(i => i) && !isLoading">
             <td colspan="6">Введите ФИО или Логин пользователя</td>
           </tr>
           <tr v-else-if="users.length === 0 && !isLoading">
@@ -157,9 +159,11 @@ export default {
   },
   data() {
     return {
-      departmentSelected: '',
-      companySelected: '',
-      searchData: '',
+      searchData: {
+        departmentSelected: '',
+        companySelected: '',
+        inputData: '',
+      },
       chosenUsers: [],
     };
   },
@@ -167,19 +171,23 @@ export default {
   methods: {
     ...mapActions(['fetchUsers', 'fetchDepartments', 'fetchCompanies', 'clearCompanies', 'clearUsers', 'changeSuccessStatus']),
     selectDepartment(payload) {
-      this.companySelected = '';
+      this.searchData.companySelected = '';
       this.clearUsers();
       this.onInputCustom();
-      this.departmentSelected = payload;
-      this.fetchCompanies(this.departmentSelected);
+      this.searchData.departmentSelected = payload;
+      this.fetchCompanies(this.searchData.departmentSelected);
     },
     selectCompany(payload) {
-      this.companySelected = payload;
+      this.searchData.companySelected = payload;
       this.onInputCustom();
     },
     onInputCustom() {
       this.fetchUsers(
-        { q: this.searchData, department: this.departmentSelected, company: this.companySelected },
+        {
+          q: this.searchData.inputData,
+          department: this.searchData.departmentSelected,
+          company: this.searchData.companySelected,
+        },
       );
     },
 
@@ -195,9 +203,9 @@ export default {
     },
 
     resetInputs() {
-      this.departmentSelected = '';
-      this.searchData = '';
-      this.companySelected = '';
+      this.searchData.departmentSelected = '';
+      this.searchData.inputData = '';
+      this.searchData.companySelected = '';
       this.clearUsers();
     },
 
