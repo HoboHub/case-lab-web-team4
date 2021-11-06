@@ -15,7 +15,7 @@
         </div>
         <Dropdown
           class="my-dropdown-toggle"
-          :options="this.getDepartments"
+          :options="this.departments"
           :selected="departmentSelected || 'Департамент'"
           :placeholder="departmentSelected || 'Департамент'"
           v-on:updateOption="selectDepartment"

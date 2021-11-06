@@ -142,6 +142,7 @@ export default {
       flex-grow: 1;
 
       .track-name {
+        cursor: pointer;
         display: block;
         font-weight: 800;
         font-size: 14px;
@@ -162,7 +163,7 @@ export default {
 
     .open-track {
       align-self: end;
-
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
