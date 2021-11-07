@@ -1,6 +1,6 @@
 <template>
   <div>
-    <actionResult v-if="showActionResult"/> >
+    <actionResult v-if="showActionResult"/>
     <div v-if="track" class="track">
       <!--    <Preloader></Preloader>-->
 
@@ -99,17 +99,7 @@
             Входное тестирование
           </Button>
       </div>
-
-      <div class="track-item-list">
-        <TrackItem
-          v-for="item in trackDetail"
-          :key="item.id"
-          :name="item.entityName"
-          :duration="item.entityDuration"
-          :type="item.data.type"
-          :id="item.id"
-          :trackId="item.trackId"/>
-      </div>
+        <TrackItemList :track-id="track.id" @durationCounted="onCounted"></TrackItemList>
     </div>
     </div>
   </div>
@@ -121,14 +111,11 @@ import { mapActions, mapGetters } from 'vuex';
 // import Track from '../services/track/track';
 // import Preloader from '../components/Preloader';
 
-import TrackDetail from '@/services/track/trackDetail';
-
 import Button from '@/components/Button.vue';
 import TrackInfoMain from '@/components/trackRelated/TrackInfoMain.vue';
 import TrackInfoSub from '@/components/trackRelated/TrackInfoSub.vue';
 import placeholderBig from '../../public/placeholderBig.png';
-
-import TrackItem from '@/components/trackRelated/TrackItem.vue';
+import TrackItemList from '@/components/trackRelated/TrackItemList.vue';
 import ActionResult from '@/components/ActionResult.vue';
 
 export default {
@@ -140,8 +127,9 @@ export default {
     Button,
     TrackInfoMain,
     TrackInfoSub,
-    TrackItem,
+    TrackItemList,
   },
+
   computed: {
     ...mapGetters([
       'getUser',
@@ -166,26 +154,6 @@ export default {
 
   methods: {
     ...mapActions(['removeTrack', 'editTrack']),
-    async details(role) {
-      const result = await TrackDetail.getTrackDetail(+this.$route.params.id, role);
-      this.trackDetail = result;
-
-      // get full track duration
-      const durRes = await this.trackDetail
-        .map((item) => {
-          let sum = 0;
-          const newStr = item.entityDuration.toString();
-
-          if (newStr) {
-            const num = newStr.match(/\d+/g).map(Number);
-            sum += num[0] * 60 + num[1];
-            return sum;
-          }
-          return 0;
-        });
-
-      this.trackDuration = Math.ceil(durRes.reduce((a, b) => a + b) / 60);
-    },
 
     deleteTrack() {
       // eslint-disable-next-line no-restricted-globals
@@ -208,24 +176,22 @@ export default {
       this.$router.push(`/track/${this.track.id}/enroll`);
     },
 
+    onCounted(val) {
+      this.trackDuration = val;
+    },
+
   },
 
   data() {
     return {
       baseUrl: 'https://tml9.rosatom.ru',
       placeholderBig,
-      trackDetail: null,
-      trackDuration: 0,
       // typeOfitem: null,
       showActionResult: true,
+      trackDuration: 0,
     };
   },
 
-  mounted() {
-    this.details(this.getUser.role);
-    // this.getItemType(this.getUser.role);
-    // this.getTrackDuration();
-  },
 };
 </script>
 
