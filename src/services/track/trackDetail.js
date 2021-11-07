@@ -6,8 +6,6 @@ export default class TrackDetail {
   static async getTrackDetail(trackId, userRole) {
     const headers = {};
 
-    console.log(userRole);
-
     if (userRole === 'teacher') {
       headers.headers = { 'X-API-KEY': tokens.teacher };
     }
@@ -23,5 +21,15 @@ export default class TrackDetail {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  static async changeTrackDetail(detailId, newData, userRole) {
+    const headers = {};
+    if (userRole === 'teacher') {
+      headers.headers = { 'X-API-KEY': tokens.teacher };
+    }
+
+    const response = await serviceApi.put('rosatom', `track/detail/${detailId}`, newData, headers);
+    return response;
   }
 }

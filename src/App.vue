@@ -69,4 +69,5 @@ export default {
   .align-center{
     align-items: center;
   }
+
 </style>

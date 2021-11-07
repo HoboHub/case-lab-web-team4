@@ -8,7 +8,6 @@
   @completed="onComplete"
 
   />
-
   </div>
 </template>
 
@@ -58,6 +57,7 @@ export default {
     onComplete() {
       this.$router.push({ name: 'Tracks' });
     },
+
   },
 };
 </script>
