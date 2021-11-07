@@ -131,6 +131,7 @@ export default {
     overflow: hidden;
     height: 200px;
     background: #EDEDED;
+
   }
 
   .track-img {
