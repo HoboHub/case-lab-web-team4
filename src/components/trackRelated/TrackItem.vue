@@ -19,7 +19,7 @@
       {{ type || "Формат файла" }}
     </div>
 
-    <div class="track-item-props">
+    <div class="track-item-props" v-if="isMaster">
       <div class="track-item-req">
         <label :for="`isReq${id}`">обязательно к изучению</label>
         <input type="checkbox"
@@ -75,6 +75,11 @@ export default {
     return {
       isLoading: false,
     };
+  },
+  computed: {
+    isMaster() {
+      return this.$store.getters.getUser.role === 'teacher';
+    },
   },
   methods: {
     ...mapActions(['changeTrackDetails']),
