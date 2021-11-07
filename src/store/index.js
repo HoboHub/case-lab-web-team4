@@ -5,6 +5,9 @@ import ServiceApi from '@/services/serviceApi';
 import track from '@/services/track/track';
 import tokens from '@/services/tokens';
 
+import TrackDetail from '../services/track/trackDetail';
+// import { getAllDetails } from '@/services/track/trackDetails';
+
 export default createStore({
   state: {
     user: {
@@ -12,6 +15,8 @@ export default createStore({
       token: getItem('token') || '',
     },
     tracks: getItem('tracks') || '',
+
+    trackDetails: getItem('trackDetails') || [],
 
     isSuccess: null,
   },
@@ -21,6 +26,9 @@ export default createStore({
     getTracks: (state) => state.tracks,
     getTrackByIdStore: (state) => (id) => [...state.tracks].find((t) => t.id === id),
     getSuccessStatus: (state) => state.isSuccess,
+
+    // getTrackDetailsFromStore: (state) => (id) => state.trackDetails.find((i) => i === id),
+    getTrackDetailsFromStore: (state) => (id) => [...state.trackDetails].find((t) => t.id === id),
   },
 
   mutations: {
@@ -70,6 +78,16 @@ export default createStore({
     removeTrack(state, payload) {
       state.tracks = state.tracks.filter((i) => i.id !== payload);
       setItem('tracks', state.tracks);
+    },
+
+    // add track element
+    addTrackDetails(state, payload) {
+      state.trackDetails.push(payload);
+    },
+    // delete track element from store
+    removeTrackItem(state, payload) {
+      state.trackDetails = state.trackDetails.filter((i) => i.id !== payload);
+      setItem('trackDetails', state.trackDetails);
     },
 
     changeSuccessStatus(state, payload) {
@@ -152,6 +170,33 @@ export default createStore({
         commit('changeSuccessStatus', false);
       }
     },
+
+    // Получить элементы трека ----------------------
+    async getTrackDetails({ commit }, trackId) {
+      console.log({ commit });
+      const response = await TrackDetail.getTrackDetail(trackId, 'teacher');
+      if (response) {
+        commit('addTrackDetails', { id: trackId, details: response });
+      }
+    },
+
+    // удаление отдельного элемента в треке ------------
+    async removeTrackItem({ commit }, ids) {
+      // console.log(commit);
+      // const trackId = ids[0];
+      const itemId = ids[1];
+      // console.log('store: trackId = ', trackId);
+      // console.log('store: id = ', itemId);
+      const response = await TrackDetail.removeTrackItem(itemId, this.state.user.role);
+      console.log(response);
+      if (response) {
+        commit('changeSuccessStatus', true);
+        commit('removeTrackItem', itemId);
+      } else {
+        commit('changeSuccessStatus', false);
+      }
+    },
+    // -----------------------------------------
 
     clearSuccess({ commit }) {
       commit('changeSuccessStatus', null);

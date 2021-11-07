@@ -21,12 +21,6 @@ export default {
     Button,
   },
 
-  //   data() {
-  //     return {
-  //     //   userResp: false,
-  //     };
-  //   },
-
   methods: {
     returnResp(userResp) {
     //   console.log(userResp);
@@ -39,13 +33,10 @@ export default {
 <style scoped>
 .confirm-delete-popup {
     z-index: 999999;
-    /* display: none; */
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translateY(-50%) translateX(-40%);
-    /* margin: 0 auto; */
-
     background: #fff;
     min-width: 400px;
     max-width: 600px;

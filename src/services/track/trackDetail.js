@@ -6,8 +6,6 @@ export default class TrackDetail {
   static async getTrackDetail(trackId, userRole) {
     const headers = {};
 
-    console.log(userRole);
-
     if (userRole === 'teacher') {
       headers.headers = { 'X-API-KEY': tokens.teacher };
     }
@@ -17,9 +15,24 @@ export default class TrackDetail {
     }
 
     try {
-      //   const response = await getDetails();
       const response = await serviceApi.get('rosatom', `track/${trackId}/details`, headers);
       return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // eslint-disable-next-line consistent-return
+  static async removeTrackItem(itemId, userRole) {
+    const headers = {};
+
+    if (userRole === 'teacher') {
+      headers.headers = { 'X-API-KEY': tokens.teacher };
+    }
+
+    try {
+      const response = await serviceApi.delete('rosatom', `track/detail/${itemId}`, headers);
+      return response;
     } catch (error) {
       console.log(error);
     }

@@ -1,5 +1,6 @@
 <template>
     <div class="track-item">
+        <!-- {{itemDetail}} -->
         <!-- link to item -->
         <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link>
         <!--  -->
@@ -24,17 +25,22 @@
                 <label for="isReq">обязательно к изучению</label>
                 <input type="checkbox" name="isReq">
             </div>
-            <div class="delete-track-item">
+            <div
+                @click="deleteItem"
+                class="delete-track-item">
                 <i class="fa fa-trash" aria-hidden="true"></i>
             </div>
             <div class="track-item-locked">
                 <i class="fa fa-lock" aria-hidden="true"></i>
             </div>
         </div>
+        <!-- {{detailsOfItem}} -->
     </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+// import TrackDetail from '@/services/track/trackDetail';
 // import { defineComponent } from '@vue/composition-api'
 
 export default {
@@ -55,6 +61,33 @@ export default {
     trackId: {
       type: Number,
     },
+  },
+  date() {
+    return {
+      itemDetail: '',
+    };
+  },
+  computed: {
+    ...mapGetters([
+      'getUser',
+      'getTrackDetailsFromStore',
+    ]),
+  },
+  methods: {
+    ...mapActions(['removeTrackItem']),
+
+    // detailsOfItem() {
+    //   return this.getTrackDetailsFromStore(this.id);
+    // },
+
+    deleteItem() {
+      const ids = [this.trackId, this.id];
+      this.removeTrackItem(ids);
+    //   this.removeTrackItem(this.trackId, this.id);
+    },
+  },
+  mounted() {
+    // this.detailsOfItem(this.getUser.role, this.trackId);
   },
 };
 </script>
@@ -104,6 +137,7 @@ export default {
     font-size: 15px;
     color: lightslategrey;
     font-weight: 500;
+    padding-bottom: 20px;
 }
 .track-item-place {
     font-size: 16px;
