@@ -1,93 +1,103 @@
 <template>
   <div>
-    <actionResult/>
-  <div v-if="track" class="track">
-    <!--    <Preloader></Preloader>-->
+    <actionResult v-if="showActionResult"/> >
+    <div v-if="track" class="track">
+      <!--    <Preloader></Preloader>-->
 
-    <!-- <img :src="previewPicture"
-         class="track-cover" alt="preview picture"/> -->
-    <div class="track-bg-img" style="overflow: hidden; position: relative;">
-      <img
-        :src="previewPicture"
-        class="track-cover-bg"
-        alt="preview picture" data-v-7ef61a01=""
-        style="
+      <!-- <img :src="previewPicture"
+           class="track-cover" alt="preview picture"/> -->
+      <div class="track-bg-img" style="overflow: hidden; position: relative;">
+        <img
+          :src="previewPicture"
+          class="track-cover-bg"
+          alt="preview picture" data-v-7ef61a01=""
+          style="
         position: absolute;
         top:  0px;
         left: 0px;
         max-height: 510px;
         width: 101%;
         filter: blur(10px);">
-      <img
-        :src="previewPicture"
-        class="track-cover"
-        alt="preview picture"
-        data-v-7ef61a01="">
-    </div>
-
-    <div class="track-content container">
-      <router-link
-        :to="{ name: 'Tracks' }"
-        class="link-back"
-      >
-        <i class="fas fa-arrow-left"></i>
-        В каталог
-      </router-link>
-      <div v-if="isMaster" class="admin-btns d-flex flex-column gap-2">
-        <Button
-          :btn-orange="true"
-          class="redact-btn"
-          @click="this.$router.push({name : 'EditTrack'})"
-        >
-          <i class="fas fa-pencil"></i>
-          Редактировать
-        </Button>
-        <Button
-          :btn-danger="true"
-          class="redact-btn"
-          @click="deleteTrack"
-        >
-          <i class="fas fa-times"></i>
-          Удалить
-        </Button>
+        <img
+          :src="previewPicture"
+          class="track-cover"
+          alt="preview picture"
+          data-v-7ef61a01="">
       </div>
-      <TrackInfoMain
-        :name="track.data.name"
-        :description="track.data.previewText"
-        :isNotAssigned="!track.assigned"
-      />
 
-      <TrackInfoSub
-        :track-duration="trackDuration"
-        :date-start-prop="track.data.dateTimeStart"
-        :date-finish-prop="track.data.dateTimeFinish"
-      />
-      <div class="track-manage-btns">
-        <Button v-if="isMaster"
-                :btn-orange="true"
-                class="add-btn"
+      <div class="track-content container">
+        <router-link
+          :to="{ name: 'Tracks' }"
+          class="link-back"
         >
-          <i class="fas fa-plus"></i>
-          Добавить элемент
-        </Button>
-        <Button v-if="isMaster"
-                :btn-blue="true"
-                class="enroll-btn"
-                @click="addStudents"
-        >
-          <img src="../assets/student.svg" alt="student">
-          Записать студента
-        </Button>
-      </div>
-      <!-- if ordered -->
-      <!-- сменить на track.assigned как будет функционал -->
-      <div
-        v-if="!track.assigned"
-        class="track-content-ordered">
-        <Button
-          :class="{'btn-test': true, 'btn-disabled': false}">
-          Входное тестирование
-        </Button>
+          <i class="fas fa-arrow-left"></i>
+          В каталог
+        </router-link>
+        <div v-if="isMaster" class="admin-btns d-flex flex-column gap-2">
+          <Button
+            :btn-orange="true"
+            class="redact-btn"
+            @click="this.$router.push({name : 'EditTrack'})"
+          >
+            <i class="fas fa-pencil"></i>
+            Редактировать
+          </Button>
+          <Button
+            :btn-danger="true"
+            class="redact-btn"
+            @click="deleteTrack"
+          >
+            <i class="fas fa-times"></i>
+            Удалить
+          </Button>
+          <div class="publish-cnt d-flex align-center">
+            <label for="publish">Опубликовано :</label>
+            <input
+              type="checkbox"
+              class="publish-btn"
+              id="publish"
+              :checked="track.data.published"
+              @click="publish"
+            >
+          </div>
+        </div>
+        <TrackInfoMain
+          :name="track.data.name"
+          :description="track.data.previewText"
+          :isNotAssigned="!track.assigned"
+        />
+
+        <TrackInfoSub
+          :track-duration="trackDuration"
+          :date-start-prop="track.data.dateTimeStart"
+          :date-finish-prop="track.data.dateTimeFinish"
+        />
+        <div v-if="isMaster" class="track-manage-btns">
+          <Button
+                  :btn-orange="true"
+                  class="add-btn"
+          >
+            <i class="fas fa-plus"></i>
+            Добавить элемент
+          </Button>
+          <Button
+                  :btn-blue="true"
+                  class="enroll-btn"
+                  @click="addStudents"
+          >
+            <img src="../assets/student.svg" alt="student">
+            Записать студента
+          </Button>
+        </div>
+        <!-- if ordered -->
+        <!-- сменить на track.assigned как будет функционал -->
+        <div
+          v-if="!track.assigned"
+          class="track-content-ordered">
+          <Button
+            :class="{'btn-test': true, 'btn-disabled': false}">
+            Входное тестирование
+          </Button>
       </div>
 
       <div class="track-item-list">
@@ -101,7 +111,7 @@
           :trackId="item.trackId"/>
       </div>
     </div>
-  </div>
+    </div>
   </div>
 
 </template>
@@ -155,7 +165,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['removeTrack']),
+    ...mapActions(['removeTrack', 'editTrack']),
     async details(role) {
       const result = await TrackDetail.getTrackDetail(+this.$route.params.id, role);
       this.trackDetail = result;
@@ -184,12 +194,20 @@ export default {
       }
     },
 
-    callConfirm() {
-
+    async publish(event) {
+      this.showActionResult = false;
+      this.track.data.published = event.target.checked;
+      await this.editTrack({
+        id: this.track.id,
+        form: this.track.data,
+      });
+      this.showActionResult = true;
     },
+
     addStudents() {
       this.$router.push(`/track/${this.track.id}/enroll`);
     },
+
   },
 
   data() {
@@ -199,6 +217,7 @@ export default {
       trackDetail: null,
       trackDuration: 0,
       // typeOfitem: null,
+      showActionResult: true,
     };
   },
 
@@ -247,6 +266,19 @@ export default {
   border-radius: 22px;
   width: 250px;
   grid-column: 2;
+}
+
+.publish-cnt {
+  gap: 12px;
+  label {
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  input {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .track-content {

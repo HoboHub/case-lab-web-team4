@@ -55,14 +55,14 @@ export default class Track {
   }
 
   // eslint-disable-next-line consistent-return
-  static async changeTrack(trackId, track, userRole) {
+  static async changeTrack(trackId, data, userRole) {
     const headers = {};
 
     if (userRole === 'teacher') {
       headers.headers = { 'X-API-KEY': tokens.teacher };
     }
 
-    const response = await serviceApi.put('rosatom', `track/${trackId}`, track, headers);
+    const response = await serviceApi.put('rosatom', `track/${trackId}`, data, headers);
     return response;
   }
 

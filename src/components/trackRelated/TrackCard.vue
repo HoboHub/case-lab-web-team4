@@ -130,6 +130,7 @@ export default {
     // position: relative;
     overflow: hidden;
     height: 200px;
+    background: #EDEDED;
   }
 
   .track-img {

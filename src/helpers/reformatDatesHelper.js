@@ -1,5 +1,15 @@
 import moment from 'moment';
 // eslint-disable-next-line import/prefer-default-export
+export const formatDates = (data) => {
+  Object.entries(data).forEach(([key, value]) => {
+    if (key === 'dateTimeStart' || key === 'dateTimeFinish') {
+      // eslint-disable-next-line no-param-reassign
+      data[key] = moment(value).format('X');
+    }
+  });
+  return data;
+};
+
 export const reformatDates = (data) => {
   Object.entries(data).forEach(([key, value]) => {
     if (key === 'dateTimeStart' || key === 'dateTimeFinish') {

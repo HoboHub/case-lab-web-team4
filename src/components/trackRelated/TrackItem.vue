@@ -1,8 +1,8 @@
 <template>
     <div class="track-item">
         <!-- link to item -->
-        <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link>
-        <!--  -->
+      <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link>
+      <!--  -->
 
         <span v-if="type !== 'pdf'" class="track-item-type">{{ type || "Тип" }}</span>
 
@@ -21,8 +21,8 @@
 
         <div class="track-item-props">
             <div class="track-item-req">
-                <label for="isReq">обязательно к изучению</label>
-                <input type="checkbox" name="isReq">
+                <label :for="`isReq${id}`">обязательно к изучению</label>
+                <input type="checkbox" :id="`isReq${id}`" name="isReq">
             </div>
             <div class="delete-track-item">
                 <i class="fa fa-trash" aria-hidden="true"></i>
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+
 // import { defineComponent } from '@vue/composition-api'
 
 export default {

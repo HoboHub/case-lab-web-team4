@@ -109,7 +109,6 @@
 
 <script>
 import Datepicker from 'vue3-date-time-picker';
-import moment from 'moment';
 import Button from '@/components/Button.vue';
 import ActionResult from '@/components/ActionResult.vue';
 
@@ -135,12 +134,6 @@ export default {
 
   computed: {
 
-    dateTimeStartComputed() {
-      return moment(this.dateTimeStart).format('X');
-    },
-    dateTimeFinishComputed() {
-      return moment(this.dateTimeFinish).format('X');
-    },
     yearRange() {
       const currentYear = new Date().getFullYear();
       return [currentYear - 5, currentYear + 5];
@@ -163,8 +156,8 @@ export default {
         name: this.name,
         previewText: this.previewText,
         previewPicture: this.pictureToUpload || this.previewPicture,
-        dateTimeStart: this.dateTimeStartComputed,
-        dateTimeFinish: this.dateTimeFinishComputed,
+        dateTimeStart: this.dateTimeStart,
+        dateTimeFinish: this.dateTimeFinish,
       };
       this.$emit('trackSubmit', form);
     },
