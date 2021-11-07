@@ -94,7 +94,6 @@
         </div>
         <!-- if ordered -->
         <!-- сменить на track.assigned как будет функционал -->
-        <TrackItemList :track-id="track.id" @durationCounted="onCounted"></TrackItemList>
 
         <div
           v-if="!track.assigned"
@@ -104,6 +103,9 @@
             Входное тестирование
           </Button>
         </div>
+        
+        <TrackItemList :track-id="track.id" @durationCounted="onCounted"></TrackItemList>
+
 
       </div>
     </div>
