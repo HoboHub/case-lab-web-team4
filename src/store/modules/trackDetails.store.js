@@ -15,6 +15,12 @@ const mutations = {
     state.details.push(payload);
     setItem('details', state.details);
   },
+
+  changeDetail(state, payload) {
+    // eslint-disable-next-line no-param-reassign
+    payload.detail.data = payload.newData;
+    setItem('details', state.details);
+  },
 };
 
 const actions = {
@@ -24,6 +30,17 @@ const actions = {
     const response = await TrackDetail.getTrackDetail(trackId, 'teacher');
     if (response) {
       commit('addTrackDetails', { id: trackId, details: response });
+    }
+  },
+
+  async changeTrackDetails({ commit, state }, data) {
+    const response = await TrackDetail.changeTrackDetail(data.id, data.newData, 'teacher');
+    if (response) {
+      // Здесь мы делаем массив из details внутри массива details (там [{id: xx, details: xx}, ..]
+      const detailsList = [...state.details.map((i) => i.details)].flat();
+      const detail = detailsList.find((i) => i.id === data.id);
+      commit('changeDetail', { detail, newData: data.newData });
+      console.log('done');
     }
   },
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <actionResult v-if="showActionResult"/>
+    <actionResult v-if="showActionResult" />
     <div v-if="track" class="track">
       <!--    <Preloader></Preloader>-->
 
@@ -10,26 +10,21 @@
         <img
           :src="previewPicture"
           class="track-cover-bg"
-          alt="preview picture" data-v-7ef61a01=""
+          alt="preview picture"
+          data-v-7ef61a01=""
           style="
         position: absolute;
         top:  0px;
         left: 0px;
         max-height: 510px;
         width: 101%;
-        filter: blur(10px);">
-        <img
-          :src="previewPicture"
-          class="track-cover"
-          alt="preview picture"
-          data-v-7ef61a01="">
+        filter: blur(10px);"
+        />
+        <img :src="previewPicture" class="track-cover" alt="preview picture" data-v-7ef61a01="" />
       </div>
 
       <div class="track-content container">
-        <router-link
-          :to="{ name: 'Tracks' }"
-          class="link-back"
-        >
+        <router-link :to="{ name: 'Tracks' }" class="link-back">
           <i class="fas fa-arrow-left"></i>
           В каталог
         </router-link>
@@ -37,16 +32,12 @@
           <Button
             :btn-orange="true"
             class="redact-btn"
-            @click="this.$router.push({name : 'EditTrack'})"
+            @click="this.$router.push({ name: 'EditTrack' })"
           >
             <i class="fas fa-pencil"></i>
             Редактировать
           </Button>
-          <Button
-            :btn-danger="true"
-            class="redact-btn"
-            @click="deleteTrack"
-          >
+          <Button :btn-danger="true" class="redact-btn" @click="deleteTrack">
             <i class="fas fa-times"></i>
             Удалить
           </Button>
@@ -58,7 +49,7 @@
               id="publish"
               :checked="track.data.published"
               @click="publish"
-            >
+            />
           </div>
         </div>
         <TrackInfoMain
@@ -73,37 +64,26 @@
           :date-finish-prop="track.data.dateTimeFinish"
         />
         <div v-if="isMaster" class="track-manage-btns">
-          <Button
-                  :btn-orange="true"
-                  class="add-btn"
-          >
+          <Button :btn-orange="true" class="add-btn">
             <i class="fas fa-plus"></i>
             Добавить элемент
           </Button>
-          <Button
-                  :btn-blue="true"
-                  class="enroll-btn"
-                  @click="addStudents"
-          >
-            <img src="../assets/student.svg" alt="student">
+          <Button :btn-blue="true" class="enroll-btn" @click="addStudents">
+            <img src="../assets/student.svg" alt="student" />
             Записать студента
           </Button>
         </div>
         <!-- if ordered -->
         <!-- сменить на track.assigned как будет функционал -->
-        <div
-          v-if="!track.assigned"
-          class="track-content-ordered">
-          <Button
-            :class="{'btn-test': true, 'btn-disabled': false}">
+        <div v-if="!track.assigned" class="track-content-ordered">
+          <Button :class="{ 'btn-test': true, 'btn-disabled': false }">
             Входное тестирование
           </Button>
-      </div>
+        </div>
         <TrackItemList :track-id="track.id" @durationCounted="onCounted"></TrackItemList>
-    </div>
+      </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -164,10 +144,11 @@ export default {
 
     async publish(event) {
       this.showActionResult = false;
-      this.track.data.published = event.target.checked;
+      const dataClone = { ...this.track.data, published: event.target.checked };
+
       await this.editTrack({
         id: this.track.id,
-        form: this.track.data,
+        form: dataClone,
       });
       this.showActionResult = true;
     },
@@ -202,7 +183,7 @@ export default {
 
 .track-bg-img {
   background-color: lightgrey;
-  max-height: 500px
+  max-height: 500px;
 }
 
 .track-cover {
@@ -222,12 +203,15 @@ export default {
   font-size: 14px;
 }
 
-.redact-btn, .add-btn, .enroll-btn {
+.redact-btn,
+.add-btn,
+.enroll-btn {
   border: unset;
-  box-shadow: 0px 2px 4px rgba(139, 164, 249, .3);
+  box-shadow: 0px 2px 4px rgba(139, 164, 249, 0.3);
 }
 
-.add-btn, .enroll-btn {
+.add-btn,
+.enroll-btn {
   gap: 15px;
   border-radius: 22px;
   width: 250px;
@@ -281,13 +265,14 @@ export default {
   .link-back {
     grid-column: span 2;
   }
-  .track-manage-btns, .track-content-ordered, .track-item-list {
+  .track-manage-btns,
+  .track-content-ordered,
+  .track-item-list {
     grid-column-start: 2;
   }
   .track-manage-btns {
     justify-content: space-between;
   }
-
 }
 
 .track-content-ordered {
@@ -296,7 +281,6 @@ export default {
 }
 
 .track-item-list {
-
   display: flex;
   flex-direction: column;
   gap: 20px;

@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import search from './modules/search';
 import corporation from './modules/corporation';
-import trackDetails from './modules/trackDetails';
+import trackDetails from './modules/trackDetails.store';
 import { getItem, removeItem, setItem } from '@/helpers/localStorageHelper';
 import { formatDates, reformatDates } from '@/helpers/reformatDatesHelper';
 import ServiceApi from '@/services/serviceApi';
@@ -104,7 +104,6 @@ export default createStore({
       }
     },
 
-    // eslint-disable-next-line no-unused-vars
     async createTrack({ commit }, form) {
       // проверяем, загрузил ли пользователь изображение, и, если да,
       // заменяем ссылку в previewPicture
@@ -129,7 +128,6 @@ export default createStore({
       }
       // eslint-disable-next-line no-param-reassign
       data.form = formatDates(data.form);
-      debugger;
       const response = await track.changeTrack(data.id, data.form, 'teacher');
       if (response) {
         // eslint-disable-next-line no-param-reassign

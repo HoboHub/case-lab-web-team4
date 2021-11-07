@@ -7,7 +7,8 @@
       :duration="item.entityDuration"
       :type="item.data.type"
       :id="item.id"
-      :trackId="trackId"/>
+      :trackId="trackId"
+      :detail-data="item.data"/>
   </div>
 </template>
 
@@ -41,7 +42,6 @@ export default {
     theDetails() {
       try {
         const detailsRaw = this.getTrackDetailsFromStore(this.trackId);
-        debugger;
         return detailsRaw.details;
       } catch (err) {
         return undefined;
