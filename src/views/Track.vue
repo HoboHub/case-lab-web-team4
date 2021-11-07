@@ -1,26 +1,109 @@
 <template>
   <div>
-    <actionResult v-if="showActionResult" />
-    <div v-if="track" class="track">
-      <!--    <Preloader></Preloader>-->
 
-      <!-- <img :src="previewPicture"
-           class="track-cover" alt="preview picture"/> -->
-      <div class="track-bg-img" style="overflow: hidden; position: relative;">
-        <img
-          :src="previewPicture"
-          class="track-cover-bg"
-          alt="preview picture"
-          data-v-7ef61a01=""
-          style="
+    <actionResult/>
+  <div v-if="track" class="track">
+
+    <div
+      @click="hideModal"
+      ref="popupPageDark"
+      class="popup-page-darken"></div>
+
+    <!--    <Preloader></Preloader>-->
+
+    <!-- <img :src="previewPicture"
+         class="track-cover" alt="preview picture"/> -->
+    <div class="track-bg-img" style="overflow: hidden; position: relative;">
+      <img
+        :src="previewPicture"
+        class="track-cover-bg"
+        alt="preview picture" data-v-7ef61a01=""
+        style="
+        develop
         position: absolute;
         top:  0px;
         left: 0px;
         max-height: 510px;
         width: 101%;
-        filter: blur(10px);"
-        />
-        <img :src="previewPicture" class="track-cover" alt="preview picture" data-v-7ef61a01="" />
+
+       
+
+        filter: blur(10px);">
+      <img
+        :src="previewPicture"
+        class="track-cover"
+        alt="preview picture"
+        data-v-7ef61a01="">
+    </div>
+
+    <div class="track-content container">
+      <router-link
+        :to="{ name: 'Tracks' }"
+        class="link-back"
+      >
+        <i class="fas fa-arrow-left"></i>
+        В каталог
+      </router-link>
+      <div v-if="isMaster" class="admin-btns d-flex flex-column gap-2">
+        <Button
+          :btn-orange="true"
+          class="redact-btn"
+          @click="this.$router.push({name : 'EditTrack'})"
+        >
+          <i class="fas fa-pencil"></i>
+          Редактировать
+        </Button>
+        <Button
+          :btn-danger="true"
+          class="redact-btn"
+          @click="showDeleteModal"
+        >
+          <i class="fas fa-times"></i>
+          Удалить
+        </Button>
+      </div>
+
+      <ConfirmDelete
+        @callConfirm="callConfirm"
+        v-if="showConfirmDelete" />
+
+      <TrackInfoMain
+        :name="track.data.name"
+        :description="track.data.previewText"
+        :isNotAssigned="!track.assigned"
+      />
+
+      <TrackInfoSub
+        :track-duration="trackDuration"
+        :date-start-prop="track.data.dateTimeStart"
+        :date-finish-prop="track.data.dateTimeFinish"
+      />
+      <div class="track-manage-btns">
+        <Button v-if="isMaster"
+                :btn-orange="true"
+                class="add-btn"
+        >
+          <i class="fas fa-plus"></i>
+          Добавить элемент
+        </Button>
+        <Button v-if="isMaster"
+                :btn-blue="true"
+                class="enroll-btn"
+                @click="addStudents"
+        >
+          <img src="../assets/student.svg" alt="student">
+          Записать студента
+        </Button>
+      </div>
+      <!-- if ordered -->
+      <!-- сменить на track.assigned как будет функционал -->
+      <div
+        v-if="!track.assigned"
+        class="track-content-ordered">
+        <Button
+          :class="{'btn-test': true, 'btn-disabled': false}">
+          Входное тестирование
+        </Button>
       </div>
 
       <div class="track-content container">
@@ -98,6 +181,8 @@ import placeholderBig from '../../public/placeholderBig.png';
 import TrackItemList from '@/components/trackRelated/TrackItemList.vue';
 import ActionResult from '@/components/ActionResult.vue';
 
+import ConfirmDelete from '@/components/trackRelated/ConfirmDelete.vue';
+
 export default {
   name: 'track',
   components: {
@@ -108,6 +193,7 @@ export default {
     TrackInfoMain,
     TrackInfoSub,
     TrackItemList,
+    ConfirmDelete,
   },
 
   computed: {
@@ -134,13 +220,15 @@ export default {
 
   methods: {
     ...mapActions(['removeTrack', 'editTrack']),
+   
 
-    deleteTrack() {
-      // eslint-disable-next-line no-restricted-globals
-      if (confirm('Are you sure?')) {
-        this.removeTrack(this.track.id);
-      }
+    showDeleteModal() {
+      this.showConfirmDelete = true;
+
+      this.$refs.popupPageDark.style.display = 'block';
+      document.getElementsByTagName('body')[0].style.overflow = 'hidden';
     },
+
 
     async publish(event) {
       this.showActionResult = false;
@@ -151,6 +239,18 @@ export default {
         form: dataClone,
       });
       this.showActionResult = true;
+    hideModal() {
+      this.showConfirmDelete = false;
+      this.$refs.popupPageDark.style.display = 'none';
+      document.getElementsByTagName('body')[0].style.overflowY = 'auto';
+    },
+
+    callConfirm(userResp) {
+      if (userResp) {
+        // console.log('удалить');
+        this.removeTrack(this.track.id);
+      }
+      this.hideModal();
     },
 
     addStudents() {
@@ -167,6 +267,9 @@ export default {
     return {
       baseUrl: 'https://tml9.rosatom.ru',
       placeholderBig,
+      trackDetail: null,
+      trackDuration: 0,
+      showConfirmDelete: false,
       // typeOfitem: null,
       showActionResult: true,
       trackDuration: 0,
@@ -177,6 +280,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.popup-page-darken {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  // position: absolute;
+  // top: 0px;
+  // left: 0px;
+  z-index: 1000;
+  opacity: 0.6;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+}
+
 .track {
   color: #1f2041;
 }

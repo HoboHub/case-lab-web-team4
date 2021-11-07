@@ -17,13 +17,14 @@
                 К треку
             </router-link>
 
+          <div v-if="isMaster" class="admin-btns d-flex flex-column gap-2">
             <Button
-                v-if="isMaster"
                 :btn-orange="true"
                 class="redact-btn">
                 <i class="fas fa-pencil"></i>
                 Редактировать
             </Button>
+          </div>
 
             <ItemInfoMain :name="itemDetail.entityName" />
 
@@ -165,6 +166,15 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
   font-size: 14px;
 }
 
+// .flex-column {
+//   flex-direction: column;
+// }
+
+// .d-flex {
+//   width: 100%;
+//   display: flex;
+// }
+
 .redact-btn, .add-btn, .enroll-btn{
   border: unset;
   box-shadow: 0px 2px 4px rgba(139, 164, 249, .3);
@@ -195,6 +205,8 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
   display: flex;
   justify-content: space-between;
 }
+
+// @media (min-width: 978px) {
 @media (min-width: 968px) {
   .item-content {
     // grid-template-columns: 1fr;
@@ -205,7 +217,7 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
   }
   .item-info-sub {
     text-align: left;
-    align-self: center;
+    // align-self: center;
   }
 
   .link-back {
@@ -231,7 +243,12 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
   gap: 20px;
 }
 
+// @media (min-width: 978px) {
 @media (max-width: 967px) {
+  .item-content {
+    gap: 0px;
+    row-gap: 60px;
+  }
   .item-info-main {
     grid-column-start: 1;
   }
@@ -242,6 +259,10 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
     grid-column-start: 1;
     display: flex;
     justify-content: center;
+  }
+
+  .admin-btns {
+    grid-row-start: 2;
   }
 }
 </style>

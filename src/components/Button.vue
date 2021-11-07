@@ -91,6 +91,7 @@ export default {
   $orangeTextColor: rgb(255, 255, 255);
   background: $orangeBgColor;
   color: $orangeTextColor;
+  border: none;
 
   &:hover {
     background: darken($orangeBgColor, 10%);
@@ -130,6 +131,7 @@ export default {
 .enroll-btn {
   background-color: #66D2EA;
   border: none;
+  color: #fff;
 
   &:hover {
     background: darken(#66D2EA, 10%);
