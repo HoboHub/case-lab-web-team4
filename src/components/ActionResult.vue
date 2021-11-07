@@ -1,8 +1,8 @@
 <template>
-  <div>
-  <p v-show="this.isSuccess"  class="result success-text">SUCCESS</p>
-  <p v-show="!this.isSuccess && this.isSuccess !== null"
-     class="result failure-text">FAILURE</p>
+  <div >
+    <p v-show="this.isSuccess" class="result success-text">SUCCESS</p>
+    <p v-show="!this.isSuccess && this.isSuccess !== null"
+       class="result failure-text">FAILURE</p>
   </div>
 </template>
 
@@ -21,7 +21,6 @@ export default {
   },
   methods: {
     completed() {
-      debugger;
       this.$router.back();
     },
   },

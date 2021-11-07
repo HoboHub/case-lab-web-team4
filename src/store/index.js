@@ -1,8 +1,9 @@
 import { createStore } from 'vuex';
 import search from './modules/search';
 import corporation from './modules/corporation';
+import trackDetails from './modules/trackDetails.store';
 import { getItem, removeItem, setItem } from '@/helpers/localStorageHelper';
-import { reformatDates } from '@/helpers/reformatDatesHelper';
+import { formatDates, reformatDates } from '@/helpers/reformatDatesHelper';
 import ServiceApi from '@/services/serviceApi';
 import track from '@/services/track/track';
 import tokens from '@/services/tokens';
@@ -103,7 +104,6 @@ export default createStore({
       }
     },
 
-    // eslint-disable-next-line no-unused-vars
     async createTrack({ commit }, form) {
       // проверяем, загрузил ли пользователь изображение, и, если да,
       // заменяем ссылку в previewPicture
@@ -121,17 +121,18 @@ export default createStore({
       }
     },
 
-    // eslint-disable-next-line no-unused-vars
     async editTrack({ commit, state }, data) {
       if (data.form.previewPicture instanceof FormData) {
         // eslint-disable-next-line no-param-reassign
         data.form.previewPicture = await track.uploadImage(data.form.previewPicture, 'teacher');
       }
-
+      // eslint-disable-next-line no-param-reassign
+      data.form = formatDates(data.form);
       const response = await track.changeTrack(data.id, data.form, 'teacher');
       if (response) {
         // eslint-disable-next-line no-param-reassign
         data.form = reformatDates(data.form);
+
         const trackIndex = state.tracks.findIndex((i) => i.id === data.id);
         const currentTrack = state.tracks[trackIndex].data;
         commit('changeTrack', { currentTrack, form: data.form });
@@ -161,5 +162,5 @@ export default createStore({
 
   },
 
-  modules: { search, corporation },
+  modules: { search, corporation, trackDetails },
 });
