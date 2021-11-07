@@ -2,6 +2,12 @@
   <div>
     <actionResult/>
   <div v-if="track" class="track">
+
+    <div
+      @click="hideModal"
+      ref="popupPageDark"
+      class="popup-page-darken"></div>
+
     <!--    <Preloader></Preloader>-->
 
     <!-- <img :src="previewPicture"
@@ -45,12 +51,17 @@
         <Button
           :btn-danger="true"
           class="redact-btn"
-          @click="deleteTrack"
+          @click="showDeleteModal"
         >
           <i class="fas fa-times"></i>
           Удалить
         </Button>
       </div>
+
+      <ConfirmDelete
+        @callConfirm="callConfirm"
+        v-if="showConfirmDelete" />
+
       <TrackInfoMain
         :name="track.data.name"
         :description="track.data.previewText"
@@ -121,6 +132,8 @@ import placeholderBig from '../../public/placeholderBig.png';
 import TrackItem from '@/components/trackRelated/TrackItem.vue';
 import ActionResult from '@/components/ActionResult.vue';
 
+import ConfirmDelete from '@/components/trackRelated/ConfirmDelete.vue';
+
 export default {
   name: 'track',
   components: {
@@ -131,6 +144,7 @@ export default {
     TrackInfoMain,
     TrackInfoSub,
     TrackItem,
+    ConfirmDelete,
   },
   computed: {
     ...mapGetters([
@@ -174,18 +188,30 @@ export default {
           return 0;
         });
 
-      this.trackDuration = Math.ceil(durRes.reduce((a, b) => a + b) / 60);
-    },
-
-    deleteTrack() {
-      // eslint-disable-next-line no-restricted-globals
-      if (confirm('Are you sure?')) {
-        this.removeTrack(this.track.id);
+      if (durRes.length !== 0) {
+        this.trackDuration = Math.ceil(durRes.reduce((a, b) => a + b) / 60);
       }
     },
 
-    callConfirm() {
+    showDeleteModal() {
+      this.showConfirmDelete = true;
 
+      this.$refs.popupPageDark.style.display = 'block';
+      document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+    },
+
+    hideModal() {
+      this.showConfirmDelete = false;
+      this.$refs.popupPageDark.style.display = 'none';
+      document.getElementsByTagName('body')[0].style.overflowY = 'auto';
+    },
+
+    callConfirm(userResp) {
+      if (userResp) {
+        // console.log('удалить');
+        this.removeTrack(this.track.id);
+      }
+      this.hideModal();
     },
     addStudents() {
       this.$router.push(`/track/${this.track.id}/enroll`);
@@ -198,6 +224,7 @@ export default {
       placeholderBig,
       trackDetail: null,
       trackDuration: 0,
+      showConfirmDelete: false,
       // typeOfitem: null,
     };
   },
@@ -211,6 +238,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.popup-page-darken {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  // position: absolute;
+  // top: 0px;
+  // left: 0px;
+  z-index: 1000;
+  opacity: 0.6;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+}
+
 .track {
   color: #1f2041;
 }
