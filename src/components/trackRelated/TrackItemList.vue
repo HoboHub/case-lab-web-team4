@@ -8,7 +8,10 @@
       :type="item.data.type"
       :id="item.id"
       :trackId="trackId"
-      :detail-data="item.data"/>
+      :detail-data="item.data"
+      :isLocked="item.locked"
+      :detail="item"
+    />
   </div>
 </template>
 
@@ -32,7 +35,10 @@ export default {
     if (!this.theDetails) {
       await this.getDetails();
     }
-    this.countDuration();
+    if (this.theDetails.length) {
+      this.countDuration();
+    }
+
     // this.details(this.getUser.role);
     // this.getItemType(this.getUser.role);
     // this.getTrackDuration();
@@ -42,7 +48,31 @@ export default {
     theDetails() {
       try {
         const detailsRaw = this.getTrackDetailsFromStore(this.trackId);
+        let epilogIncomplete = false;
+        detailsRaw.details.forEach((i, index) => {
+          if (i.epilogFinished && epilogIncomplete) {
+            detailsRaw.details[index].locked = true;
+            debugger;
+          }
+          if (!i.finished) epilogIncomplete = true;
+        });
         return detailsRaw.details;
+      } catch (err) {
+        console.log(err);
+        return undefined;
+      }
+    },
+
+    requiredDetailsQuantity() {
+      try {
+        return [...this.theDetails.filter((i) => i.data.required === true)].length;
+      } catch (err) {
+        return undefined;
+      }
+    },
+    finishedDetailsQuantity() {
+      try {
+        return [...this.theDetails.filter((i) => i.finished === true)].length;
       } catch (err) {
         return undefined;
       }
@@ -74,7 +104,11 @@ export default {
           return 0;
         });
 
-      this.$emit('durationCounted', Math.ceil(durRes.reduce((a, b) => a + b) / 60));
+      this.$emit('durationCounted', {
+        duration: Math.ceil(durRes.reduce((a, b) => a + b) / 60),
+        completion: (
+          this.finishedDetailsQuantity / this.requiredDetailsQuantity) * 100,
+      });
     },
   },
 

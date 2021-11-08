@@ -23,7 +23,17 @@ export default class TrackDetail {
     }
   }
 
-  static async changeTrackDetail(detailId, newData, userRole) {
+  static async addDetailToTrack(trackId, detailData, userRole) {
+    const headers = {};
+    if (userRole === 'teacher') {
+      headers.headers = { 'X-API-KEY': tokens.teacher };
+    }
+    const response = await serviceApi.post('rosatom', `track/${trackId}/detail`, detailData, headers);
+    debugger;
+    return response;
+  }
+
+  static async changeTrackDetailData(detailId, newData, userRole) {
     const headers = {};
     if (userRole === 'teacher') {
       headers.headers = { 'X-API-KEY': tokens.teacher };

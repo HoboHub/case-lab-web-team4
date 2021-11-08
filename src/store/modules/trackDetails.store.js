@@ -3,23 +3,32 @@ import TrackDetail from '@/services/track/trackDetail';
 import { setItem, getItem } from '@/helpers/localStorageHelper';
 
 const state = {
-  details: getItem('details') || [], // Массив. Содержит айди трека и объект с деталями
+  trackAndDetails: getItem('details') || [], // Массив. Содержит айди трека и объект с деталями
+
+  globalDetails: '',
 };
 
 const getters = {
   // eslint-disable-next-line no-unused-vars
-  getTrackDetailsFromStore: (state) => (id) => state.details.find((i) => i.id === id),
+  getTrackDetailsFromStore: (state) => (id) => state.trackAndDetails.find((i) => i.id === id),
 };
 const mutations = {
   addTrackDetails(state, payload) {
-    state.details.push(payload);
-    setItem('details', state.details);
+    state.trackAndDetails.push(payload);
+    setItem('details', state.trackAndDetails);
+  },
+  removeTrackDetails(state, payload) {
+    state.trackAndDetails = state.trackAndDetails.filter((i) => i.id !== payload);
   },
 
   changeDetail(state, payload) {
     // eslint-disable-next-line no-param-reassign
     payload.detail.data = payload.newData;
-    setItem('details', state.details);
+    setItem('details', state.trackAndDetails);
+  },
+
+  changeGlobalDetails(state, payload) {
+    state.globalDetails = payload;
   },
 };
 
@@ -32,15 +41,20 @@ const actions = {
       commit('addTrackDetails', { id: trackId, details: response });
     }
   },
+  async addDetailToTrack({ commit }, data) {
+    const response = await TrackDetail.addDetailToTrack(data.trackId, data.detailData, 'teacher');
+    if (response) {
+      commit('removeTrackDetails', data.trackId);
+    }
+  },
 
-  async changeTrackDetails({ commit, state }, data) {
-    const response = await TrackDetail.changeTrackDetail(data.id, data.newData, 'teacher');
+  async changeTrackDetailData({ commit, state }, data) {
+    const response = await TrackDetail.changeTrackDetailData(data.id, data.newData, 'teacher');
     if (response) {
       // Здесь мы делаем массив из details внутри массива details (там [{id: xx, details: xx}, ..]
-      const detailsList = [...state.details.map((i) => i.details)].flat();
+      const detailsList = [...state.trackAndDetails.map((i) => i.details)].flat();
       const detail = detailsList.find((i) => i.id === data.id);
       commit('changeDetail', { detail, newData: data.newData });
-      console.log('done');
     }
   },
 

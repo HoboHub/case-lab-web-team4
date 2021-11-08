@@ -83,14 +83,14 @@ const routes = [
     },
     component: () => import('@/views/AddStudents.vue'),
   },
-  // {
-  //   path: '/track/:id/enroll',
-  //   name: 'enrollStudent',
-  //   meta: {
-  //     requiresAuth: true,
-  //   },
-  //   component: () => import('@/views/EnrollStudent.vue'),
-  // },
+  {
+    path: '/track/:id/extend',
+    name: 'AddDetails',
+    meta: {
+      requiresAuth: true,
+    },
+    component: () => import('@/views/AddDetail.vue'),
+  },
   {
     path: '/:pathMatch(.*)*',
     name: 'notFound',

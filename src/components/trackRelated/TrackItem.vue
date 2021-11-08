@@ -1,6 +1,7 @@
 <template>
-  <div class="track-item">
+  <div  class="track-item" :class="{'locked' :isLocked}" >
     <!-- link to item -->
+
     <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link>
     <!--  -->
 
@@ -27,16 +28,17 @@
                name="isReq"
                :disabled="isLoading"
                :checked="detailData.required"
-               @click="lockDetail">
+               @click="makeDetailRequired">
       </div>
       <div class="delete-track-item">
         <i class="fa fa-trash" aria-hidden="true"></i>
       </div>
-      <div class="track-item-locked">
+      <div class="track-item-locked" >
         <i class="fa fa-lock" aria-hidden="true"></i>
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -67,6 +69,13 @@ export default {
       type: Object,
       required: true,
     },
+    isLocked: {
+      type: Boolean,
+      default: false,
+    },
+    detail: {
+      type: Object,
+    },
   },
   mounted() {
     this.lockDetail = debounce(this.lockDetail, 400);
@@ -74,6 +83,7 @@ export default {
   data() {
     return {
       isLoading: false,
+      inputData: '',
     };
   },
   computed: {
@@ -82,14 +92,22 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['changeTrackDetails']),
+    ...mapActions(['changeTrackDetailData']),
 
-    async lockDetail(event) {
+    async makeDetailRequired(event) {
       this.isLoading = true;
-      const dataClone = { ...this.detailData, required: event.target.checked };
-      await this.changeTrackDetails({ id: this.id, newData: dataClone });
+      const dataClone = {
+        ...this.detailData,
+        required: event.target.checked,
+      };
+      await this.changeTrackDetailData({ id: this.id, newData: dataClone });
       this.isLoading = false;
     },
+
+    // async makeEpilogRequired() {
+    //   this.isLoading = true;
+    //   const dataClone = { ...this.detailData, required: event.target.checked };
+    // },
   },
 };
 </script>
@@ -117,6 +135,10 @@ export default {
   text-align: left;
   cursor: pointer;
   transition-duration: .2s;
+}
+.locked{
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .track-item:hover {

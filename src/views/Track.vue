@@ -58,8 +58,17 @@
             <i class="fas fa-times"></i>
             Удалить
           </Button>
-        </div>
 
+        <div class="publish-cnt d-flex align-center">
+          <label for="publish">Опубликовано :</label>
+          <input
+            type="checkbox"
+            class="publish-btn"
+            id="publish"
+            :checked="track.data.published"
+            @click="publish"
+          >
+        </div>   </div>
         <ConfirmDelete
           @callConfirm="callConfirm"
           v-if="showConfirmDelete"/>
@@ -68,6 +77,7 @@
           :name="track.data.name"
           :description="track.data.previewText"
           :isNotAssigned="!track.assigned"
+          :completion-percent="completionPercent"
         />
 
         <TrackInfoSub
@@ -79,6 +89,7 @@
           <Button v-if="isMaster"
                   :btn-orange="true"
                   class="add-btn"
+                  @click="this.$router.push(`/track/${this.track.id}/extend`);"
           >
             <i class="fas fa-plus"></i>
             Добавить элемент
@@ -94,7 +105,6 @@
         </div>
         <!-- if ordered -->
         <!-- сменить на track.assigned как будет функционал -->
-        <TrackItemList :track-id="track.id" @durationCounted="onCounted"></TrackItemList>
 
         <div
           v-if="!track.assigned"
@@ -104,6 +114,7 @@
             Входное тестирование
           </Button>
         </div>
+        <TrackItemList :track-id="track.id" @durationCounted="onCounted"></TrackItemList>
 
       </div>
     </div>
@@ -197,7 +208,8 @@ export default {
     },
 
     onCounted(val) {
-      this.trackDuration = val;
+      this.trackDuration = val.duration;
+      this.completionPercent = val.completion;
     },
 
   },
@@ -208,6 +220,7 @@ export default {
       placeholderBig,
       trackDetail: null,
       trackDuration: 0,
+      completionPercent: 0,
       showConfirmDelete: false,
       // typeOfitem: null,
       showActionResult: true,
