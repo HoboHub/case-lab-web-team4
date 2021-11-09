@@ -23,7 +23,6 @@ export default class ServiceApi {
    * @param {Object} reqConfig - хедеры запроса
    * @returns {Object}
    */
-  // eslint-disable-next-line consistent-return
   static async post(serviceName = 'rosatom', url = '', postData = {}, reqConfig = {}) {
     try {
       const response = await this.api[serviceName].post(url, postData, reqConfig);
@@ -33,7 +32,6 @@ export default class ServiceApi {
     }
   }
 
-  // eslint-disable-next-line consistent-return
   static async get(serviceName = 'rosatom', url = '', preqConfig = {}) {
     try {
       const response = await this.api[serviceName].get(url, preqConfig);
@@ -43,7 +41,6 @@ export default class ServiceApi {
     }
   }
 
-  // eslint-disable-next-line consistent-return
   static async put(serviceName = 'rosatom', url = '', postData = {}, reqConfig = {}) {
     try {
       const response = await this.api[serviceName].put(url, postData, reqConfig);
@@ -53,7 +50,6 @@ export default class ServiceApi {
     }
   }
 
-  // eslint-disable-next-line consistent-return
   static async delete(serviceName = 'rosatom', url = '', preqConfig = {}) {
     try {
       const response = await this.api[serviceName].delete(url, preqConfig);

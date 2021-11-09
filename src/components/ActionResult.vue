@@ -29,7 +29,7 @@ export default {
       if (val !== null) {
         gsap.fromTo('.result', { opacity: 0 }, {
           opacity: 1,
-          duration: 2,
+          duration: 1,
           onComplete: this.completed,
         });
       }

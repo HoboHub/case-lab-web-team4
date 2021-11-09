@@ -1,10 +1,10 @@
 <template>
 <div class="item-info-main">
-    <h2 class="item-name">
+    <h2 class="name-title">
         {{ name || "Скоро здесь будет название" }}
     </h2>
     <!-- <div v-if="isNotAssigned" class="item-ordered-progress">0% изучено</div> -->
-    <div class="item-description">
+    <div class="description">
     {{ description || fishText }}
     </div>
 </div>
@@ -34,17 +34,5 @@ export default {
   flex-direction: column;
   gap: 24px;
 
-  .item-name {
-    font-weight: 300;
-    font-size: 36px;
-  }
-
-  .item-description {
-    font-weight: 300;
-    font-size: 24px;
-    line-height: 28px;
-
-    font-family: "Roboto", sans-serif;
-  }
 }
 </style>

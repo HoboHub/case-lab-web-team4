@@ -1,10 +1,10 @@
 <template>
   <div class="layout-default">
     <div class="layout-default__navigation">
-      <AppNavigation />
+      <AppNavigation/>
     </div>
     <div class="layout-default__content">
-      <slot />
+      <slot/>
     </div>
   </div>
 </template>
@@ -21,19 +21,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .layout-default {
-    display: flex;
+.layout-default {
+  display: flex;
 
+  &__navigation {
+    width: 70px;
+  }
+
+  &__content {
+    // display: flex;
+    width: 100%;
+    height: 100%;
+    // padding: 30px;
+    // padding-left: 50px;
+  }
+
+  @media (max-width: 500px) {
+    flex-direction: column;
     &__navigation {
-      width: 70px;
-    }
-
-    &__content {
-      // display: flex;
       width: 100%;
-      height: 100%;
-      // padding: 30px;
-      // padding-left: 50px;
     }
   }
+
+}
 </style>

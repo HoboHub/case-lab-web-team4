@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { gsap } from 'gsap';
 import store from '@/store';
 
 const routes = [
@@ -59,7 +60,7 @@ const routes = [
   },
   // track item
   {
-    path: '/track/:id/detail/:id',
+    path: '/track/:id/detail/:detailId',
     name: 'Item',
     meta: {
       requiresAuth: true,
@@ -101,15 +102,21 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  // eslint-disable-next-line no-unused-vars,consistent-return
+  scrollBehavior(to, from) {
+    if (to.name !== 'Tracks') return { top: 0 };
+  },
 });
 
 router.beforeEach((to, from, next) => {
+  gsap.fromTo('body', { opacity: 0 }, { opacity: 1, duration: 1 });
+
   // Если в роуте в meta флаг обязательной авторизации === true то проверяем роут дальше
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!store.getters.getUser.token) {
       next({ name: 'Login' }); // Если токен не получен, то роут не переключится
     } else {
-      next(); // переход на следующий роут
+      next();// переход на следующий роут
     }
   } else {
     next(); // Если флага нет, или он равен false, то переход на следующий роут

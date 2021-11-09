@@ -1,6 +1,6 @@
 <template>
   <div class="home container">
-    <!--    <Preloader :first-load="!hasPageBeenLoaded" @loaded="loaded"></Preloader>-->
+    <Preloader v-show="this.isLoading"></Preloader>
     <template v-if="getTracks">
       <div class="page-choice">
         <Button
@@ -12,7 +12,7 @@
           Каталог
         </Button>
         <Button
-          v-if="getUser.role === 'teacher'"
+          v-if="this.user.role === 'teacher'"
           :btn-orange="true"
           class="create-btn"
         >
@@ -46,17 +46,17 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import gsap from 'gsap';
 // import Track from '@/services/track/track';
 import TrackCard from '@/components/trackRelated/TrackCard.vue';
 import Button from '@/components/Button.vue';
-// import Preloader from '../components/Preloader';
+import Preloader from '@/components/Preloader.vue';
+
 export default {
   name: 'Home',
   components: {
     TrackCard,
     Button,
-    // Preloader,
+    Preloader,
   },
 
   data() {
@@ -68,16 +68,16 @@ export default {
 
   async mounted() {
     if (!this.getTracks.length) {
-      await this.fetchTracks(this.getUser.token);
+      await this.fetchTracks();
     }
-    gsap.fromTo('body', { opacity: 0 }, { opacity: 1, duration: 0.7 });
   },
 
   computed: {
-    ...mapGetters([
-      'getTracks',
-      'getUser',
-    ]),
+    ...mapGetters({
+      getTracks: 'getTracks',
+      user: 'getUser',
+      isLoading: 'getLoadingStatus',
+    }),
 
     actualTracks() {
       // ВКЛЮЧИМ,КОГДА ПОЧИНЯТ ДАТЫ
@@ -113,6 +113,9 @@ export default {
   @media (min-width: 968px) {
     justify-content: flex-start;
   }
+  @media (max-width: 768px) {
+    display: grid;
+  }
 
   .myTracks-btn {
     i {
@@ -123,7 +126,11 @@ export default {
   .create-btn {
     margin-left: auto;
     border: unset;
+    @media (max-width: 768px) {
+      margin-left: unset;
+    }
   }
+
 }
 
 .tracks-cnt {
@@ -145,7 +152,7 @@ export default {
     margin-top: 60px;
     // margin-left: 120px;
   }
-  @media (min-width: 481px) and (max-width: 768px) {
+  @media (min-width: 501px) and (max-width: 768px) {
     flex-direction: column;
     justify-content: flex-start;
 

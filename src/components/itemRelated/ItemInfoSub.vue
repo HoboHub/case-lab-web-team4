@@ -5,14 +5,6 @@
             <!-- <div v-if="itemType">{{itemType || 'Тип элемента'}}</div> -->
             <p>продолжительность</p>
         </div>
-        <div class="item-start-date">
-            <h2 v-if="dateStart">{{ dateStart.format("DD, MM, YYYY").replaceAll(", ", ".") }}</h2>
-            <p>дата открытия</p>
-        </div>
-        <div class="item-finish-date">
-            <h2 v-if="dateFinish">{{ dateFinish.format("DD, MM, YYYY").replaceAll(", ", ".") }}</h2>
-            <p>дата закрытия</p>
-        </div>
     </div>
 </template>
 

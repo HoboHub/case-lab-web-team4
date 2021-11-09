@@ -1,7 +1,6 @@
 <template>
   <div>
-
-    <actionResult/>
+    <actionResult v-if="showActionResult"/>
     <div v-if="track" class="track">
 
       <div
@@ -71,7 +70,9 @@
         </div>   </div>
         <ConfirmDelete
           @callConfirm="callConfirm"
-          v-if="showConfirmDelete"/>
+          v-if="showConfirmDelete"
+          :deletion-target="deletionTarget"
+        />
 
         <TrackInfoMain
           :name="track.data.name"
@@ -132,7 +133,6 @@ import TrackInfoSub from '@/components/trackRelated/TrackInfoSub.vue';
 import placeholderBig from '../../public/placeholderBig.png';
 import TrackItemList from '@/components/trackRelated/TrackItemList.vue';
 import ActionResult from '@/components/ActionResult.vue';
-
 import ConfirmDelete from '@/components/trackRelated/ConfirmDelete.vue';
 
 export default {
@@ -147,7 +147,8 @@ export default {
     TrackItemList,
     ConfirmDelete,
   },
-
+  mounted() {
+  },
   computed: {
     ...mapGetters([
       'getUser',
@@ -175,6 +176,7 @@ export default {
 
     showDeleteModal() {
       this.showConfirmDelete = true;
+      this.deletionTarget = 'трек';
       this.$refs.popupPageDark.style.display = 'block';
       document.getElementsByTagName('body')[0].style.overflow = 'hidden';
     },
@@ -211,7 +213,6 @@ export default {
       this.trackDuration = val.duration;
       this.completionPercent = val.completion;
     },
-
   },
 
   data() {
@@ -222,8 +223,10 @@ export default {
       trackDuration: 0,
       completionPercent: 0,
       showConfirmDelete: false,
+      deletionTarget: 'трек',
       // typeOfitem: null,
       showActionResult: true,
+
     };
   },
 
@@ -266,6 +269,7 @@ export default {
 
 .link-back {
   display: flex;
+  align-self: start;
   gap: 10px;
   align-items: center;
   border-radius: 10px;

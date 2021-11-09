@@ -4,7 +4,6 @@ import corporation from './modules/corporation';
 import trackDetails from './modules/trackDetails.store';
 import { getItem, removeItem, setItem } from '@/helpers/localStorageHelper';
 import { formatDates, reformatDates } from '@/helpers/reformatDatesHelper';
-import ServiceApi from '@/services/serviceApi';
 import track from '@/services/track/track';
 import tokens from '@/services/tokens';
 
@@ -17,6 +16,7 @@ export default createStore({
     tracks: getItem('tracks') || '',
 
     isSuccess: null,
+    isLoading: false,
   },
 
   getters: {
@@ -24,6 +24,8 @@ export default createStore({
     getTracks: (state) => state.tracks,
     getTrackByIdStore: (state) => (id) => [...state.tracks].find((t) => t.id === id),
     getSuccessStatus: (state) => state.isSuccess,
+    getLoadingStatus: (state) => state.isLoading,
+
   },
 
   mutations: {
@@ -58,7 +60,6 @@ export default createStore({
       // eslint-disable-next-line no-unused-expressions
       Object.keys(payload.currentTrack).forEach((key) => {
         if (payload.form[key]) {
-          // eslint-disable-next-line no-param-reassign
           payload.currentTrack[key] = payload.form[key];
         }
       });
@@ -79,6 +80,10 @@ export default createStore({
       state.isSuccess = payload;
     },
 
+    changeLoadingStatus(state, payload) {
+      state.isLoading = payload;
+    },
+
   },
 
   actions: {
@@ -86,33 +91,30 @@ export default createStore({
       commit('setUser', role);
     },
 
-    async fetchTracks({ commit }, token) {
-      const response = await ServiceApi.get('rosatom', '/tracks', {
-        headers: {
-          'X-API-KEY': token,
-        },
-      });
-
-      if (this.state.user.role !== 'teacher') {
-        response.data = response.data.filter((item) => item.data.published === true);
-      }
+    async fetchTracks({ commit }) {
+      commit('changeLoadingStatus', true);
+      const response = await track.getTracks(this.state.user.role);
       // console.log(response);
       if (response.data && response.data.length) {
+        if (this.state.user.role !== 'teacher') {
+          response.data = response.data.filter((item) => item.data.published === true);
+        }
         response.data.map((i) => reformatDates(i.data));
         commit('changeTracks', response.data);
         commit('changeSuccessStatus', true);
       }
+      commit('changeLoadingStatus', false);
     },
 
     async createTrack({ commit }, form) {
       // проверяем, загрузил ли пользователь изображение, и, если да,
       // заменяем ссылку в previewPicture
       if (form.previewPicture instanceof FormData) {
-        const imgUrl = await track.uploadImage(form.previewPicture, 'teacher');
-        // eslint-disable-next-line no-param-reassign
+        const imgUrl = await track.uploadImage(form.previewPicture, this.getters.getUser.role);
         form.previewPicture = imgUrl;
       }
-      const response = await track.createTrack(form, 'teacher');
+      form = formatDates(form);
+      const response = await track.createTrack(form, this.getters.getUser.role);
       if (response) {
         commit('removeTracks');
         commit('changeSuccessStatus', true);
@@ -123,14 +125,12 @@ export default createStore({
 
     async editTrack({ commit, state }, data) {
       if (data.form.previewPicture instanceof FormData) {
-        // eslint-disable-next-line no-param-reassign
-        data.form.previewPicture = await track.uploadImage(data.form.previewPicture, 'teacher');
+        data.form.previewPicture = await track.uploadImage(data.form.previewPicture,
+          this.getters.getUser.role);
       }
-      // eslint-disable-next-line no-param-reassign
       data.form = formatDates(data.form);
-      const response = await track.changeTrack(data.id, data.form, 'teacher');
+      const response = await track.changeTrack(data.id, data.form, this.getters.getUser.role);
       if (response) {
-        // eslint-disable-next-line no-param-reassign
         data.form = reformatDates(data.form);
 
         const trackIndex = state.tracks.findIndex((i) => i.id === data.id);

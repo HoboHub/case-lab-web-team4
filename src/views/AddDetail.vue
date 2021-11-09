@@ -65,7 +65,8 @@
           <tr v-else-if="(courses.length === 0 && events.length === 0) && !isLoading">
             <td colspan="6">Результатов, соответсвующих запросу, не обнаружено</td>
           </tr>
-          <tr v-else v-for="(item, index) in searchTarget === 'courses' ? courses : events"
+          <!--          !! сделал через ||, поскольку один из массивов всегда пуст-->
+          <tr v-else v-for="(item, index) in courses || events"
               :key="index">
             <td>{{ item.name }}</td>
             <td class="item-name">{{ item.duration || 'Не определено' }}</td>
@@ -107,14 +108,16 @@
       </div>
       <div class="form-footer cnt-local">
         <div class="modal-footer">
-          <Button :btn-orange="true" :border-disabled="true">
+          <Button :btn-orange="true"
+                  :border-disabled="true"
+                  @click="this.$router.back()"
+          >
             Отмена
           </Button>
 
           <Button
             type="button"
             @click="addDetailsToTrack"
-            :btn-disabled="isSubmitting"
             :btn-blue="true"
             style="border: none;"
           >Подтвердить
@@ -141,16 +144,35 @@ export default {
   },
   mounted() {
     this.onInputCustom = debounce(this.onInputCustom, 200);
+    this.lastSortIndex = this.theDetails[this.theDetails.length - 1].data.sortIndex + 1;
   },
   computed: {
     ...mapGetters({
       getTrackByIdStore: 'getTrackByIdStore',
+      getTrackDetailsFromStore: 'getTrackDetailsFromStore',
       courses: 'getCourses',
       events: 'getEvents',
       isLoading: 'getLoadingStatus',
     }),
     track() {
       return this.getTrackByIdStore(+this.$route.params.id);
+    },
+    theDetails() {
+      try {
+        const detailsRaw = this.getTrackDetailsFromStore(this.track.id);
+        let epilogIncomplete = false;
+        detailsRaw.details.forEach((i, index) => {
+          if (i.epilogFinished && epilogIncomplete) {
+            detailsRaw.details[index].locked = true;
+            debugger;
+          }
+          if (!i.finished) epilogIncomplete = true;
+        });
+        return detailsRaw.details;
+      } catch (err) {
+        this.getDetails();
+        return undefined;
+      }
     },
 
   },
@@ -162,7 +184,7 @@ export default {
       chosenCourses: [],
       chosenEvents: [],
       searchTarget: 'courses',
-      isSubmitting: false,
+      lastSortIndex: 0,
     };
   },
 
@@ -203,7 +225,8 @@ export default {
         this.addDetailToTrack({
           trackId: this.track.id,
           detailData: {
-            type: 'course', entityId: i.id, sortIndex: 0, required: false,
+            // eslint-disable-next-line no-plusplus
+            type: 'course', entityId: i.id, sortIndex: this.lastSortIndex++, required: false,
           },
         });
       });
@@ -211,7 +234,8 @@ export default {
         this.addDetailToTrack({
           trackId: this.track.id,
           detailData: {
-            type: 'event', entityId: i.id, sortIndex: 0, required: false,
+            // eslint-disable-next-line no-plusplus
+            type: 'event', entityId: i.id, sortIndex: this.lastSortIndex++, required: false,
           },
         });
       });
@@ -346,7 +370,8 @@ tbody {
   width: 100%;
   height: 100%;
 }
-.item-name{
+
+.item-name {
   white-space: nowrap;
 }
 

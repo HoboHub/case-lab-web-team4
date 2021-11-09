@@ -43,6 +43,22 @@ export default {
   .container {
     padding: 50px;
   }
+
+  .name-title{
+    font-weight: 300;
+    font-size: 36px;
+    @media (max-width: 500px) {
+      font-size: 26px;
+    }
+  }
+  .description{
+    font-weight: 300;
+    font-size: 24px;
+    line-height: 28px;
+
+    font-family: "Roboto", sans-serif;
+  }
+
   .d-flex{
     width: 100%;
     display: flex;

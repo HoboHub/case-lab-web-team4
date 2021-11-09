@@ -58,7 +58,7 @@ export default {
         });
         return detailsRaw.details;
       } catch (err) {
-        console.log(err);
+        this.getDetails();
         return undefined;
       }
     },
