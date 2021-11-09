@@ -1,7 +1,7 @@
 <template>
   <div  class="track-item" :class="{'locked' :isLocked}" >
     <!-- link to item -->
-    <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link>
+<!--    <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link>-->
     <!--  -->
 
     <span v-if="type !== 'pdf'" class="track-item-type">{{ type || "Тип" }}</span>
