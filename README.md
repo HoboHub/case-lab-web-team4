@@ -7,7 +7,10 @@ Record Mobile - мобильная образовательная платфор
 
 ## Демо (скриншоты)
 
-![Case-Lab_main page](https://github.com/AnastasiaShreder/case-lab-web-team4/files/main-screen.jpg)
+![Case-Lab_main page](https://github.com/AnastasiaShreder/case-lab-web-team4/files/main-screen.png)
+![Case-Lab_tracks](https://github.com/AnastasiaShreder/case-lab-web-team4/files/tracks.png)
+![Case-Lab_trackcard](https://github.com/AnastasiaShreder/case-lab-web-team4/files/trackcard.png)
+![Case-Lab_create](https://github.com/AnastasiaShreder/case-lab-web-team4/files/create.png)
 
 ## Используемые технологии и инструменты
 1) **Framework Vue.js 3.0.**
@@ -35,7 +38,7 @@ Record Mobile - мобильная образовательная платфор
 - Изменение деталей трека (удаление, блокировка, установка обязательности прохождения, перемещение относительно друг друга) 
 - Запись студентов на трек
 
-![Case-Lab_use-case diagram](https://github.com/AnastasiaShreder/case-lab-web-team4/files/7467495/Case-Lab_use-case_Team_4.pdf)
+![Case-Lab_use-case diagram](https://github.com/AnastasiaShreder/case-lab-web-team4/files/diagram.png)
 
 ## Необходимые условия для использования продукта
 
