@@ -2,43 +2,40 @@
 <template v-if="this.track">
   <div class="container d-flex flex-column">
     <ActionResult></ActionResult>
-    <h2 class="form-name">Записать студента на трек <br>"{{
-        track.data.name
-      }}"
+    <h2 class="form-name">
+      Добавить {{ this.searchTarget === "courses" ? "курсы" : "мероприятия" }} в трек <br/>
+      "{{ track.data.name }}"
     </h2>
     <div class="form d-flex flex-column gap-3">
       <div class="form-header cnt-local d-flex flex-column gap-1">
         <div class="group">
-          <input type="text" class="form-username"
-                 v-model="searchData.inputData"
-                 @input="onInputCustom" placeholder="Поиск пользователя">
+          <input
+            type="text"
+            class="form-entityName"
+            v-model="searchData.inputData"
+            @input="onInputCustom"
+            :placeholder="'Поиск ' + (this.searchTarget === 'courses' ? 'курсов' : 'мероприятий')"
+          />
           <span class="highlight"></span>
           <span class="bar"></span>
         </div>
-        <Dropdown
-          class="my-dropdown-toggle"
-          :options="this.departments"
-          :selected="searchData.departmentSelected || 'Департамент'"
-          :placeholder="searchData.departmentSelected || 'Департамент'"
-          v-on:updateOption="selectDepartment"
-          :closeOnOutsideClick="true"
-          :disabled="!this.departments || this.isLoading"
-        >
-        </Dropdown>
-        <Dropdown
-          class="my-dropdown-toggle"
-          :options="this.companies"
-          :selected="searchData.companySelected || 'Компания'"
-          :placeholder="searchData.companySelected || 'Компания'"
-          v-on:updateOption="selectCompany"
-          :closeOnOutsideClick="true"
-          :disabled="!this.companies || this.isLoading"
-        >
-        </Dropdown>
       </div>
       <div class="form-body d-flex flex-column">
-
         <div class="form-head-buttons">
+          <Button
+            @click="searchTarget = 'courses'"
+            :active="searchTarget === 'courses'"
+            class="courses-btn"
+          >
+            <i class="fas fa-location-arrow"></i> Курсы
+          </Button>
+          <Button
+            @click="searchTarget = 'events'"
+            :active="searchTarget === 'events'"
+            class="events-btn"
+          >
+            Мероприятия
+          </Button>
           <Button
             :btn-orange="true"
             :border-disabled="true"
@@ -48,59 +45,60 @@
             <i class="fas fa-times"></i>
             Сброс
           </Button>
-
         </div>
         <table class="form-results">
-          <caption>Результаты поиска</caption>
+          <caption>
+            Результаты поиска
+          </caption>
           <thead>
           <tr>
-            <th>ФИО</th>
-            <th>Дивизион</th>
-            <th>Предприятие</th>
-            <th>Записать</th>
+            <th>Название</th>
+            <th>Длительность</th>
+            <th>Добавить</th>
           </tr>
           </thead>
           <tbody style="position:relative;">
           <Preloader v-show="isLoading"></Preloader>
           <tr v-if="!Object.values(searchData).some(i => i) && !isLoading">
-            <td colspan="6">Введите ФИО или Логин пользователя</td>
+            <td colspan="6">Введите название курса или мероприятия</td>
           </tr>
-          <tr v-else-if="users.length === 0 && !isLoading">
-            <td colspan="6">Пользователей с такими данными не найдено...</td>
+          <tr v-else-if="(courses.length === 0 && events.length === 0) && !isLoading">
+            <td colspan="6">Результатов, соответсвующих запросу, не обнаружено</td>
           </tr>
-          <tr v-else v-for="(user, index) in users" :key="index">
-            <td>{{ user.fullName }}</td>
-            <td>{{ user.data.department }}</td>
-            <td>{{ user.data.company }}</td>
+          <tr v-else v-for="(item, index) in searchTarget === 'courses' ? courses : events"
+              :key="index">
+            <td>{{ item.name }}</td>
+            <td class="item-name">{{ item.duration || 'Не определено' }}</td>
             <td>
-              <input type="checkbox"
-                     :checked="chosenUsers.includes(user)"
-                     @change="this.chooseUser($event, user)"></td>
+              <input
+                type="checkbox"
+                :checked="chosenCourses.includes(item) || chosenEvents.includes(item)"
+                @change="this.chooseDetail($event, item)"
+              />
+            </td>
           </tr>
           <tr class="filler"></tr>
-
           </tbody>
         </table>
         <table class="form-enroll">
-          <caption>Будут записаны</caption>
+          <caption>
+            Будут добавлены:
+          </caption>
           <thead>
           <tr>
-            <th>ФИО</th>
-            <th>Дивизион</th>
-            <th>Предприятие</th>
-            <th>Записать</th>
-
+            <th>Название</th>
+            <th>Длительность</th>
+            <th>Добавить</th>
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(user, index) in chosenUsers" :key="index">
-            <td>{{ user.fullName }}</td>
-            <td>{{ user.data.department }}</td>
-            <td>{{ user.data.company }}</td>
+          <tr v-for="(item, index) in [...chosenCourses, ...chosenEvents]" :key="index">
+            <td>{{ item.name }}</td>
+            <td class="item-name">{{ item.duration || 'Не определено' }}</td>
             <td>
-              <Button type="button"
-                      @click="this.removeUser(user)">
-                <i class="fas fa-times"></i></button>
+              <Button type="button" @click="this.removeDetail(item)">
+                <i class="fas fa-times"></i
+                ></Button>
             </td>
           </tr>
           <tr class="filler"></tr>
@@ -109,126 +107,138 @@
       </div>
       <div class="form-footer cnt-local">
         <div class="modal-footer">
-          <Button
-            :btn-orange="true"
-            :border-disabled="true"
-          >
+          <Button :btn-orange="true" :border-disabled="true">
             Отмена
           </Button>
 
-          <Button type="button" @click="assignTracks"
-                  :btn-disabled="isSubmitting" :btn-blue="true" style="border: none;">Подтвердить
+          <Button
+            type="button"
+            @click="addDetailsToTrack"
+            :btn-disabled="isSubmitting"
+            :btn-blue="true"
+            style="border: none;"
+          >Подтвердить
           </Button>
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { debounce } from '@/helpers/debounce';
 import ActionResult from '@/components/ActionResult.vue';
-import Dropdown from '@/components/Dropdown.vue';
 import Button from '@/components/Button.vue';
-import Track from '@/services/track/track';
 import Preloader from '@/components/Preloader.vue';
 
 export default {
-  name: 'AddStudents',
+  name: 'AddDetail',
   components: {
-    Dropdown, Button, ActionResult, Preloader,
+    Button,
+    ActionResult,
+    Preloader,
   },
   mounted() {
-    this.fetchDepartments();
-    this.clearCompanies();
     this.onInputCustom = debounce(this.onInputCustom, 200);
   },
   computed: {
     ...mapGetters({
-      users: 'getUsers',
-      departments: 'getDepartments',
-      companies: 'getCompanies',
-      isLoading: 'getLoadingStatus',
       getTrackByIdStore: 'getTrackByIdStore',
+      courses: 'getCourses',
+      events: 'getEvents',
+      isLoading: 'getLoadingStatus',
     }),
     track() {
       return this.getTrackByIdStore(+this.$route.params.id);
     },
+
   },
   data() {
     return {
       searchData: {
-        departmentSelected: '',
-        companySelected: '',
         inputData: '',
       },
-      chosenUsers: [],
+      chosenCourses: [],
+      chosenEvents: [],
+      searchTarget: 'courses',
+      isSubmitting: false,
     };
   },
 
   methods: {
-    ...mapActions(['fetchUsers', 'fetchDepartments', 'fetchCompanies', 'clearCompanies', 'clearUsers', 'changeSuccessStatus']),
-    selectDepartment(payload) {
-      this.searchData.companySelected = '';
-      this.clearUsers();
-      this.onInputCustom();
-      this.searchData.departmentSelected = payload;
-      this.fetchCompanies(this.searchData.departmentSelected);
-    },
-    selectCompany(payload) {
-      this.searchData.companySelected = payload;
-      this.onInputCustom();
-    },
-    onInputCustom() {
-      this.fetchUsers(
-        {
-          q: this.searchData.inputData,
-          department: this.searchData.departmentSelected,
-          company: this.searchData.companySelected,
-        },
-      );
-    },
+    ...mapActions(['fetchCourses', 'fetchEvents', 'addDetailToTrack', 'changeSuccessStatus', 'clearCourses', 'clearEvents']),
 
-    chooseUser(event, user) {
-      if (event.target.checked) {
-        this.chosenUsers.push(user);
-      } else {
-        this.removeUser(user);
+    onInputCustom() {
+      if (this.searchTarget === 'courses') {
+        this.fetchCourses(this.searchData.inputData);
+      } else if (this.searchTarget === 'events') {
+        this.fetchEvents(this.searchData.inputData);
       }
     },
-    removeUser(user) {
-      this.chosenUsers = this.chosenUsers.filter((i) => i.id !== user.id);
+
+    chooseDetail(event, detail) {
+      if (event.target.checked) {
+        if (this.searchTarget === 'courses') {
+          this.chosenCourses.push(detail);
+        }
+        if (this.searchTarget === 'events') {
+          this.chosenEvents.push(detail);
+        }
+      } else {
+        this.removeDetail(detail);
+      }
+    },
+    removeDetail(detail) {
+      this.chosenCourses = this.chosenCourses.filter((i) => i.id !== detail.id);
+      this.chosenEvents = this.chosenEvents.filter((i) => i.id !== detail.id);
     },
 
     resetInputs() {
-      this.searchData.departmentSelected = '';
       this.searchData.inputData = '';
-      this.searchData.companySelected = '';
-      this.clearUsers();
     },
 
-    async assignTracks() {
-      await this.chosenUsers.forEach((i) => {
-        Track.assignTrack(this.track.id, i.id, 'teacher');
+    async addDetailsToTrack() {
+      await this.chosenCourses.forEach((i) => {
+        this.addDetailToTrack({
+          trackId: this.track.id,
+          detailData: {
+            type: 'course', entityId: i.id, sortIndex: 0, required: false,
+          },
+        });
+      });
+      await this.chosenEvents.forEach((i) => {
+        this.addDetailToTrack({
+          trackId: this.track.id,
+          detailData: {
+            type: 'event', entityId: i.id, sortIndex: 0, required: false,
+          },
+        });
       });
       this.changeSuccessStatus(true); // ЗАГЛУШКА
+    },
+  },
+
+  watch: {
+    searchTarget() {
+      this.clearCourses();
+      this.clearEvents();
+      this.resetInputs();
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
-
 .cnt-local {
   max-width: 800px;
   width: 100%;
   margin: 0 auto;
 }
 
-.form-results, .form-enroll {
-  border: solid #8BA4F9 1px;
+.form-results,
+.form-enroll {
+  border: solid #8ba4f9 1px;
   border-radius: 5px;
   text-align: center;
   border-spacing: 0;
@@ -239,27 +249,28 @@ export default {
     font-weight: bold;
     font-size: 20px;
     line-height: 24px;
-    color: #8BA4F9;
+    color: #8ba4f9;
     margin-bottom: 15px;
   }
 
   th {
     font-weight: 400;
-    border-bottom: solid #8BA4F9 1px;
+    border-bottom: solid #8ba4f9 1px;
   }
 
-  th, td {
+  th,
+  td {
     padding: 16px 18px;
   }
 
-  th:first-child, td:first-child {
-    width: 20%;
-    white-space: nowrap;
+  th:first-child,
+  td:first-child {
+    text-align: left;
   }
 
-  th:last-child, td:last-child {
+  th:last-child,
+  td:last-child {
     text-align: center;
-    width: 10%;
 
     button {
       margin: 0 auto;
@@ -271,6 +282,7 @@ export default {
   gap: 24px;
   width: 90%;
   margin: 0 auto;
+
 }
 
 tbody {
@@ -299,7 +311,8 @@ tbody {
 
 }
 
-.form-username, .form-filter {
+.form-username,
+.form-filter {
   border-radius: 5px;
   padding-left: 15px;
 }
@@ -308,7 +321,7 @@ tbody {
   align-self: center;
   max-width: 800px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-around;
   gap: 10px;
 }
 
@@ -332,6 +345,9 @@ tbody {
 .filler {
   width: 100%;
   height: 100%;
+}
+.item-name{
+  white-space: nowrap;
 }
 
 .my-dropdown-toggle {

@@ -2,112 +2,42 @@
   <div>
 
     <actionResult/>
-  <div v-if="track" class="track">
+    <div v-if="track" class="track">
 
-    <div
-      @click="hideModal"
-      ref="popupPageDark"
-      class="popup-page-darken"></div>
+      <div
+        @click="hideModal"
+        ref="popupPageDark"
+        class="popup-page-darken"></div>
 
-    <!--    <Preloader></Preloader>-->
+      <!--    <Preloader></Preloader>-->
 
-    <!-- <img :src="previewPicture"
-         class="track-cover" alt="preview picture"/> -->
-    <div class="track-bg-img" style="overflow: hidden; position: relative;">
-      <img
-        :src="previewPicture"
-        class="track-cover-bg"
-        alt="preview picture" data-v-7ef61a01=""
-        style="
-        develop
+      <!-- <img :src="previewPicture"
+           class="track-cover" alt="preview picture"/> -->
+      <div class="track-bg-img" style="overflow: hidden; position: relative;">
+        <img
+          :src="previewPicture"
+          class="track-cover-bg"
+          alt="preview picture" data-v-7ef61a01=""
+          style="
         position: absolute;
         top:  0px;
         left: 0px;
         max-height: 510px;
         width: 101%;
 
-       
-
         filter: blur(10px);">
-      <img
-        :src="previewPicture"
-        class="track-cover"
-        alt="preview picture"
-        data-v-7ef61a01="">
-    </div>
-
-    <div class="track-content container">
-      <router-link
-        :to="{ name: 'Tracks' }"
-        class="link-back"
-      >
-        <i class="fas fa-arrow-left"></i>
-        В каталог
-      </router-link>
-      <div v-if="isMaster" class="admin-btns d-flex flex-column gap-2">
-        <Button
-          :btn-orange="true"
-          class="redact-btn"
-          @click="this.$router.push({name : 'EditTrack'})"
-        >
-          <i class="fas fa-pencil"></i>
-          Редактировать
-        </Button>
-        <Button
-          :btn-danger="true"
-          class="redact-btn"
-          @click="showDeleteModal"
-        >
-          <i class="fas fa-times"></i>
-          Удалить
-        </Button>
-      </div>
-
-      <ConfirmDelete
-        @callConfirm="callConfirm"
-        v-if="showConfirmDelete" />
-
-      <TrackInfoMain
-        :name="track.data.name"
-        :description="track.data.previewText"
-        :isNotAssigned="!track.assigned"
-      />
-
-      <TrackInfoSub
-        :track-duration="trackDuration"
-        :date-start-prop="track.data.dateTimeStart"
-        :date-finish-prop="track.data.dateTimeFinish"
-      />
-      <div class="track-manage-btns">
-        <Button v-if="isMaster"
-                :btn-orange="true"
-                class="add-btn"
-        >
-          <i class="fas fa-plus"></i>
-          Добавить элемент
-        </Button>
-        <Button v-if="isMaster"
-                :btn-blue="true"
-                class="enroll-btn"
-                @click="addStudents"
-        >
-          <img src="../assets/student.svg" alt="student">
-          Записать студента
-        </Button>
-      </div>
-      <!-- if ordered -->
-      <!-- сменить на track.assigned как будет функционал -->
-      <div
-        v-if="!track.assigned"
-        class="track-content-ordered">
-        <Button
-          :class="{'btn-test': true, 'btn-disabled': false}">
-          Входное тестирование
-        </Button>
+        <img
+          :src="previewPicture"
+          class="track-cover"
+          alt="preview picture"
+          data-v-7ef61a01="">
       </div>
 
       <div class="track-content container">
-        <router-link :to="{ name: 'Tracks' }" class="link-back">
+        <router-link
+          :to="{ name: 'Tracks' }"
+          class="link-back"
+        >
           <i class="fas fa-arrow-left"></i>
           В каталог
         </router-link>
@@ -115,30 +45,39 @@
           <Button
             :btn-orange="true"
             class="redact-btn"
-            @click="this.$router.push({ name: 'EditTrack' })"
+            @click="this.$router.push({name : 'EditTrack'})"
           >
             <i class="fas fa-pencil"></i>
             Редактировать
           </Button>
-          <Button :btn-danger="true" class="redact-btn" @click="deleteTrack">
+          <Button
+            :btn-danger="true"
+            class="redact-btn"
+            @click="showDeleteModal"
+          >
             <i class="fas fa-times"></i>
             Удалить
           </Button>
-          <div class="publish-cnt d-flex align-center">
-            <label for="publish">Опубликовано :</label>
-            <input
-              type="checkbox"
-              class="publish-btn"
-              id="publish"
-              :checked="track.data.published"
-              @click="publish"
-            />
-          </div>
-        </div>
+
+        <div class="publish-cnt d-flex align-center">
+          <label for="publish">Опубликовано :</label>
+          <input
+            type="checkbox"
+            class="publish-btn"
+            id="publish"
+            :checked="track.data.published"
+            @click="publish"
+          >
+        </div>   </div>
+        <ConfirmDelete
+          @callConfirm="callConfirm"
+          v-if="showConfirmDelete"/>
+
         <TrackInfoMain
           :name="track.data.name"
           :description="track.data.previewText"
           :isNotAssigned="!track.assigned"
+          :completion-percent="completionPercent"
         />
 
         <TrackInfoSub
@@ -146,24 +85,37 @@
           :date-start-prop="track.data.dateTimeStart"
           :date-finish-prop="track.data.dateTimeFinish"
         />
-        <div v-if="isMaster" class="track-manage-btns">
-          <Button :btn-orange="true" class="add-btn">
+        <div class="track-manage-btns">
+          <Button v-if="isMaster"
+                  :btn-orange="true"
+                  class="add-btn"
+                  @click="this.$router.push(`/track/${this.track.id}/extend`);"
+          >
             <i class="fas fa-plus"></i>
             Добавить элемент
           </Button>
-          <Button :btn-blue="true" class="enroll-btn" @click="addStudents">
-            <img src="../assets/student.svg" alt="student" />
+          <Button v-if="isMaster"
+                  :btn-blue="true"
+                  class="enroll-btn"
+                  @click="addStudents"
+          >
+            <img src="../assets/student.svg" alt="student">
             Записать студента
           </Button>
         </div>
         <!-- if ordered -->
         <!-- сменить на track.assigned как будет функционал -->
-        <div v-if="!track.assigned" class="track-content-ordered">
-          <Button :class="{ 'btn-test': true, 'btn-disabled': false }">
+
+        <div
+          v-if="!track.assigned"
+          class="track-content-ordered">
+          <Button
+            :class="{'btn-test': true, 'btn-disabled': false}">
             Входное тестирование
           </Button>
         </div>
         <TrackItemList :track-id="track.id" @durationCounted="onCounted"></TrackItemList>
+
       </div>
     </div>
   </div>
@@ -220,15 +172,12 @@ export default {
 
   methods: {
     ...mapActions(['removeTrack', 'editTrack']),
-   
 
     showDeleteModal() {
       this.showConfirmDelete = true;
-
       this.$refs.popupPageDark.style.display = 'block';
       document.getElementsByTagName('body')[0].style.overflow = 'hidden';
     },
-
 
     async publish(event) {
       this.showActionResult = false;
@@ -239,6 +188,7 @@ export default {
         form: dataClone,
       });
       this.showActionResult = true;
+    },
     hideModal() {
       this.showConfirmDelete = false;
       this.$refs.popupPageDark.style.display = 'none';
@@ -258,7 +208,8 @@ export default {
     },
 
     onCounted(val) {
-      this.trackDuration = val;
+      this.trackDuration = val.duration;
+      this.completionPercent = val.completion;
     },
 
   },
@@ -269,10 +220,10 @@ export default {
       placeholderBig,
       trackDetail: null,
       trackDuration: 0,
+      completionPercent: 0,
       showConfirmDelete: false,
       // typeOfitem: null,
       showActionResult: true,
-      trackDuration: 0,
     };
   },
 
@@ -339,6 +290,7 @@ export default {
 
 .publish-cnt {
   gap: 12px;
+
   label {
     font-size: 22px;
     font-weight: 500;
