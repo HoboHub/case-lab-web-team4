@@ -3,7 +3,6 @@ import moment from 'moment';
 export const formatDates = (data) => {
   Object.entries(data).forEach(([key, value]) => {
     if (key === 'dateTimeStart' || key === 'dateTimeFinish') {
-      // eslint-disable-next-line no-param-reassign
       data[key] = moment(value).format('X');
     }
   });
@@ -13,7 +12,6 @@ export const formatDates = (data) => {
 export const reformatDates = (data) => {
   Object.entries(data).forEach(([key, value]) => {
     if (key === 'dateTimeStart' || key === 'dateTimeFinish') {
-      // eslint-disable-next-line no-param-reassign
       data[key] = moment(value, 'X').format('MM/DD/yyyy HH:mm');
     }
   });

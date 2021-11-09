@@ -88,19 +88,15 @@ export default {
     ]),
 
     trackId() {
-    //   console.log(+this.$route.fullPath.match(/\d+/)[0]);
       return +this.$route.fullPath.match(/\d+/)[0];
     },
 
     trackOfThis() {
-      //   console.log(this.getTrackByIdStore(+this.$route.fullPath.match(/\d+/)[0]));
       return this.getTrackByIdStore(this.trackId);
     },
 
     itemId() {
-    //   console.log('this is item id:', +this.$route.params.id);
-    //   console.log('get track in item func:', this.trackOfThis.data);
-      return this.$route.params.id;
+      return this.$route.params.detailId;
     },
 
     isMaster() {
@@ -108,26 +104,22 @@ export default {
     },
   },
   methods: {
-    async details(role, trackId) {
+    async getDetails(role, trackId) {
       const result = await TrackDetail.getTrackDetail(trackId, role);
       // eslint-disable-next-line prefer-destructuring
       this.itemDetail = result.filter((it) => it.id === Number(this.itemId))[0];
-      //   this.itemDetail = result.filter((it) => it.id === Number(this.itemId));
     },
   },
   mounted() {
-    this.details(this.getUser.role, this.trackId);
+    this.getDetails(this.getUser.role, this.trackId);
+    const bgColors = ['rgb(255, 104, 58)', 'rgb(87, 255, 219)', 'orange', 'purple', '#66D2EA'];
+    document.querySelector('.item-bg-img')
+      .style.background = bgColors[Math.floor(Math.random() * bgColors.length)];
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
-$bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
-
-.item-bg-img {
-  background: lighten(nth($bg-colors, random(length($bg-colors))), 20%);
-}
 
 .item {
   color: #1f2041;

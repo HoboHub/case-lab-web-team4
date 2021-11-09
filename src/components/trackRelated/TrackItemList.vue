@@ -1,17 +1,26 @@
 <template>
   <div class="track-item-list" v-if="this.theDetails">
-    <TrackItem
-      v-for="item in this.theDetails"
-      :key="item.id"
-      :name="item.entityName"
-      :duration="item.entityDuration"
-      :type="item.data.type"
-      :id="item.id"
-      :trackId="trackId"
-      :detail-data="item.data"
-      :isLocked="item.locked"
-      :detail="item"
-    />
+    <div v-for="(item, index) in even(this.theDetails)"
+         :key="index"
+         class="drop-zone"
+         @dragover.prevent
+         @dragenter.prevent
+         @drop="onDrop($event, index)"
+    >
+      <TrackItem
+        :name="item.entityName"
+        :duration="item.entityDuration"
+        :type="item.data.type"
+        :id="item.id"
+        :trackId="trackId"
+        :detail-data="item.data"
+        :isLocked="item.locked"
+        :detail="item"
+        class="drag-el"
+        :draggable="true"
+        @dragstart="startDrag($event, item)"
+      />
+    </div>
   </div>
 </template>
 
@@ -58,9 +67,14 @@ export default {
         });
         return detailsRaw.details;
       } catch (err) {
-        console.log(err);
+        this.getDetails();
         return undefined;
       }
+    },
+
+    theDetailSorted() {
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      return this.theDetails.sort((i, secondI) => i.data.sortIndex - secondI.data.sortIndex);
     },
 
     requiredDetailsQuantity() {
@@ -85,7 +99,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getTrackDetails']),
+    ...mapActions(['getTrackDetails', 'changeTrackDetailData']),
     async getDetails() {
       const result = await this.getTrackDetails(this.trackId);
       this.trackDetail = result;
@@ -109,6 +123,22 @@ export default {
         completion: (
           this.finishedDetailsQuantity / this.requiredDetailsQuantity) * 100,
       });
+    },
+
+    startDrag(evt, item) {
+      evt.dataTransfer.dropEffect = 'move';
+      evt.dataTransfer.effectAllowed = 'move';
+      evt.dataTransfer.setData('itemId', item.id);
+    },
+    onDrop(evt, list) {
+      const itemId = evt.dataTransfer.getData('itemId');
+      const item = this.theDetails.find((i) => i.id === +itemId);
+      item.data.sortIndex = list;
+      this.changeTrackDetailData({ id: item.id, newData: item.data });
+    },
+    even(arr) {
+      // Set slice() to avoid to generate an infinite loop!
+      return arr.slice().sort((a, b) => a.data.sortIndex - b.data.sortIndex);
     },
   },
 

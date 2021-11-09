@@ -112,12 +112,14 @@
           <Button
             :btn-orange="true"
             :border-disabled="true"
+            @click="this.$router.back()"
+
           >
             Отмена
           </Button>
 
           <Button type="button" @click="assignTracks"
-                  :btn-disabled="isSubmitting" :btn-blue="true" style="border: none;">Подтвердить
+                  :btn-blue="true" style="border: none;">Подтвердить
           </Button>
         </div>
       </div>

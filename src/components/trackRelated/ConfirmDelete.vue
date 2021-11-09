@@ -1,6 +1,6 @@
 <template>
     <div class="confirm-delete-popup">
-        <p class="confirm-delete-q">Вы действительно хотите удалить данный элемент трека?</p>
+        <p class="confirm-delete-q">Вы действительно хотите удалить данный {{ deletionTarget }}?</p>
         <div class="confirm-delete-manage-btns">
             <Button
                 @click="returnResp(false)"
@@ -17,6 +17,12 @@ import Button from '@/components/Button.vue';
 
 export default {
   name: 'ConfirmDelete',
+  props: {
+    deletionTarget: {
+      type: String,
+      default: 'трек',
+    },
+  },
   components: {
     Button,
   },

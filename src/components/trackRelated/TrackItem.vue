@@ -1,8 +1,7 @@
 <template>
   <div  class="track-item" :class="{'locked' :isLocked}" >
     <!-- link to item -->
-
-    <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link>
+<!--    <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link>-->
     <!--  -->
 
     <span v-if="type !== 'pdf'" class="track-item-type">{{ type || "Тип" }}</span>
@@ -30,7 +29,7 @@
                :checked="detailData.required"
                @click="makeDetailRequired">
       </div>
-      <div class="delete-track-item">
+      <div class="delete-track-item" @click="deleteItem">
         <i class="fa fa-trash" aria-hidden="true"></i>
       </div>
       <div class="track-item-locked" >
@@ -77,6 +76,8 @@ export default {
       type: Object,
     },
   },
+  components: {
+  },
   mounted() {
     this.lockDetail = debounce(this.lockDetail, 400);
   },
@@ -92,7 +93,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['changeTrackDetailData']),
+    ...mapActions(['changeTrackDetailData', 'removeTrackDetail']),
 
     async makeDetailRequired(event) {
       this.isLoading = true;
@@ -102,6 +103,13 @@ export default {
       };
       await this.changeTrackDetailData({ id: this.id, newData: dataClone });
       this.isLoading = false;
+    },
+
+    async deleteItem() {
+      // eslint-disable-next-line no-restricted-globals
+      if (confirm('Вы точно хотите удалить данный элемент?')) {
+        this.removeTrackDetail({ itemId: this.id, trackId: this.trackId });
+      }
     },
 
     // async makeEpilogRequired() {

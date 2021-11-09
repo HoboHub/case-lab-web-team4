@@ -83,13 +83,13 @@
         </div>
         <div class="form-footer">
           <div class="modal-footer">
-            <router-link :to="{ name: 'Tracks' }">
               <Button
                 :btn-orange="true"
-                :border-disabled="true">
+                :border-disabled="true"
+                @click="this.$router.back()"
+              >
                 Отмена
               </Button>
-            </router-link>
 
             <Button
               type="submit"
@@ -249,7 +249,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 10px;
-
+  flex-wrap: wrap;
   label {
     cursor: pointer;
   }
