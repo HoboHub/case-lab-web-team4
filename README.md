@@ -7,9 +7,9 @@ Record Mobile - мобильная образовательная платфор
 
 ## Демо (скриншоты)
 
-![Case-Lab_main page](https://github.com/AnastasiaShreder/case-lab-web-team4/files/main-screen.png)
-![Case-Lab_tracks](https://github.com/AnastasiaShreder/case-lab-web-team4/files/tracks.png)
-![Case-Lab_trackcard](https://github.com/AnastasiaShreder/case-lab-web-team4/files/trackcard.png)
+![Case-Lab_main page](/files/main-screen.png)
+![Case-Lab_tracks](files/tracks.png)
+![Case-Lab_trackcard](./files/trackcard.png)
 ![Case-Lab_create](https://github.com/AnastasiaShreder/case-lab-web-team4/files/create.png)
 
 ## Используемые технологии и инструменты
