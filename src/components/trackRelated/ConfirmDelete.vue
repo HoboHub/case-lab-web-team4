@@ -1,12 +1,12 @@
 <template>
-    <div class="confirm-delete-popup">
+    <div class="confirm-delete-popup" align="center">
         <p class="confirm-delete-q">Вы действительно хотите удалить данный {{ deletionTarget }}?</p>
         <div class="confirm-delete-manage-btns">
             <Button
-                @click="returnResp(false)"
+                @click.stop="returnResp(false)"
                 class="btn-orange">Отмена</Button>
             <Button
-                @click="returnResp(true)"
+                @click.stop="returnResp(true)"
                 class="enroll-btn">Да, продолжить</Button>
         </div>
     </div>
@@ -38,6 +38,15 @@ export default {
     //   console.log(userResp);
       this.$emit('callConfirm', userResp);
     },
+    fixPosition(targetToDel) {
+      if (targetToDel === 'элемент') {
+        // document.querySelector('.confirm-delete-popup').style.position = 'absolute';
+        // document.querySelector('.confirm-delete-popup').style.top = '-50%';
+      }
+    },
+  },
+  mounted() {
+    this.fixPosition(this.deletionTarget);
   },
 };
 </script>
