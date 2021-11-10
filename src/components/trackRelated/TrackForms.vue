@@ -83,13 +83,13 @@
         </div>
         <div class="form-footer">
           <div class="modal-footer">
-            <router-link :to="{ name: 'Tracks' }">
               <Button
                 :btn-orange="true"
-                :border-disabled="true">
+                :border-disabled="true"
+                @click="this.$router.back()"
+              >
                 Отмена
               </Button>
-            </router-link>
 
             <Button
               type="submit"
@@ -109,7 +109,6 @@
 
 <script>
 import Datepicker from 'vue3-date-time-picker';
-import moment from 'moment';
 import Button from '@/components/Button.vue';
 import ActionResult from '@/components/ActionResult.vue';
 
@@ -135,12 +134,6 @@ export default {
 
   computed: {
 
-    dateTimeStartComputed() {
-      return moment(this.dateTimeStart).format('X');
-    },
-    dateTimeFinishComputed() {
-      return moment(this.dateTimeFinish).format('X');
-    },
     yearRange() {
       const currentYear = new Date().getFullYear();
       return [currentYear - 5, currentYear + 5];
@@ -163,8 +156,8 @@ export default {
         name: this.name,
         previewText: this.previewText,
         previewPicture: this.pictureToUpload || this.previewPicture,
-        dateTimeStart: this.dateTimeStartComputed,
-        dateTimeFinish: this.dateTimeFinishComputed,
+        dateTimeStart: this.dateTimeStart,
+        dateTimeFinish: this.dateTimeFinish,
       };
       this.$emit('trackSubmit', form);
     },
@@ -256,7 +249,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 10px;
-
+  flex-wrap: wrap;
   label {
     cursor: pointer;
   }

@@ -17,13 +17,14 @@
                 К треку
             </router-link>
 
+          <div v-if="isMaster" class="admin-btns d-flex flex-column gap-2">
             <Button
-                v-if="isMaster"
                 :btn-orange="true"
                 class="redact-btn">
                 <i class="fas fa-pencil"></i>
                 Редактировать
             </Button>
+          </div>
 
             <ItemInfoMain :name="itemDetail.entityName" />
 
@@ -87,19 +88,15 @@ export default {
     ]),
 
     trackId() {
-    //   console.log(+this.$route.fullPath.match(/\d+/)[0]);
       return +this.$route.fullPath.match(/\d+/)[0];
     },
 
     trackOfThis() {
-      //   console.log(this.getTrackByIdStore(+this.$route.fullPath.match(/\d+/)[0]));
       return this.getTrackByIdStore(this.trackId);
     },
 
     itemId() {
-    //   console.log('this is item id:', +this.$route.params.id);
-    //   console.log('get track in item func:', this.trackOfThis.data);
-      return this.$route.params.id;
+      return this.$route.params.detailId;
     },
 
     isMaster() {
@@ -107,26 +104,22 @@ export default {
     },
   },
   methods: {
-    async details(role, trackId) {
+    async getDetails(role, trackId) {
       const result = await TrackDetail.getTrackDetail(trackId, role);
       // eslint-disable-next-line prefer-destructuring
       this.itemDetail = result.filter((it) => it.id === Number(this.itemId))[0];
-      //   this.itemDetail = result.filter((it) => it.id === Number(this.itemId));
     },
   },
   mounted() {
-    this.details(this.getUser.role, this.trackId);
+    this.getDetails(this.getUser.role, this.trackId);
+    const bgColors = ['rgb(255, 104, 58)', 'rgb(87, 255, 219)', 'orange', 'purple', '#66D2EA'];
+    document.querySelector('.item-bg-img')
+      .style.background = bgColors[Math.floor(Math.random() * bgColors.length)];
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
-$bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
-
-.item-bg-img {
-  background: lighten(nth($bg-colors, random(length($bg-colors))), 20%);
-}
 
 .item {
   color: #1f2041;
@@ -165,6 +158,15 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
   font-size: 14px;
 }
 
+// .flex-column {
+//   flex-direction: column;
+// }
+
+// .d-flex {
+//   width: 100%;
+//   display: flex;
+// }
+
 .redact-btn, .add-btn, .enroll-btn{
   border: unset;
   box-shadow: 0px 2px 4px rgba(139, 164, 249, .3);
@@ -195,6 +197,8 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
   display: flex;
   justify-content: space-between;
 }
+
+// @media (min-width: 978px) {
 @media (min-width: 968px) {
   .item-content {
     // grid-template-columns: 1fr;
@@ -205,7 +209,7 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
   }
   .item-info-sub {
     text-align: left;
-    align-self: center;
+    // align-self: center;
   }
 
   .link-back {
@@ -231,7 +235,12 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
   gap: 20px;
 }
 
+// @media (min-width: 978px) {
 @media (max-width: 967px) {
+  .item-content {
+    gap: 0px;
+    row-gap: 60px;
+  }
   .item-info-main {
     grid-column-start: 1;
   }
@@ -242,6 +251,10 @@ $bg-colors: rgb(255, 104, 58), rgb(87, 255, 219), orange, purple, #66D2EA;
     grid-column-start: 1;
     display: flex;
     justify-content: center;
+  }
+
+  .admin-btns {
+    grid-row-start: 2;
   }
 }
 </style>

@@ -112,12 +112,14 @@
           <Button
             :btn-orange="true"
             :border-disabled="true"
+            @click="this.$router.back()"
+
           >
             Отмена
           </Button>
 
           <Button type="button" @click="assignTracks"
-                  :btn-disabled="isSubmitting" :btn-blue="true" style="border: none;">Подтвердить
+                  :btn-blue="true" style="border: none;">Подтвердить
           </Button>
         </div>
       </div>
@@ -273,12 +275,40 @@ export default {
   margin: 0 auto;
 }
 
+tbody {
+  tr {
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      width: 96%;
+      height: 2px;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, 0%);
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 50px;
+    }
+
+    &:first-of-type, &:last-of-type {
+      &:after {
+        content: none;
+      }
+    }
+
+  }
+
+}
+
 .form-username, .form-filter {
   border-radius: 5px;
   padding-left: 15px;
 }
 
 .form-head-buttons {
+  align-self: center;
+  max-width: 800px;
   display: flex;
   justify-content: flex-end;
   gap: 10px;

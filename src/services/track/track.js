@@ -2,7 +2,23 @@ import serviceApi from '@/services/serviceApi';
 import tokens from '@/services/tokens';
 
 export default class Track {
-  // eslint-disable-next-line consistent-return
+  static async getTracks(userRole) {
+    const headers = {};
+
+    if (userRole === 'teacher') {
+      headers.headers = { 'X-API-KEY': tokens.teacher };
+    }
+    if (userRole === 'student') {
+      headers.headers = { 'X-API-KEY': tokens.student };
+    }
+    try {
+      const response = await serviceApi.get('rosatom', '/tracks', headers);
+      return response;
+    } catch (err) {
+      console.log('Error getting tracks ', err);
+    }
+  }
+
   static async getTrackById(trackId, userRole) {
     const headers = {};
 
@@ -22,7 +38,6 @@ export default class Track {
     }
   }
 
-  // eslint-disable-next-line consistent-return
   static async createTrack(track, userRole) {
     const headers = {};
 
@@ -34,7 +49,6 @@ export default class Track {
     return response;
   }
 
-  // eslint-disable-next-line consistent-return
   static async uploadImage(image, userRole) {
     const headers = {};
 
@@ -54,19 +68,17 @@ export default class Track {
     }
   }
 
-  // eslint-disable-next-line consistent-return
-  static async changeTrack(trackId, track, userRole) {
+  static async changeTrack(trackId, data, userRole) {
     const headers = {};
 
     if (userRole === 'teacher') {
       headers.headers = { 'X-API-KEY': tokens.teacher };
     }
 
-    const response = await serviceApi.put('rosatom', `track/${trackId}`, track, headers);
+    const response = await serviceApi.put('rosatom', `track/${trackId}`, data, headers);
     return response;
   }
 
-  // eslint-disable-next-line consistent-return
   static async removeTrack(trackId, userRole) {
     const headers = {};
 
@@ -93,6 +105,5 @@ export default class Track {
     } catch (error) {
       console.log(`Error assigning user ${userId} to track ${trackId}`, error);
     }
-    debugger;
   }
 }

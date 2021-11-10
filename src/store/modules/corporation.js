@@ -21,7 +21,7 @@ const mutations = {
 };
 const actions = {
   async fetchDepartments({ commit }) {
-    const response = await corporationApi.fetchDepartments('teacher');
+    const response = await corporationApi.fetchDepartments(this.getters.getUser.role);
 
     if (response) {
       commit('changeDepartments', response.data);
@@ -29,7 +29,7 @@ const actions = {
   },
 
   async fetchCompanies({ commit }, department) {
-    const response = await corporationApi.fetchCompanies(department, 'teacher');
+    const response = await corporationApi.fetchCompanies(department, this.getters.getUser.role);
     if (response) {
       // const filteredCompanies = await removeRedundant(this.state.search.users
       //   .map((i) => i.data.company), response);

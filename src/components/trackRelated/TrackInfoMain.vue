@@ -1,11 +1,11 @@
 <template>
   <div class="track-info-main">
-    <h2 class="track-name">{{ name || "Скоро здесь будет название" }}</h2>
+    <h2 class="name-title">{{ name || "Скоро здесь будет название" }}</h2>
     <!-- нужно изменить isNotAssigned на isAssigned-->
     <!-- когда будет реализовано назначение курсов -->
-    <div v-if="isNotAssigned" class="track-ordered-progress">0% изучено</div>
+    <div v-if="isNotAssigned" class="track-ordered-progress">{{completionPercent}}% изучено</div>
 
-    <div class="track-description">
+    <div class="description">
       {{ description || fishText }}
     </div>
   </div>
@@ -24,6 +24,9 @@ export default {
     isNotAssigned: {
       type: Boolean,
     },
+    completionPercent: {
+      type: Number,
+    },
   },
   data() {
     return {
@@ -41,18 +44,6 @@ export default {
   flex-direction: column;
   gap: 24px;
 
-  .track-name {
-    font-weight: 300;
-    font-size: 36px;
-  }
-
-  .track-description {
-    font-weight: 300;
-    font-size: 24px;
-    line-height: 28px;
-
-    font-family: "Roboto", sans-serif;
-  }
 }
 
 //ordered

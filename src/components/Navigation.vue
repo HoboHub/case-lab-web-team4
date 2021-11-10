@@ -1,20 +1,20 @@
 <template>
   <div id="nav">
-      <router-link to="/login" class="menu-login">
-        <i class="fas fa-users-cog"></i>
+    <router-link to="/login" class="menu-login">
+      <i class="fas fa-users-cog"></i>
+    </router-link>
+    <div class="menu">
+      <router-link to="/home" class="menu-item">
+        <i class="fas fa-home"></i>
       </router-link>
-      <div class="menu">
-        <router-link to="/home" class="menu-item">
-          <i class="fas fa-home"></i>
-        </router-link>
-        <router-link to="/catalog" class="menu-item">
-          <i class="far fa-check-circle"> </i>
-        </router-link>
-        <router-link to="/tracks" class="menu-item">
-          <i class="fas fa-location-arrow"></i>
-        </router-link>
-      </div>
+      <router-link to="/catalog" class="menu-item">
+        <i class="far fa-check-circle"> </i>
+      </router-link>
+      <router-link to="/tracks" class="menu-item">
+        <i class="fas fa-location-arrow"></i>
+      </router-link>
     </div>
+  </div>
 </template>
 
 <script>
@@ -24,7 +24,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  #nav {
+#nav {
   position: fixed;
   top: 0;
   left: 0;
@@ -60,6 +60,7 @@ export default {
       border-radius: 50%;
     }
   }
+
   .menu-login {
     margin-top: 20px;
     display: flex;
@@ -72,6 +73,31 @@ export default {
     border-radius: 50%;
   }
 }
+
+@media (max-width: 500px) {
+  #nav {
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    .menu-login{
+      margin-top: 0;
+    }
+    .menu {
+      flex-direction: row;
+      padding: 0;
+      gap: 16px;
+
+    .menu-item{
+      margin-top: 0;
+    }
+    }
+
+  }
+}
+
 .container {
   max-width: 1140px;
   margin: 0 auto;
