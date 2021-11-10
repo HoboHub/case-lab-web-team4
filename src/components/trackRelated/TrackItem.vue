@@ -1,7 +1,11 @@
 <template>
-  <div  class="track-item" :class="{'locked' :isLocked}" >
+  <div
+  class="track-item"
+  :class="{'locked' :isLocked}"
+  @click="$router.push({path: `${trackId}/detail/${id}`})">
+
     <!-- link to item -->
-<!--    <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link>-->
+   <!-- <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link> -->
     <!--  -->
 
     <span v-if="type !== 'pdf'" class="track-item-type">{{ type || "Тип" }}</span>
@@ -27,15 +31,26 @@
                name="isReq"
                :disabled="isLoading"
                :checked="detailData.required"
-               @click="makeDetailRequired">
+               @click.stop="makeDetailRequired">
       </div>
-      <div class="delete-track-item" @click="deleteItem">
+      <div
+        class="delete-track-item"
+        @click.stop="showDeleteModal">
+
         <i class="fa fa-trash" aria-hidden="true"></i>
+
       </div>
       <div class="track-item-locked" >
+
         <i class="fa fa-lock" aria-hidden="true"></i>
+
       </div>
     </div>
+    <ConfirmDelete
+      @callConfirm="callConfirm"
+      v-if="showConfirmDelete"
+      :deletion-target="deletionTarget"
+    />
   </div>
 
 </template>
@@ -45,6 +60,7 @@
 // import { defineComponent } from '@vue/composition-api'
 import { mapActions } from 'vuex';
 import { debounce } from '@/helpers/debounce';
+import ConfirmDelete from '@/components/trackRelated/ConfirmDelete.vue';
 
 export default {
   name: 'TrackItem',
@@ -77,6 +93,7 @@ export default {
     },
   },
   components: {
+    ConfirmDelete,
   },
   mounted() {
     this.lockDetail = debounce(this.lockDetail, 400);
@@ -85,6 +102,8 @@ export default {
     return {
       isLoading: false,
       inputData: '',
+      showConfirmDelete: false,
+      deletionTarget: 'элемент',
     };
   },
   computed: {
@@ -104,13 +123,33 @@ export default {
       await this.changeTrackDetailData({ id: this.id, newData: dataClone });
       this.isLoading = false;
     },
-
-    async deleteItem() {
-      // eslint-disable-next-line no-restricted-globals
-      if (confirm('Вы точно хотите удалить данный элемент?')) {
+    ///
+    showDeleteModal() {
+      this.showConfirmDelete = true;
+      // this.deletionTarget = 'трек';
+      // this.$refs.popupPageDark.style.display = 'block';
+      document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+    },
+    ///
+    hideModal() {
+      this.showConfirmDelete = false;
+      // this.$refs.popupPageDark.style.display = 'none';
+      document.getElementsByTagName('body')[0].style.overflowY = 'auto';
+    },
+    ///
+    callConfirm(userResp) {
+      if (userResp) {
+        // console.log('удалить');
         this.removeTrackDetail({ itemId: this.id, trackId: this.trackId });
       }
+      this.hideModal();
     },
+    // async deleteItem() {
+    //   // eslint-disable-next-line no-restricted-globals
+    //   if (confirm('Вы точно хотите удалить данный элемент?')) {
+    //     this.removeTrackDetail({ itemId: this.id, trackId: this.trackId });
+    //   }
+    // },
 
     // async makeEpilogRequired() {
     //   this.isLoading = true;

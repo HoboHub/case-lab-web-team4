@@ -34,7 +34,7 @@ const actions = {
   // Получить элементы трека ----------------------
   async getTrackDetails({ commit }, trackId) {
     const response = await TrackDetail.getTrackDetail(trackId, this.getters.getUser.role);
-    debugger;
+    // debugger;
     if (response) {
       commit('addTrackDetails', { id: trackId, details: response });
     }
@@ -60,7 +60,7 @@ const actions = {
 
   // удаление отдельного элемента в треке ------------
   async removeTrackDetail({ commit }, data) {
-    debugger;
+    // debugger;
     const response = await TrackDetail.removeTrackDetail(data.itemId, this.state.user.role);
     if (response) {
       commit('removeTrackDetails', data.trackId);
