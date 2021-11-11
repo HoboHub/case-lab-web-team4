@@ -25,6 +25,7 @@ export default createStore({
     getTrackByIdStore: (state) => (id) => [...state.tracks].find((t) => t.id === id),
     getSuccessStatus: (state) => state.isSuccess,
     getLoadingStatus: (state) => state.isLoading,
+    isMaster: (state) => state.user.role === 'teacher',
 
   },
 
@@ -94,14 +95,12 @@ export default createStore({
     async fetchTracks({ commit }) {
       commit('changeLoadingStatus', true);
       const response = await track.getTracks(this.state.user.role);
-      // console.log(response);
       if (response.data && response.data.length) {
         if (this.state.user.role !== 'teacher') {
           response.data = response.data.filter((item) => item.data.published === true);
         }
         response.data.map((i) => reformatDates(i.data));
         commit('changeTracks', response.data);
-        commit('changeSuccessStatus', true);
       }
       commit('changeLoadingStatus', false);
     },

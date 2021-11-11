@@ -46,6 +46,7 @@ const routes = [
     name: 'CreateTrack',
     meta: {
       requiresAuth: true,
+      requiresMaster: true,
     },
     component: () => import('@/views/CreateTrack.vue'),
   },
@@ -73,6 +74,8 @@ const routes = [
     name: 'EditTrack',
     meta: {
       requiresAuth: true,
+      requiresMaster: true,
+
     },
     component: () => import('@/views/EditTrack.vue'),
   },
@@ -81,6 +84,8 @@ const routes = [
     name: 'AddStudent',
     meta: {
       requiresAuth: true,
+      requiresMaster: true,
+
     },
     component: () => import('@/views/AddStudents.vue'),
   },
@@ -89,6 +94,8 @@ const routes = [
     name: 'AddDetails',
     meta: {
       requiresAuth: true,
+      requiresMaster: true,
+
     },
     component: () => import('@/views/AddDetail.vue'),
   },
@@ -112,11 +119,13 @@ router.beforeEach((to, from, next) => {
   gsap.fromTo('body', { opacity: 0 }, { opacity: 1, duration: 1 });
 
   // Если в роуте в meta флаг обязательной авторизации === true то проверяем роут дальше
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
+  if (to.matched.some((record) => record.meta.requiresAuth || record.meta.requiresMaster)) {
     if (!store.getters.getUser.token) {
       next({ name: 'Login' }); // Если токен не получен, то роут не переключится
     } else {
-      next();// переход на следующий роут
+      if (to.meta.requiresMaster && store.getters.getUser.role !== 'teacher') {
+        return router.back();
+      } next(); // переход на следующий роут
     }
   } else {
     next(); // Если флага нет, или он равен false, то переход на следующий роут
