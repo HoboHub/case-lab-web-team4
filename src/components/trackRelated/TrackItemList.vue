@@ -72,11 +72,6 @@ export default {
       }
     },
 
-    theDetailSorted() {
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      return this.theDetails.sort((i, secondI) => i.data.sortIndex - secondI.data.sortIndex);
-    },
-
     requiredDetailsQuantity() {
       try {
         return [...this.theDetails.filter((i) => i.data.required === true)].length;

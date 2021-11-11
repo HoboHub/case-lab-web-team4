@@ -17,15 +17,6 @@
                 К треку
             </router-link>
 
-          <div v-if="isMaster" class="admin-btns d-flex flex-column gap-2">
-            <Button
-                :btn-orange="true"
-                class="redact-btn">
-                <i class="fas fa-pencil"></i>
-                Редактировать
-            </Button>
-          </div>
-
             <ItemInfoMain :name="itemDetail.entityName" />
 
             <ItemInfoSub v-if="itemDetail"
