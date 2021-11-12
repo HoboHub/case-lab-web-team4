@@ -1,6 +1,7 @@
 <template>
   <div class="errors-list">
-    <p class="error" v-for="(error, index) in errorsCompared" :key="index">
+    <p class="error"
+       v-for="(error, index) in errorsCompared" :key="index">
       - {{error}}
     </p>
   </div>
@@ -8,14 +9,21 @@
 </template>
 
 <script>
+import { gsap } from 'gsap';
 
 export default {
   name: 'validationErrors',
   props: {
-    validationErrorsActual: {
+    validationErrors: {
       type: Object,
       required: true,
     },
+  },
+  mounted() {
+    const tl = gsap.timeline({ repeatDelay: 0.3 });
+    document.querySelectorAll('.error').forEach((i) => {
+      tl.fromTo(i, { opacity: 0 }, { opacity: 1, duration: 0.2 });
+    });
   },
   computed: {
     errorsCompared() {

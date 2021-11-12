@@ -171,7 +171,6 @@ export default {
     onSubmit() {
       // eslint-disable-next-line array-callback-return
       if (Object.values(this.validationErrors).length) {
-        debugger;
         this.showErrors = true;
         return null;
       }
