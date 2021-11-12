@@ -3,17 +3,23 @@
     <ActionResult></ActionResult>
     <div class="d-flex flex-column">
       <h2 class="track-name">Настройки трека <br>"{{
-          truncate(name, 38, "...") || "Имя трека"
+          truncate(form.name, 38, "...") || "Имя трека"
         }}"
       </h2>
+
       <form @submit.prevent="onSubmit" class="form d-flex flex-column">
+        <ValidationErrors
+          v-if="showErrors"
+          :validation-errors='validationErrors' >
+
+        </ValidationErrors>
         <div class="form-header">
           <div class="group">
             <input
               class="input-name"
               type="text"
               :disabled="isSubmitting"
-              required v-model="name"
+               v-model="form.name"
               placeholder="Название трека"/>
             <span class="highlight"></span>
             <span class="bar"></span>
@@ -25,8 +31,8 @@
           type="text"
           :disabled="isSubmitting"
           class="description"
-          v-model="previewText"
-          required
+          v-model="form.previewText"
+
           placeholder="Описание трека"></textarea>
             <span class="highlight"></span>
             <span class="bar"></span>
@@ -38,9 +44,9 @@
                 inputClassName="input-date"
                 uid="start"
                 :disabled="isSubmitting"
-                :maxDate="dateTimeFinish"
+                :maxDate="form.dateTimeFinish"
                 :yearRange="yearRange"
-                v-model="dateTimeStart">
+                v-model="form.dateTimeStart">
               </Datepicker>
             </div>
             <div class="date-block finish">
@@ -49,9 +55,9 @@
                 inputClassName="input-date"
                 uid="finish"
                 :disabled="isSubmitting"
-                :minDate="dateTimeStart"
+                :minDate="form.dateTimeStart"
                 :yearRange="yearRange"
-                v-model="dateTimeFinish"
+                v-model="form.dateTimeFinish"
               ></Datepicker>
             </div>
           </div>
@@ -83,13 +89,13 @@
         </div>
         <div class="form-footer">
           <div class="modal-footer">
-              <Button
-                :btn-orange="true"
-                :border-disabled="true"
-                @click="this.$router.back()"
-              >
-                Отмена
-              </Button>
+            <Button
+              :btn-orange="true"
+              :border-disabled="true"
+              @click="this.$router.back()"
+            >
+              Отмена
+            </Button>
 
             <Button
               type="submit"
@@ -111,6 +117,7 @@
 import Datepicker from 'vue3-date-time-picker';
 import Button from '@/components/Button.vue';
 import ActionResult from '@/components/ActionResult.vue';
+import ValidationErrors from '@/components/ValidationErrors.vue';
 
 export default {
   name: 'TrackForms',
@@ -119,17 +126,13 @@ export default {
       type: Object,
       required: true,
     },
-    validationErrors: {
-      type: Array,
-      required: false,
-    },
     isSubmitting: {
       type: Boolean,
       required: true,
     },
   },
   components: {
-    Datepicker, Button, ActionResult,
+    Datepicker, Button, ActionResult, ValidationErrors,
   },
 
   computed: {
@@ -138,26 +141,46 @@ export default {
       const currentYear = new Date().getFullYear();
       return [currentYear - 5, currentYear + 5];
     },
+
+    validationErrors() {
+      const obj = {};
+      Object.entries(this.form).forEach((entry) => {
+        const [key, value] = entry;
+        if (!value) {
+          obj[key] = true;
+        }
+      });
+      return obj;
+    },
   },
   data() {
     return {
-      name: this.initialValues.name,
-      previewText: this.initialValues.previewText,
-      previewPicture: this.initialValues.previewPicture,
-      dateTimeStart: this.initialValues.dateTimeStart,
-      dateTimeFinish: this.initialValues.dateTimeFinish,
+      form: {
+        name: this.initialValues.name,
+        previewText: this.initialValues.previewText,
+        previewPicture: this.initialValues.previewPicture,
+        dateTimeStart: this.initialValues.dateTimeStart,
+        dateTimeFinish: this.initialValues.dateTimeFinish,
 
+      },
       pictureToUpload: '',
+      showErrors: false,
     };
   },
   methods: {
     onSubmit() {
+      // eslint-disable-next-line array-callback-return
+      if (Object.values(this.validationErrors).length) {
+        debugger;
+        this.showErrors = true;
+        return null;
+      }
       const form = {
-        name: this.name,
-        previewText: this.previewText,
-        previewPicture: this.pictureToUpload || this.previewPicture,
-        dateTimeStart: this.dateTimeStart,
-        dateTimeFinish: this.dateTimeFinish,
+        name: this.form.name,
+        previewText: this.form.previewText,
+        previewPicture: this.pictureToUpload || this.form.previewPicture,
+        dateTimeStart: this.form.dateTimeStart,
+        dateTimeFinish: this.form.dateTimeFinish,
       };
       this.$emit('trackSubmit', form);
     },
@@ -250,6 +273,7 @@ export default {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+
   label {
     cursor: pointer;
   }
