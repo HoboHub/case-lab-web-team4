@@ -8,7 +8,7 @@
       <div class="track-img-wrap">
         <img class="track-img"
           :src="imgUrl ? baseUrl + imgUrl : placeholderImage "
-          alt="small placeholder. TO BE DONE"
+          alt="track img"
         />
       </div>
 
@@ -44,9 +44,6 @@ export default {
       required: true,
     },
     status: {
-      type: String,
-    },
-    dateFinish: {
       type: String,
     },
     id: {

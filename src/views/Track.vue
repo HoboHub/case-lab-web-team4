@@ -2,16 +2,11 @@
   <div>
     <actionResult v-if="showActionResult"/>
     <div v-if="track" class="track">
-
       <div
         @click="hideModal"
         ref="popupPageDark"
         class="popup-page-darken"></div>
 
-      <!--    <Preloader></Preloader>-->
-
-      <!-- <img :src="previewPicture"
-           class="track-cover" alt="preview picture"/> -->
       <div class="track-bg-img" style="overflow: hidden; position: relative;">
         <img
           :src="previewPicture"
@@ -153,14 +148,11 @@ export default {
     ...mapGetters([
       'getUser',
       'getTrackByIdStore',
+      'isMaster',
     ]),
 
     track() {
       return this.getTrackByIdStore(+this.$route.params.id);
-    },
-
-    isMaster() {
-      return this.getUser.role === 'teacher';
     },
 
     previewPicture() {

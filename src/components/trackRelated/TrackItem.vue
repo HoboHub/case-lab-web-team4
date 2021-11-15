@@ -1,8 +1,8 @@
 <template>
   <div
   class="track-item"
-  :class="{'locked' :isLocked}"
   @click="$router.push(`${trackId}/detail/${id}`)">
+<!--  // :class="{'locked' :isLocked}"-->
 
     <!-- link to item -->
    <!-- <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link> -->
@@ -64,6 +64,9 @@ import ConfirmDelete from '@/components/trackRelated/ConfirmDelete.vue';
 export default {
   name: 'TrackItem',
   props: {
+    trackId: {
+      type: Number,
+    },
     name: {
       type: String,
     },
@@ -76,20 +79,12 @@ export default {
     id: {
       type: Number,
     },
-    trackId: {
-      type: Number,
-    },
+
     detailData: {
       type: Object,
       required: true,
     },
-    isLocked: {
-      type: Boolean,
-      default: false,
-    },
-    detail: {
-      type: Object,
-    },
+
   },
   components: {
     ConfirmDelete,
