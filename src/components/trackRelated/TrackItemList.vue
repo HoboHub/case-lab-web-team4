@@ -5,20 +5,17 @@
          class="drop-zone"
          @dragover.prevent
          @dragenter.prevent
-         @drop="onDrop($event, index)"
+         @drop="isMaster && onDrop($event, index)"
     >
       <TrackItem
+        :trackId="trackId"
         :name="item.entityName"
         :duration="item.entityDuration"
         :type="item.data.type"
         :id="item.id"
-        :trackId="trackId"
         :detail-data="item.data"
-        :isLocked="item.locked"
-        :detail="item"
-        class="drag-el"
-        :draggable="true"
-        @dragstart="startDrag($event, item)"
+        :draggable="isMaster"
+        @dragstart="isMaster && startDrag($event, item)"
       />
     </div>
   </div>
@@ -42,7 +39,9 @@ export default {
   },
   async mounted() {
     if (!this.theDetails) {
-      await this.getDetails();
+      await this.getTrackDetails(this.trackId);
+      const detailsRaw = this.getTrackDetailsFromStore(this.trackId);
+      this.theDetails = detailsRaw.details;
     }
     if (this.theDetails.length) {
       this.countDuration();
@@ -53,57 +52,28 @@ export default {
     // this.getTrackDuration();
   },
   computed: {
-    ...mapGetters(['getTrackDetailsFromStore']),
-    theDetails() {
-      try {
-        const detailsRaw = this.getTrackDetailsFromStore(this.trackId);
-        let epilogIncomplete = false;
-        detailsRaw.details.forEach((i, index) => {
-          if (i.epilogFinished && epilogIncomplete) {
-            detailsRaw.details[index].locked = true;
-            debugger;
-          }
-          if (!i.finished) epilogIncomplete = true;
-        });
-        return detailsRaw.details;
-      } catch (err) {
-        this.getDetails();
-        return undefined;
-      }
-    },
+    ...mapGetters(['getTrackDetailsFromStore', 'getUser']),
 
-    theDetailSorted() {
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      return this.theDetails.sort((i, secondI) => i.data.sortIndex - secondI.data.sortIndex);
+    isMaster() {
+      return this.getUser.role === 'teacher';
     },
 
     requiredDetailsQuantity() {
-      try {
-        return [...this.theDetails.filter((i) => i.data.required === true)].length;
-      } catch (err) {
-        return undefined;
-      }
+      return [...this.theDetails.filter((i) => i.data.required === true)].length;
     },
     finishedDetailsQuantity() {
-      try {
-        return [...this.theDetails.filter((i) => i.finished === true)].length;
-      } catch (err) {
-        return undefined;
-      }
+      return [...this.theDetails.filter((i) => i.finished === true)].length;
     },
 
   },
   data() {
     return {
-      trackDetail: null,
+      theDetails: '',
     };
   },
   methods: {
     ...mapActions(['getTrackDetails', 'changeTrackDetailData']),
-    async getDetails() {
-      const result = await this.getTrackDetails(this.trackId);
-      this.trackDetail = result;
-    },
+
     countDuration() {
       const durRes = this.theDetails
         .map((item) => {

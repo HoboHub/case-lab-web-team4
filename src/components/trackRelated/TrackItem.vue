@@ -1,8 +1,8 @@
 <template>
   <div
   class="track-item"
-  :class="{'locked' :isLocked}"
-  @click="$router.push({path: `${trackId}/detail/${id}`})">
+  @click="$router.push(`${trackId}/detail/${id}`)">
+<!--  // :class="{'locked' :isLocked}"-->
 
     <!-- link to item -->
    <!-- <router-link class="open-track-item" :to="`${trackId}/detail/${id}`"></router-link> -->
@@ -25,7 +25,7 @@
 
     <div class="track-item-props" v-if="isMaster">
       <div class="track-item-req">
-        <label :for="`isReq${id}`">обязательно к изучению</label>
+        <label :for="`isReq${id}`" @click.stop>обязательно к изучению</label>
         <input type="checkbox"
                :id="`isReq${id}`"
                name="isReq"
@@ -36,7 +36,6 @@
       <div
         class="delete-track-item"
         @click.stop="showDeleteModal">
-
         <i class="fa fa-trash" aria-hidden="true"></i>
 
       </div>
@@ -65,6 +64,9 @@ import ConfirmDelete from '@/components/trackRelated/ConfirmDelete.vue';
 export default {
   name: 'TrackItem',
   props: {
+    trackId: {
+      type: Number,
+    },
     name: {
       type: String,
     },
@@ -77,20 +79,12 @@ export default {
     id: {
       type: Number,
     },
-    trackId: {
-      type: Number,
-    },
+
     detailData: {
       type: Object,
       required: true,
     },
-    isLocked: {
-      type: Boolean,
-      default: false,
-    },
-    detail: {
-      type: Object,
-    },
+
   },
   components: {
     ConfirmDelete,

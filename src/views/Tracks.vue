@@ -12,16 +12,13 @@
           Каталог
         </Button>
         <Button
-          v-if="this.user.role === 'teacher'"
+          v-if="isMaster"
           :btn-orange="true"
           class="create-btn"
+          @click="this.$router.push({name: 'CreateTrack'})"
         >
-          <router-link
-            style="color:#FFFFFF;"
-            :to="{name: 'CreateTrack'}">
             <i class="fas fa-plus"></i>
             Создать трек
-          </router-link>
         </Button>
 
       </div>
@@ -31,7 +28,6 @@
           :key="track.id"
           :show-all="showAll"
           :status="track.status"
-          :dateFinish="track.data.dateTimeFinish"
           :id="track.id"
           :name="track.data.name"
           :description="track.data.previewText"
@@ -46,7 +42,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-// import Track from '@/services/track/track';
 import TrackCard from '@/components/trackRelated/TrackCard.vue';
 import Button from '@/components/Button.vue';
 import Preloader from '@/components/Preloader.vue';
@@ -75,8 +70,8 @@ export default {
   computed: {
     ...mapGetters({
       getTracks: 'getTracks',
-      user: 'getUser',
       isLoading: 'getLoadingStatus',
+      isMaster: 'isMaster',
     }),
 
     actualTracks() {
@@ -88,7 +83,7 @@ export default {
 
     assignedTracks() {
       // ПОКА ДАННАЯ ФУНКЦИЯ НИЧЕГО НЕ ДЕЛАЕТ, ТК НЕТ ПОДХОДЯЩИХ ТРЕКОВ
-      // return [...this.tracks].filter(i => i.assigned === false)
+      // return [...this.tracks].filter(i => i.assigned === true)
       return this.getTracks;
     },
 
